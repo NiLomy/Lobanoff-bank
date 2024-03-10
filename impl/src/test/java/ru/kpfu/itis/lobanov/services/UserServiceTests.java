@@ -5,11 +5,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import ru.kpfu.itis.lobanov.data.dtos.UserDto;
 import ru.kpfu.itis.lobanov.data.entities.User;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
 import ru.kpfu.itis.lobanov.data.services.UserService;
-import ru.kpfu.itis.lobanov.data.services.impl.UserServiceImpl;
+import ru.kpfu.itis.lobanov.dtos.Role;
+import ru.kpfu.itis.lobanov.dtos.State;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +26,8 @@ public class UserServiceTests {
                 User.builder()
                         .email("test1@mail.com")
                         .password("testPassword")
-                        .role(User.Role.USER)
-                        .state(User.State.ACTIVE)
+                        .role(Role.USER)
+                        .state(State.ACTIVE)
                         .isDeleted(false)
                         .build()
         );
@@ -35,8 +35,8 @@ public class UserServiceTests {
                 User.builder()
                         .email("test2@mail.com")
                         .password("testPassword")
-                        .role(User.Role.USER)
-                        .state(User.State.ACTIVE)
+                        .role(Role.USER)
+                        .state(State.ACTIVE)
                         .isDeleted(false)
                         .build()
         );
@@ -45,8 +45,8 @@ public class UserServiceTests {
                 User.builder()
                         .email("test3@mail.com")
                         .password("testPassword")
-                        .role(User.Role.USER)
-                        .state(User.State.ACTIVE)
+                        .role(Role.USER)
+                        .state(State.ACTIVE)
                         .isDeleted(false)
                         .build()
         );
@@ -57,8 +57,8 @@ public class UserServiceTests {
                 .id(5L)
                 .email("test5@mail.com")
                 .password("testPassword")
-                .role(User.Role.USER)
-                .state(User.State.BANNED)
+                .role(Role.USER)
+                .state(State.BANNED)
                 .isDeleted(false)
                 .build();
 
@@ -66,7 +66,7 @@ public class UserServiceTests {
         Mockito.when(userRepository.findAllByIsDeletedIsFalse()).thenReturn(users);
         Mockito.when(userRepository.findById(3L)).thenReturn(optionalUser);
         Mockito.when(userRepository.findById(4L)).thenReturn(nullableUser);
-        Mockito.when(userRepository.updateStateById(5L, User.State.BANNED.name())).thenReturn(bannedUser);
+        Mockito.when(userRepository.updateStateById(5L, State.BANNED.name())).thenReturn(bannedUser);
     }
 
     @BeforeEach
@@ -115,8 +115,8 @@ public class UserServiceTests {
                 .id(5L)
                 .email("test5@mail.com")
                 .password("testPassword")
-                .role(User.Role.USER)
-                .state(User.State.ACTIVE)
+                .role(Role.USER)
+                .state(State.ACTIVE)
                 .isDeleted(false)
                 .build();
 

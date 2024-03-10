@@ -7,6 +7,8 @@ import org.mockito.Mockito;
 import ru.kpfu.itis.lobanov.data.entities.User;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
 import ru.kpfu.itis.lobanov.data.services.impl.UserDetailsServiceImpl;
+import ru.kpfu.itis.lobanov.dtos.Role;
+import ru.kpfu.itis.lobanov.dtos.State;
 
 public class UserDetailsServiceTests {
     private static UserRepository userRepository;
@@ -18,8 +20,8 @@ public class UserDetailsServiceTests {
                 .id(1L)
                 .email("test1@mail.com")
                 .password("testPassword")
-                .role(User.Role.USER)
-                .state(User.State.ACTIVE)
+                .role(Role.USER)
+                .state(State.ACTIVE)
                 .isDeleted(false)
                 .build();
 
@@ -38,8 +40,8 @@ public class UserDetailsServiceTests {
                 .id(1L)
                 .email("test1@mail.com")
                 .password("testPassword")
-                .role(User.Role.USER)
-                .state(User.State.ACTIVE)
+                .role(Role.USER)
+                .state(State.ACTIVE)
                 .isDeleted(false)
                 .build();
         assert userDetailsService.loadUserByUsername("test1@mail.com").equals(user);

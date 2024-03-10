@@ -6,9 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.kpfu.itis.lobanov.data.entities.User;
+import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
+import ru.kpfu.itis.lobanov.data.mappers.impl.UserMapperImpl;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
 import ru.kpfu.itis.lobanov.data.services.impl.RegistrationServiceImpl;
 import ru.kpfu.itis.lobanov.data.services.impl.UserServiceImpl;
+import ru.kpfu.itis.lobanov.dtos.Role;
+import ru.kpfu.itis.lobanov.dtos.State;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +32,8 @@ public class TestConfig {
                         .id(1L)
                         .email("test1@mail.com")
                         .password("testPassword")
-                        .role(User.Role.USER)
-                        .state(User.State.ACTIVE)
+                        .role(Role.USER)
+                        .state(State.ACTIVE)
                         .isDeleted(false)
                         .build()
         );
@@ -38,20 +42,20 @@ public class TestConfig {
                         .id(2L)
                         .email("test2@mail.com")
                         .password("testPassword")
-                        .role(User.Role.USER)
-                        .state(User.State.ACTIVE)
+                        .role(Role.USER)
+                        .state(State.ACTIVE)
                         .isDeleted(false)
                         .build()
         );
         UserRepository userRepository = Mockito.mock(UserRepository.class);
         Mockito.when(userRepository.findAllByIsDeletedIsFalse()).thenReturn(users);
-        Mockito.when(userRepository.updateStateById(3L, User.State.BANNED.name())).thenReturn(
+        Mockito.when(userRepository.updateStateById(3L, State.BANNED.name())).thenReturn(
                 User.builder()
                         .id(3L)
                         .email("test3@mail.com")
                         .password("testPassword")
-                        .role(User.Role.USER)
-                        .state(User.State.BANNED)
+                        .role(Role.USER)
+                        .state(State.BANNED)
                         .isDeleted(false)
                         .build()
         );
@@ -59,8 +63,13 @@ public class TestConfig {
     };
 
     @Bean
+    public UserMapper userMapper() {
+        return new UserMapperImpl();
+    }
+
+    @Bean
     public UserServiceImpl userService() {
-        return new UserServiceImpl(userRepository());
+        return new UserServiceImpl(userRepository(), userMapper());
     }
 
     @Bean
