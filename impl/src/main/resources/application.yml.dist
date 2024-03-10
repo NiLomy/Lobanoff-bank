@@ -1,0 +1,26 @@
+server:
+  servlet:
+    session:
+      cookie:
+        name: SESSIONID
+    application-display-name: Lobanoff
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:postgresql://{your-url}
+    username: {username}
+    password: {password}
+  jpa:
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  sql:
+    init:
+      mode: always
+
+

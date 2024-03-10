@@ -1,0 +1,122 @@
+.header-container {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.header-content {
+    box-sizing: border-box;
+    display: block;
+    margin: 0 auto;
+    max-width: 1104px;
+    min-width: 1104px;
+}
+
+.header-items {
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    min-height: 64px;
+}
+
+.header-bank-name {
+    margin-right: 48px;
+    align-items: center;
+    display: flex;
+}
+
+.header-bank-name-text {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.header-navigation-container {
+    margin-right: 48px;
+    flex: 1 0;
+    align-items: center;
+    display: flex;
+}
+
+.header-navigation {
+    justify-content: flex-start;
+    display: flex;
+    flex: 1 0;
+    flex-wrap: wrap;
+    height: 64px;
+    overflow: hidden;
+    padding-right: 24px;
+}
+
+.header-navigation-item {
+    align-items: stretch;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-right: 24px;
+}
+
+.header-navigation-item-text {
+    display: inline-flex;
+    outline: none;
+    position: relative;
+    text-decoration: none;
+    transition: .3s ease-in-out;
+    transition-property: color,box-shadow;
+    white-space: nowrap;
+    align-items: center;
+    height: 64px;
+    cursor: pointer;
+    color: black;
+}
+
+.header-profile-container {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
+.header-profile-item {
+    text-align: end;
+    width: 169px;
+}
+
+.header-profile-content {
+    cursor: pointer;
+    display: inline-block;
+    max-width: 100%;
+    position: relative;
+    vertical-align: middle;
+}
+
+.header-profile-content-button {
+    background: none;
+    border: 0;
+    padding: 0;
+}
+
+.header-profile-content-span {
+    outline: none;
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap;
+}
+
+.header-profile-content-name {
+    margin-right: 8px;
+    max-width: 20ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.header-profile-content-image {
+    height: 32px;
+    width: 32px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    display: block;
+}

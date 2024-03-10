@@ -1,0 +1,106 @@
+.replenish-page {
+    background-color: #f6f7f8;
+}
+
+.replenish-container {
+    margin: 0 auto;
+    width: 1104px;
+    display: block;
+}
+
+.replenish-title-container {
+    background: transparent;
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 1104px;
+    min-width: 1104px;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 32px;
+    padding-top: 40px;
+}
+
+.replenish-title-back {
+    align-items: center;
+    display: flex;
+    margin-right: 9px;
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    justify-content: center;
+    vertical-align: top;
+    width: 32px;
+    height: 32px;
+}
+
+.replenish-title-content {
+    cursor: default;
+    overflow: hidden;
+    color: black;
+}
+
+.replenish-content {
+    display: flex;
+    justify-content: space-between;
+    width: 672px;
+    --simba-column-gap: 32px;
+    padding-bottom: 32px;
+}
+
+.replenish-choice {
+    height: 100%;
+    background-color: white;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    padding: 14px 10px;
+}
+
+.replenish-choice-table {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px -8px;
+}
+
+.replenish-choice-table-elem {
+    margin-bottom: 8px;
+    padding: 4px 20px;
+    flex: 0 0 50%;
+    max-width: 50%;
+    box-sizing: border-box;
+    vertical-align: top;
+    width: 100%;
+    align-items: center;
+    border-radius: 8px;
+    display: flex;
+    height: 56px;
+    position: relative;
+}
+
+.replenish-choice-table-elem-icon {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    position: relative;
+    vertical-align: top;
+    align-items: center;
+    justify-content: center;
+}
+
+.replenish-choice-table-elem-text {
+    cursor: pointer;
+    color: black;
+    background-color: transparent;
+    text-decoration: none;
+    max-height: 48px;
+    overflow: hidden;
+    padding-left: 12px;
+    height: 24px;
+    transition-duration: .3s;
+    transition-property: height;
+    transition-timing-function: ease-in-out;
+    display: block;
+    position: relative;
+    visibility: visible;
+}
