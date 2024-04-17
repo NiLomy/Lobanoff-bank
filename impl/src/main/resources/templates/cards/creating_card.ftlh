@@ -1,4 +1,4 @@
-<#include "base.ftlh">
+<#include "../base/base.ftlh">
 
 <#macro styles>
     <link rel="stylesheet" href="/css/creating_card.css">
@@ -9,13 +9,13 @@
 
 <#macro content>
     <div class="card-page">
-        <#include "header.ftlh">
+        <#include "../base/header.ftlh">
 
         <div>
             <span id="create-card" style="cursor: pointer">Create card</span>
         </div>
 
-        <#include "footer.ftlh">
+        <#include "../base/footer.ftlh">
     </div>
 </#macro>
 

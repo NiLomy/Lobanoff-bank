@@ -22,6 +22,7 @@ public class OperationMapperImpl implements OperationMapper {
 
     @Override
     public List<OperationDto> toListResponse(List<Operation> set) {
+        if (set == null) return null;
         return set.stream().map(this::toResponse).collect(Collectors.toList());
     }
 }

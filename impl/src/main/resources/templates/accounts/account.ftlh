@@ -1,4 +1,4 @@
-<#include "base.ftlh">
+<#include "../base/base.ftlh">
 
 <#macro styles>
     <link rel="stylesheet" href="/css/account.css">
@@ -9,7 +9,7 @@
 
 <#macro content>
     <div class="account-page">
-        <#include "header.ftlh">
+        <#include "../base/header.ftlh">
 
         <div class="account-container">
             <div class="account-container-header">
@@ -32,25 +32,60 @@
                     <span>${currentAccount.deposit} ₽</span>
                 </div>
             </div>
-            <div>
-                <a href="/transfers/${currentAccount.id}">
-                    <span>Transfer</span>
-                </a>
-                <br>
-                <a href="/replenishes/${currentAccount.id}">
-                    <span>Replenish</span>
-                </a>
-                <br>
-                <a href="/requisites/${currentAccount.id}">
-                    <span>Requisites</span>
-                </a>
-                <br>
-                <a href="/account/${currentAccount.id}/statement">
-                    <span>Account statement</span>
-                </a>
-                <br>
+            <div class="account-actions">
+                <div class="account-action">
+                    <a href="/transfers/${currentAccount.id}" style="text-decoration: none">
+                        <div class="action-card">
+                            <div class="action-card-icon"></div>
+                            <div class="action-card-extend">
+                                <div class="action-card-name">
+                                    <span class="action-card-text">Transfer</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="account-action">
+                    <a href="/replenishes/${currentAccount.id}" style="text-decoration: none">
+                        <div class="action-card">
+                            <div class="action-card-icon"></div>
+                            <div class="action-card-extend">
+                                <div class="action-card-name">
+                                    <span class="action-card-text">Replenish</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="account-action">
+                    <a href="/requisites/${currentAccount.id}" style="text-decoration: none">
+                        <div class="action-card">
+                            <div class="action-card-icon"></div>
+                            <div class="action-card-extend">
+                                <div class="action-card-name">
+                                    <span class="action-card-text">Requisites</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="account-action">
+                    <a href="/account/${currentAccount.id}/statement" style="text-decoration: none">
+                        <div class="action-card">
+                            <div class="action-card-icon"></div>
+                            <div class="action-card-extend">
+                                <div class="action-card-name">
+                                    <span class="action-card-text">Account statement</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
             <div>
+                <br>
+                <br>
+
                 <span>Linked cards:</span>
                 <div>
                     <#if currentAccount.cards?has_content>
@@ -69,7 +104,7 @@
             </div>
         </div>
 
-        <#include "footer.ftlh">
+        <#include "../base/footer.ftlh">
     </div>
 </#macro>
 

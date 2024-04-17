@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -18,7 +19,7 @@ public class OperationDto {
     private Long id;
     @Schema(description = "Date of the transaction.", example = "01.01.2001")
     @NotNull(message = "Date of the transaction shouldn't be null.")
-    private Date date;
+    private LocalDate date;
     @Schema(description = "The amount of money that needs to be transferred.", example = "10000")
     @NotNull(message = "The amount of money shouldn't be null.")
     private Long amount;

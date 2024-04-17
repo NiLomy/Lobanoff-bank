@@ -13,7 +13,6 @@ import ru.kpfu.itis.lobanov.data.services.RegistrationService;
 import ru.kpfu.itis.lobanov.dtos.Role;
 import ru.kpfu.itis.lobanov.dtos.State;
 
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -32,7 +31,6 @@ public class RegistrationServiceImpl implements RegistrationService {
                     .isDeleted(false)
                     .build();
             userRepository.save(user);
-            log.info("User {} was saved.", user);
         }
     }
 }

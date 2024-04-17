@@ -1,4 +1,4 @@
-<#include "base.ftlh">
+<#include "../base/base.ftlh">
 
 <#macro styles>
     <link rel="stylesheet" href="/css/transfers.css">
@@ -9,7 +9,7 @@
 
 <#macro content>
     <div class="transfer-page">
-        <#include "header.ftlh">
+        <#include "../base/header.ftlh">
 
         <div class="transfer-phone-container">
             <div class="transfer-phone-title">
@@ -21,16 +21,6 @@
                 </h2>
             </div>
             <div class="transfer-phone-main">
-                <div class="transfer-phone-main-content">
-                    <div class="transfer-phone-main-content-title">
-                        <h4>Contract number</h4>
-                    </div>
-                    <div class="transfer-phone-main-content-body-input" style="margin-bottom: 16px;">
-                        <div class="transfer-phone-main-content-body-input-2">
-                            <input id="contract-input" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required placeholder="Contract number" class="transfer-phone-main-content-body-selector-body-input">
-                        </div>
-                    </div>
-                </div>
                 <div class="transfer-phone-main-content">
                     <div class="transfer-phone-main-content-title">
                         <h4>Transfer from</h4>
@@ -73,6 +63,16 @@
                         </#list>
                     </#if>
                 </div>
+                <div class="transfer-phone-main-content">
+                    <div class="transfer-phone-main-content-title">
+                        <h4>Transfer to</h4>
+                    </div>
+                    <div class="transfer-phone-main-content-body-input" style="margin-bottom: 16px;">
+                        <div class="transfer-phone-main-content-body-input-2">
+                            <input id="card-input" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" required placeholder="Card number" class="transfer-phone-main-content-body-selector-body-input">
+                        </div>
+                    </div>
+                </div>
 
                 <div class="transfer-phone-main-content">
                     <div class="transfer-phone-main-content-title">
@@ -84,24 +84,13 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="transfer-phone-main-content">
-                    <div class="transfer-phone-main-content-title">
-                        <h4>Transfer to</h4>
-                    </div>
-                    <div class="transfer-phone-main-content-body-input" style="margin-bottom: 16px;">
-                        <div class="transfer-phone-main-content-body-input-2">
-                            <input id="message-input" placeholder="Message to the recipient"  class="transfer-phone-main-content-body-selector-body-input">
-                        </div>
-                    </div>
-                </div>
                 <button id="transfer-button" class="transfer-button">
                     <span class="transfer-button-text">Transfer</span>
                 </button>
             </div>
         </div>
 
-        <#include "footer.ftlh">
+        <#include "../base/footer.ftlh">
     </div>
 </#macro>
 
@@ -126,9 +115,9 @@
         });
 
         let transferForm = $("#transfer-from");
-        dropdownInit(transferForm, "dropdown-from", ".dropdown-item-from", "transfer-from", "transfer-from-name", "transfer-from-deposit", "transferFromAccountId", "transfer-to", "transfer-to-name", "transfer-to-deposit", "transferToAccountId");
+        dropdownInit(transferForm, "dropdown-from", ".dropdown-item-from", "transfer-from", "transfer-from-name", "transfer-from-deposit", "transferFromAccountId");
 
-        function dropdownInit(transfer, dropdownId, dropdownItemClass, transferId, transferName, transferDeposit, transferAccountId, anotherTransferId, anotherTransferName, anotherTransferDeposit, anotherTransferAccountId) {
+        function dropdownInit(transfer, dropdownId, dropdownItemClass, transferId, transferName, transferDeposit, transferAccountId) {
             transfer.on("click", function () {
                 document.getElementById(dropdownId).style.display = "block";
                 let height = 56 * Number("${accountsList?size}") + 10;
@@ -170,10 +159,9 @@
             let csrfToken = $("meta[name='_csrf']").attr("content");
 
             let betweenTransfer = {};
-            betweenTransfer["contractNumber"] = $("#contract-input").val();
             betweenTransfer["from"] = document.getElementById("transfer-from").dataset["transferFromAccountId"].toString();
+            betweenTransfer["card"] = $("#card-input").val();
             betweenTransfer["amount"] = $("#amount-input").val();
-            betweenTransfer["message"] = $("#message-input").val();
 
             $.ajax({
                 type: "POST",

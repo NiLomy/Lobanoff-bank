@@ -13,6 +13,7 @@ import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
 import ru.kpfu.itis.lobanov.data.services.OperationService;
 import ru.kpfu.itis.lobanov.dtos.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -94,7 +95,7 @@ public class OperationServiceImpl implements OperationService {
 
     private Operation createTransaction(BankAccount currentAccount, BankAccount anotherAccount, Long amount, String message) {
         Operation operation = Operation.builder()
-                .date(new Date())
+                .date(LocalDate.now())
                 .amount(amount)
                 .from(currentAccount)
                 .to(anotherAccount)

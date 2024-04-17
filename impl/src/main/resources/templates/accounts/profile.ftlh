@@ -1,4 +1,4 @@
-<#include "base.ftlh">
+<#include "../base/base.ftlh">
 
 <#macro styles>
     <link rel="stylesheet" href="/css/profile.css">
@@ -9,7 +9,7 @@
 
 <#macro content>
     <div class="profile-page">
-        <#include "header.ftlh">
+        <#include "../base/header.ftlh">
 
         <div class="container">
             <div class="title">
@@ -52,9 +52,11 @@
                     </div>
                 </#if>
                 <div class="main-content-container">
-                    <div class="line-chart">
-                        <canvas id="myChart"></canvas>
-                    </div>
+                    <#if transactions?has_content>
+                        <div class="line-chart">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </#if>
                 </div>
             </div>
         </div>
@@ -78,7 +80,7 @@
 <#--            </#if>-->
 <#--        </#list>-->
 <#--    </#if>-->
-    <#include "footer.ftlh">
+    <#include "../base/footer.ftlh">
 </#macro>
 
 <#macro scripts>
@@ -91,13 +93,13 @@
     <script>
         const ctx = document.getElementById('myChart');
 
-        let labels =[<#list transactions as transaction>"${transaction.date?string["dd.MM"]}",</#list>].reverse()
+        let labels =[<#if transactions?has_content><#list transactions as transaction>"${transaction.date.toString()?substring(5)}",</#list></#if>].reverse()
 
         const data = {
             labels: labels,
             datasets: [{
                 label: 'Money in the account',
-                data: [<#list transactions as transaction>${transaction.amount?c},</#list>].reverse(),
+                data: [<#if transactions?has_content><#list transactions as transaction>${transaction.amount?c},</#list></#if>].reverse(),
                 fill: false,
                 borderColor: 'rgb(75, 192, 192)',
                 tension: 0.1

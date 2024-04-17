@@ -30,7 +30,7 @@ public class AdminControllerTests {
     public void adminShowAllUsersTest() throws Exception {
         mockMvc.perform(get("/admin"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("users"))
+                .andExpect(view().name("admin/users"))
                 .andExpect(content().string(containsString("Admin panel")))
                 .andExpect(content().string(containsString("User")));
     }

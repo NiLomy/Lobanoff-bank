@@ -71,6 +71,7 @@ $("#submit-button").on("click", function () {
     ) {
         let email = $("#email").val();
         let password = $("#password").val();
+        let rememberMe = $("#remember-me").val();
 
         let csrfHeader = $("meta[name='_csrf_header']").attr("content");
         let csrfToken = $("meta[name='_csrf']").attr("content");
@@ -83,7 +84,8 @@ $("#submit-button").on("click", function () {
             },
             data: {
                 "email": email,
-                "password": password
+                "password": password,
+                "remember-me": rememberMe
             },
             statusCode: {
                 200: function () {

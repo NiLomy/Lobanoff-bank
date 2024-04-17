@@ -1,6 +1,6 @@
 <#import "/spring.ftl" as spring />
 
-<#include "base.ftlh">
+<#include "../base/base.ftlh">
 
 <#macro styles>
     <link rel="stylesheet" href="css/login.css" xmlns="http://www.w3.org/1999/html">

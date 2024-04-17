@@ -1,43 +1,36 @@
 package ru.kpfu.itis.lobanov.controllers.accounts;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kpfu.itis.lobanov.api.accounts.AccountDetailsApi;
 import ru.kpfu.itis.lobanov.data.entities.User;
 import ru.kpfu.itis.lobanov.data.services.BankAccountService;
 import ru.kpfu.itis.lobanov.data.services.OperationService;
+import ru.kpfu.itis.lobanov.data.services.UserService;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
 import ru.kpfu.itis.lobanov.dtos.OperationDto;
+import ru.kpfu.itis.lobanov.dtos.UserDto;
 
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class AccountDetailsController implements AccountDetailsApi {
     private final BankAccountService bankAccountService;
     private final OperationService operationService;
-
-    @Autowired
-    public AccountDetailsController(BankAccountService bankAccountService, OperationService operationService) {
-        this.bankAccountService = bankAccountService;
-        this.operationService = operationService;
-    }
+    private final UserService userService;
 
     @Override
-    public String showAccountDetailsPage(String accountId, Model model, Authentication authentication) {
-        if (authentication != null) { // check if user is authorized
-            User user = (User) authentication.getPrincipal();
-            BankAccountDto currentAccount = bankAccountService.getAccountById(Long.parseLong(accountId));
-            List<OperationDto> operations = operationService.findAllByUserLimitRecent(currentAccount);
-            model.addAttribute("currentUser", user);
-            model.addAttribute("currentAccount", currentAccount);
-            model.addAttribute("transactions", operations);
-            return "account";
-        } else {
-            return "redirect:/login";
-        }
+    public String showAccountDetailsPage(String accountId, Model model) {
+        UserDto currentUser = userService.getCurrentUser();
+        BankAccountDto currentAccount = bankAccountService.getAccountById(Long.parseLong(accountId));
+        List<OperationDto> operations = operationService.findAllByUserLimitRecent(currentAccount);
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentAccount", currentAccount);
+        model.addAttribute("transactions", operations);
+        return "accounts/account";
     }
 
     @Override

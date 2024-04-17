@@ -40,6 +40,12 @@ public class BankAccount {
     @ToString.Exclude
     private List<Card> cards;
 
+    @NotNull
+    private String number;
+
+    @NotNull
+    private Long beginningMonthDeposit;
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

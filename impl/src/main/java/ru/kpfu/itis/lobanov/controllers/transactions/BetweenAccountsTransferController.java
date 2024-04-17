@@ -1,6 +1,6 @@
-package ru.kpfu.itis.lobanov.controllers.transfers;
+package ru.kpfu.itis.lobanov.controllers.transactions;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,34 +8,32 @@ import ru.kpfu.itis.lobanov.api.transfers.BetweenAccountsTransferApi;
 import ru.kpfu.itis.lobanov.data.entities.User;
 import ru.kpfu.itis.lobanov.data.services.BankAccountService;
 import ru.kpfu.itis.lobanov.data.services.OperationService;
+import ru.kpfu.itis.lobanov.data.services.UserService;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
 import ru.kpfu.itis.lobanov.dtos.BetweenAccountsTransferForm;
+import ru.kpfu.itis.lobanov.dtos.UserDto;
 
 import java.util.List;
 import java.util.Objects;
 
 @Controller
+@RequiredArgsConstructor
 public class BetweenAccountsTransferController implements BetweenAccountsTransferApi {
     private final BankAccountService bankAccountService;
     private final OperationService operationService;
-
-    @Autowired
-    public BetweenAccountsTransferController(BankAccountService bankAccountService, OperationService operationService) {
-        this.bankAccountService = bankAccountService;
-        this.operationService = operationService;
-    }
+    private final UserService userService;
 
     @Override
-    public String getTransfersPage(String accountId, Model model, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+    public String getTransfersPage(String accountId, Model model) {
+        UserDto currentUser = userService.getCurrentUser();
         BankAccountDto currentAccount = bankAccountService.getAccountById(Long.parseLong(accountId));
-        BankAccountDto anotherAccount = bankAccountService.getAllUserAccounts(user).stream().filter(account -> !Objects.equals(account.getId(), currentAccount.getId())).findAny().orElseThrow(IllegalArgumentException::new);
-        List<BankAccountDto> accounts = bankAccountService.getAllUserAccounts(user);
-        model.addAttribute("currentUser", user);
+        BankAccountDto anotherAccount = bankAccountService.getAllUserAccounts(currentUser).stream().filter(account -> !Objects.equals(account.getId(), currentAccount.getId())).findAny().orElseThrow(IllegalArgumentException::new);
+        List<BankAccountDto> accounts = bankAccountService.getAllUserAccounts(currentUser);
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentAccount", currentAccount);
         model.addAttribute("anotherAccount", anotherAccount);
         model.addAttribute("accountsList", accounts);
-        return "between_accounts_transfer";
+        return "transactions/between_accounts_transfer";
     }
 
     @Override

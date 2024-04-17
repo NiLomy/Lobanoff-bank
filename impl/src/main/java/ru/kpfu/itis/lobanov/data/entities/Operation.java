@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -21,7 +22,7 @@ public class Operation {
     private Long id;
 
     @NotNull
-    private Date date;
+    private LocalDate date;
 
     @NotNull
     private Long amount;

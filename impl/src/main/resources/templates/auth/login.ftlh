@@ -1,4 +1,4 @@
-<#include "base.ftlh">
+<#include "../base/base.ftlh">
 
 <#macro styles>
     <link rel="stylesheet" href="css/login.css">
@@ -28,6 +28,11 @@
                 <div class="error error-txt">Password can't be blank</div>
             </div>
             <div class="pass-txt"><a href="#">Forgot password?</a></div>
+            <br>
+            <input id="remember-me" type="checkbox" value="off"
+                   name="remember-me">
+            <label for="remember-me">Remember me</label>
+            <br>
             <input id="submit-button" type="submit" value="Login">
         </div>
 <#--        <form method="POST" action="/login" id="loginForm">-->

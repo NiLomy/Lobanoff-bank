@@ -1,36 +1,32 @@
 package ru.kpfu.itis.lobanov.controllers.cards;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kpfu.itis.lobanov.api.cards.CreatingCardApi;
 import ru.kpfu.itis.lobanov.data.entities.User;
 import ru.kpfu.itis.lobanov.data.services.BankAccountService;
 import ru.kpfu.itis.lobanov.data.services.CardService;
+import ru.kpfu.itis.lobanov.data.services.UserService;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
 import ru.kpfu.itis.lobanov.dtos.CardDto;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
 
 @Controller
+@RequiredArgsConstructor
 public class CreatingCardController implements CreatingCardApi {
     private final BankAccountService bankAccountService;
     private final CardService cardService;
-
-    @Autowired
-    public CreatingCardController(BankAccountService bankAccountService, CardService cardService) {
-        this.bankAccountService = bankAccountService;
-        this.cardService = cardService;
-    }
+    private final UserService userService;
 
     @Override
-    public String getCreatingCardPage(String accountId, Model model, Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+    public String getCreatingCardPage(String accountId, Model model) {
+        UserDto currentUser = userService.getCurrentUser();
         BankAccountDto currentAccount = bankAccountService.getAccountById(Long.parseLong(accountId));
         model.addAttribute("currentAccount", currentAccount);
-        model.addAttribute("currentUser", user);
-        return "creating_card";
+        model.addAttribute("currentUser", currentUser);
+        return "cards/creating_card";
     }
 
     @Override

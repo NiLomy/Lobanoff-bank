@@ -5,17 +5,34 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.kpfu.itis.lobanov.data.entities.BankAccount;
+import ru.kpfu.itis.lobanov.data.entities.Card;
 import ru.kpfu.itis.lobanov.data.entities.User;
+import ru.kpfu.itis.lobanov.data.mappers.BankAccountMapper;
+import ru.kpfu.itis.lobanov.data.mappers.CardMapper;
+import ru.kpfu.itis.lobanov.data.mappers.OperationMapper;
 import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
+import ru.kpfu.itis.lobanov.data.mappers.impl.BankAccountMapperImpl;
+import ru.kpfu.itis.lobanov.data.mappers.impl.CardMapperImpl;
+import ru.kpfu.itis.lobanov.data.mappers.impl.OperationMapperImpl;
 import ru.kpfu.itis.lobanov.data.mappers.impl.UserMapperImpl;
+import ru.kpfu.itis.lobanov.data.repositories.BankAccountRepository;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
+import ru.kpfu.itis.lobanov.data.services.BankAccountService;
+import ru.kpfu.itis.lobanov.data.services.OperationService;
+import ru.kpfu.itis.lobanov.data.services.RegistrationService;
+import ru.kpfu.itis.lobanov.data.services.impl.BankAccountServiceImpl;
+import ru.kpfu.itis.lobanov.data.services.impl.OperationServiceImpl;
 import ru.kpfu.itis.lobanov.data.services.impl.RegistrationServiceImpl;
 import ru.kpfu.itis.lobanov.data.services.impl.UserServiceImpl;
-import ru.kpfu.itis.lobanov.dtos.Role;
-import ru.kpfu.itis.lobanov.dtos.State;
+import ru.kpfu.itis.lobanov.dtos.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.doNothing;
 
 @TestConfiguration
 public class TestConfig {
@@ -63,8 +80,54 @@ public class TestConfig {
     };
 
     @Bean
+    public BankAccountRepository bankAccountRepository() {
+        User owner = User.builder()
+                .id(1L)
+                .email("test@mail.com")
+                .password("testPassword")
+                .role(Role.USER)
+                .state(State.ACTIVE)
+                .isDeleted(false)
+                .build();
+        Card card = Card.builder()
+                .owner(owner)
+                .cvv("302")
+                .expiration("03/28")
+                .number("1144485810352102")
+                .build();
+
+        BankAccount bankAccount = BankAccount.builder()
+                .name("AAAA")
+                .owner(owner)
+                .cards(List.of(card))
+                .deposit(1000L)
+                .operations(null)
+                .beginningMonthDeposit(500L)
+                .number("1")
+                .build();
+        BankAccountRepository bankAccountRepository = Mockito.mock(BankAccountRepository.class);
+        Mockito.when(bankAccountRepository.findById(1L)).thenReturn(Optional.of(bankAccount));
+        return bankAccountRepository;
+    }
+
+    @Bean
     public UserMapper userMapper() {
         return new UserMapperImpl();
+    }
+
+    @Bean
+    public OperationMapper operationMapper() {
+        return new OperationMapperImpl();
+    }
+
+    @Bean
+    public CardMapper cardMapper() {
+        return new CardMapperImpl(userMapper());
+    }
+
+    @Bean
+    public BankAccountMapper bankAccountMapper() {
+        return new BankAccountMapperImpl(userMapper(), cardMapper(), operationMapper());
     }
 
     @Bean
@@ -73,7 +136,21 @@ public class TestConfig {
     }
 
     @Bean
-    public RegistrationServiceImpl registrationService() {
-        return new RegistrationServiceImpl(userRepository(), passwordEncoder());
+    public RegistrationService registrationService() {
+        RegistrationForm registrationForm = new RegistrationForm("test1@mail.com", "password", "password");
+        RegistrationService registrationService = Mockito.mock(RegistrationServiceImpl.class);
+        doNothing().when(registrationService).register(isA(RegistrationForm.class));
+        return registrationService;
+    }
+
+    @Bean
+    public BankAccountService bankAccountService() {
+        return Mockito.mock(BankAccountServiceImpl.class);
+//        return new BankAccountServiceImpl(bankAccountRepository(), userRepository(), null, bankAccountMapper(), null);
+    }
+
+    @Bean
+    OperationService operationService() {
+        return Mockito.mock(OperationServiceImpl.class);
     }
 }

@@ -9,6 +9,8 @@ public interface UserService {
 
     UserDto getUserByPhone(String phone);
 
+    UserDto getCurrentUser();
+
     void banUser(UserDto userDto);
 
     void deleteUser(Long userId);

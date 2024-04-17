@@ -1,4 +1,4 @@
-<#include "base.ftlh">
+<#include "../base/base.ftlh">
 
 <#macro styles>
     <link rel="stylesheet" href="/css/transfers.css">
@@ -9,7 +9,7 @@
 
 <#macro content>
     <div class="transfer-page">
-        <#include "header.ftlh">
+        <#include "../base/header.ftlh">
 
         <div class="transfer-phone-container">
              <div class="transfer-phone-title">
@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        <#include "footer.ftlh">
+        <#include "../base/footer.ftlh">
     </div>
 </#macro>
 

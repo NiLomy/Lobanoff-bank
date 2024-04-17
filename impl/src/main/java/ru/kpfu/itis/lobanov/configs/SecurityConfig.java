@@ -1,5 +1,6 @@
 package ru.kpfu.itis.lobanov.configs;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,16 +23,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import javax.sql.DataSource;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final DataSource dataSource;
-
-    @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService, DataSource dataSource) {
-        this.userDetailsService = userDetailsService;
-        this.dataSource = dataSource;
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,7 +39,7 @@ public class SecurityConfig {
         return http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/profile").authenticated()
-                        .requestMatchers("/transfers/between-accounts").authenticated()
+                        .requestMatchers("/transfers/**").authenticated()
                         .requestMatchers("/admin").hasAuthority("ADMIN")
                         .anyRequest().permitAll())
                 .formLogin(formLogin -> formLogin
@@ -52,6 +49,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/profile")
                         .failureUrl("/login?error"))
                 .rememberMe(rememberMe -> rememberMe
+                        .rememberMeCookieName("remember-me")
                         .rememberMeParameter("remember-me")
                         .tokenRepository(persistentTokenRepository()))
                 .logout(logout -> logout
@@ -59,6 +57,7 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                         .deleteCookies("SESSIONID"))
+                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
 
