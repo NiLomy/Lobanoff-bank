@@ -40,7 +40,7 @@
             </div>
             <div class="field password">
                 <div class="input-area">
-                    <input id="confirmPassword" name="password" type="password" placeholder="Confirm Password">
+                    <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password">
                     <i class="icon fas fa-lock"></i>
                     <i class="error error-icon fas fa-exclamation-circle"></i>
                 </div>

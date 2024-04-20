@@ -29,12 +29,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @NotBlank
     private String name;
 
-    @NotNull
-    @NotBlank
     private String lastname;
 
     private String patronymic;

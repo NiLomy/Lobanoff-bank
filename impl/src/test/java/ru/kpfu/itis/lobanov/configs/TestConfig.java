@@ -102,7 +102,6 @@ public class TestConfig {
                 .cards(List.of(card))
                 .deposit(1000L)
                 .operations(null)
-                .beginningMonthDeposit(500L)
                 .number("1")
                 .build();
         BankAccountRepository bankAccountRepository = Mockito.mock(BankAccountRepository.class);
