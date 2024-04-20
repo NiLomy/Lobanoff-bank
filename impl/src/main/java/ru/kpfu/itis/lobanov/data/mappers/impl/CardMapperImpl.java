@@ -3,6 +3,7 @@ package ru.kpfu.itis.lobanov.data.mappers.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.kpfu.itis.lobanov.data.entities.Card;
+import ru.kpfu.itis.lobanov.data.mappers.BankAccountMapper;
 import ru.kpfu.itis.lobanov.data.mappers.CardMapper;
 import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
 import ru.kpfu.itis.lobanov.dtos.CardDto;
@@ -19,8 +20,10 @@ public class CardMapperImpl implements CardMapper {
     public CardDto toResponse(Card card) {
         return CardDto.builder()
                 .id(card.getId())
+                .name(card.getName())
                 .number(card.getNumber())
                 .owner(userMapper.toResponse(card.getOwner()))
+                .accountId(card.getAccount().getId())
                 .build();
     }
 

@@ -34,8 +34,4 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
     @Modifying
     @Query("update BankAccount set deposit = :deposit where id = :id")
     void updateDepositById(Long id, Long deposit);
-
-    @Modifying
-    @Query("update BankAccount set beginningMonthDeposit = :deposit where id = :id")
-    void updateBeginningMonthDepositById(Long id, Long deposit);
 }

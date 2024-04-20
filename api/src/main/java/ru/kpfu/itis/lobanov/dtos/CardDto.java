@@ -16,10 +16,14 @@ import lombok.NoArgsConstructor;
 public class CardDto {
     @Schema(description = "Id of the card.", example = "123")
     private Long id;
+
+    private String name;
     @Schema(description = "Number of the card.", example = "1144485810352102", maxLength = 16)
     @NotBlank(message = "Credit card number shouldn't be empty.")
     private String number;
     @Schema(description = "Owner of the bank account.")
     @NotNull(message = "Owner of the card shouldn't be null.")
     private UserDto owner;
+
+    private Long accountId;
 }

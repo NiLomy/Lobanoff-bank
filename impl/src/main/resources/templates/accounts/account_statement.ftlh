@@ -28,7 +28,7 @@
                 <ul class="account-requisites-table">
                     <li class="account-requisites-table-item">
                         <div class="account-requisites-table-item-content">
-                            <p class="account-requisites-table-item-content-title">Balance at the beginning of the period (12.01.2024):</p>
+                            <p class="account-requisites-table-item-content-title">Balance at the beginning of the period (${dateFrom}):</p>
                             <p class="account-requisites-table-item-content-text">${statement.startBalance}</p>
                         </div>
                     </li>
@@ -52,7 +52,7 @@
                     </li>
                     <li class="account-requisites-table-item">
                         <div class="account-requisites-table-item-content">
-                            <p class="account-requisites-table-item-content-title">Balance at the end of the period (02/11/2024):</p>
+                            <p class="account-requisites-table-item-content-title">Balance at the end of the period (${dateTo}):</p>
                             <p class="account-requisites-table-item-content-text">${statement.endBalance}</p>
                         </div>
                     </li>

@@ -26,7 +26,5 @@ public interface BankAccountService {
 
     BankAccountDto bindCard(Long accountId, CardDto cardDto);
 
-    AccountStatementDto getStatement(Long accountId);
-
-    void updateBeginningMonthDeposit();
+    AccountStatementDto getStatement(Long accountId, String date);
 }

@@ -26,7 +26,7 @@
                     <li class="account-requisites-table-item">
                         <div class="account-requisites-table-item-content">
                             <p class="account-requisites-table-item-content-title">Payee</p>
-                            <p class="account-requisites-table-item-content-text">${requisites.payee}</p>
+                            <p class="account-requisites-table-item-content-text">${requisites.payee.lastname} ${requisites.payee.name} <#if requisites.payee.patronymic? has_content>${requisites.payee.patronymic}</#if></p>
                         </div>
                     </li>
                     <li class="account-requisites-table-item">

@@ -13,6 +13,9 @@ import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
 import ru.kpfu.itis.lobanov.dtos.CardDto;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
 
+import static ru.kpfu.itis.lobanov.utils.NamingConstants.CURRENT_ACCOUNT_KEY;
+import static ru.kpfu.itis.lobanov.utils.NamingConstants.CURRENT_USER_KEY;
+
 @Controller
 @RequiredArgsConstructor
 public class CreatingCardController implements CreatingCardApi {
@@ -24,8 +27,10 @@ public class CreatingCardController implements CreatingCardApi {
     public String getCreatingCardPage(String accountId, Model model) {
         UserDto currentUser = userService.getCurrentUser();
         BankAccountDto currentAccount = bankAccountService.getAccountById(Long.parseLong(accountId));
-        model.addAttribute("currentAccount", currentAccount);
-        model.addAttribute("currentUser", currentUser);
+
+        model.addAttribute(CURRENT_ACCOUNT_KEY, currentAccount);
+        model.addAttribute(CURRENT_USER_KEY, currentUser);
+
         return "cards/creating_card";
     }
 

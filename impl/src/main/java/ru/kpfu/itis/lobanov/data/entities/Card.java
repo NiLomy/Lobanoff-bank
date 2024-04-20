@@ -22,6 +22,8 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
     @NotNull
     @CreditCardNumber(message = "Not valid credit card number!")
     private String number;
@@ -38,6 +40,9 @@ public class Card {
     @NotNull
     @ManyToOne
     private User owner;
+
+    @ManyToOne
+    private BankAccount account;
 
     @Override
     public final boolean equals(Object o) {

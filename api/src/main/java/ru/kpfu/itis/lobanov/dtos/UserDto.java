@@ -19,6 +19,9 @@ import java.util.Collections;
 public class UserDto {
     @Schema(description = "Id of the user.", example = "123")
     private Long id;
+    private String name;
+    private String lastname;
+    private String patronymic;
     @Schema(description = "Email of the user.", example = "test@mail.com")
     @NotBlank(message = "Email shouldn't be empty.")
     @Email(message = "Email should be valid.")

@@ -12,6 +12,7 @@ import ru.kpfu.itis.lobanov.data.repositories.CardRepository;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
 import ru.kpfu.itis.lobanov.data.services.CardService;
 import ru.kpfu.itis.lobanov.dtos.CardDto;
+import ru.kpfu.itis.lobanov.dtos.UserDto;
 import ru.kpfu.itis.lobanov.utils.CreditCardNumberGenerator;
 
 import java.time.LocalDate;
@@ -27,6 +28,12 @@ public class CardServiceImpl implements CardService {
     private final CardMapper cardMapper;
 
     @Override
+    public CardDto getById(Long cardId) {
+        Card card = cardRepository.findById(cardId).orElseThrow(IllegalArgumentException::new);
+        return cardMapper.toResponse(card);
+    }
+
+    @Override
     public CardDto create(Long accountId) {
         BankAccount bankAccount = bankAccountRepository.findById(accountId).orElseThrow(IllegalArgumentException::new);
         Random random = new Random();
@@ -40,6 +47,7 @@ public class CardServiceImpl implements CardService {
                         .expiration(String.format("%02d/%02d", month, year))
                         .cvv(String.valueOf(cvv))
                         .owner(bankAccount.getOwner())
+                        .account(bankAccount)
                         .build()
         );
 

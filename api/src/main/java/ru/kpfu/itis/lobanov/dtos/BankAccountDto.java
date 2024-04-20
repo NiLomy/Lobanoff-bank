@@ -31,7 +31,4 @@ public class BankAccountDto {
     private List<OperationDto> operations;
     @Schema(description = "Cards of the bank account.")
     private List<CardDto> cards;
-    @Schema(description = "Deposit of the bank account ath the beginning of the month.", example = "10000")
-    @NotNull(message = "Deposit of the bank account shouldn't be empty.")
-    private Long beginningMonthDeposit;
 }

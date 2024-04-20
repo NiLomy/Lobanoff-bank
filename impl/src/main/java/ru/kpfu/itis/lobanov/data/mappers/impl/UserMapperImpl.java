@@ -19,6 +19,9 @@ public class UserMapperImpl implements UserMapper {
 
         return UserDto.builder()
                 .id(userEntity.getId())
+                .name(userEntity.getName())
+                .lastname(userEntity.getLastname())
+                .patronymic(userEntity.getPatronymic())
                 .email(userEntity.getEmail())
                 .phone(userEntity.getPhone())
                 .role(userEntity.getRole())

@@ -22,87 +22,33 @@
                         </a>
                     </div>
                     <div class="account-name-container">
-                        <span id="account-name" class="account-name">${currentAccount.name}</span>
+                        <span id="account-name" class="account-name">${currentCard.number}</span>
                         <div class="account-name-edit-container">
                             <span id="edit-account-name" class="account-name-edit">Edit</span>
                         </div>
                     </div>
                 </div>
                 <div class="account-deposit">
-                    <span>${currentAccount.deposit} ₽</span>
+<#--                    <span>${currentAccount.deposit} ₽</span>-->
                 </div>
             </div>
             <div class="account-actions">
                 <div class="account-action">
-                    <a href="/transfers/${currentAccount.id}" style="text-decoration: none">
-                        <div class="action-card">
-                            <div class="action-card-icon"></div>
-                            <div class="action-card-extend">
-                                <div class="action-card-name">
-                                    <span class="action-card-text">Transfer</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+
                 </div>
                 <div class="account-action">
-                    <a href="/replenishes/${currentAccount.id}" style="text-decoration: none">
-                        <div class="action-card">
-                            <div class="action-card-icon"></div>
-                            <div class="action-card-extend">
-                                <div class="action-card-name">
-                                    <span class="action-card-text">Replenish</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+
                 </div>
                 <div class="account-action">
-                    <a href="/requisites/${currentAccount.id}" style="text-decoration: none">
-                        <div class="action-card">
-                            <div class="action-card-icon"></div>
-                            <div class="action-card-extend">
-                                <div class="action-card-name">
-                                    <span class="action-card-text">Requisites</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+
                 </div>
                 <div class="account-action">
-                    <a href="/account/${currentAccount.id}/statement/${currentDate}" style="text-decoration: none">
-                        <div class="action-card">
-                            <div class="action-card-icon"></div>
-                            <div class="action-card-extend">
-                                <div class="action-card-name">
-                                    <span class="action-card-text">Account statement</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+
                 </div>
             </div>
             <div>
                 <br>
                 <br>
-
-                <span>Linked cards:</span>
-                <div>
-                    <#if currentAccount.cards?has_content>
-                        <#list currentAccount.cards as card>
-                            <a href="/card/${card.id}">
-                                <div class="account-card">
-                                    <span>·· ${card.number[card.number?length - 4..]}</span>
-                                </div>
-                            </a>
-                        </#list>
-                    </#if>
-                    <div class="account-card">
-                        <a href="/adding-card/${currentAccount.id}">
-                            <span>Add a card</span>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -118,10 +64,10 @@
             $("#edit-account-name").on("click", function () {
                 let accountName = $("#account-name");
                 if (accountName.is('span')) {
-                    let input = $("<input id='edit-account-name-input' class='account-name account-name-editor'>", { value: "${currentAccount.name}", type: "text" });
+                    let input = $("<input id='edit-account-name-input' class='account-name account-name-editor'>", { value: "${currentCard.number}", type: "text" });
                     accountName.replaceWith(input);
                     input.select();
-                    input.val("${currentAccount.name}");
+                    input.val("${currentCard.number}");
                     let accountNameInput = $("#edit-account-name-input");
 
                     accountNameInput.keyup(function (event) {
@@ -133,7 +79,7 @@
                     accountNameInput.blur(function () {
                         let spanName = $("<span id='account-name' class='account-name'>");
                         $("#edit-account-name-input").replaceWith(spanName);
-                        spanName.text("${currentAccount.name}");
+                        spanName.text("${currentCard.number}");
                     });
                 }
 
@@ -143,13 +89,13 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "/account/${currentAccount.id}?name=" + $("#edit-account-name-input").val(),
+                        url: "/account/${currentCard.id}?name=" + $("#edit-account-name-input").val(),
                         beforeSend: function(xhr) {
                             xhr.setRequestHeader(csrfHeader, csrfToken);
                         },
                         statusCode: {
                             200: function () {
-                                window.location.replace("/account/${currentAccount.id}")
+                                window.location.replace("/account/${currentCard.id}")
                             },
                             <#--404: function () {-->
                             <#--    window.location.replace("/account/${currentAccount.id}")-->

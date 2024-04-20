@@ -57,7 +57,6 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                         .deleteCookies("SESSIONID"))
-                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
 

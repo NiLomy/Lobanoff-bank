@@ -28,7 +28,6 @@ public class BankAccountMapperImpl implements BankAccountMapper {
                 .owner(userMapper.toResponse(bankAccount.getOwner()))
                 .cards(cardMapper.toListResponse(bankAccount.getCards()))
                 .operations(operationMapper.toListResponse(bankAccount.getOperations()))
-                .beginningMonthDeposit(bankAccount.getBeginningMonthDeposit())
                 .build();
     }
 
