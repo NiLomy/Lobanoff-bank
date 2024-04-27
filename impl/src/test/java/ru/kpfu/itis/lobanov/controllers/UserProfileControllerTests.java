@@ -13,9 +13,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.kpfu.itis.lobanov.configs.SecurityConfig;
 import ru.kpfu.itis.lobanov.configs.TestConfig;
-import ru.kpfu.itis.lobanov.controllers.accounts.UserProfileController;
 import ru.kpfu.itis.lobanov.data.services.BankAccountService;
-import ru.kpfu.itis.lobanov.data.services.OperationService;
+import ru.kpfu.itis.lobanov.data.services.TransactionService;
 import ru.kpfu.itis.lobanov.data.services.UserService;
 import ru.kpfu.itis.lobanov.data.services.impl.UserDetailsServiceImpl;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
@@ -34,7 +33,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.kpfu.itis.lobanov.utils.Constants.*;
 
-@WebMvcTest(UserProfileController.class)
+@WebMvcTest
 @Import({TestConfig.class, SecurityConfig.class, UserDetailsServiceImpl.class, DataSourceAutoConfiguration.class})
 @ExtendWith(SpringExtension.class)
 @DisplayName("UserProfileController API test")
@@ -44,7 +43,7 @@ public class UserProfileControllerTests {
     @MockBean
     private BankAccountService bankAccountService;
     @MockBean
-    private OperationService operationService;
+    private TransactionService transactionService;
     @MockBean
     private UserService userService;
 
@@ -73,7 +72,6 @@ public class UserProfileControllerTests {
                 .owner(accountOwner)
                 .cards(userCards)
                 .deposit(BANK_ACCOUNT_DEPOSIT)
-                .beginningMonthDeposit(BANK_ACCOUNT_BEGINNING_MONTH_DEPOSIT)
                 .operations(null)
                 .build();
         accounts = Collections.singletonList(bankAccount);
@@ -81,8 +79,8 @@ public class UserProfileControllerTests {
 
     @BeforeEach
     public void setUpServices() {
-        given(bankAccountService.getAllUserAccounts(accountOwner)).willReturn(accounts);
-        given(operationService.findAllByUserLimitRecent(bankAccount)).willReturn(null);
+        given(bankAccountService.getAllUserAccounts(accountOwner.getId())).willReturn(accounts);
+        given(transactionService.getAllRecentTransactions(bankAccount.getId())).willReturn(null);
         given(userService.getCurrentUser()).willReturn(accountOwner);
     }
 
@@ -159,12 +157,12 @@ public class UserProfileControllerTests {
             public void shouldHaveServicesInvocations() throws Exception {
                 mockMvc.perform(get(PROFILE_URL).with(csrf()));
 
-                verify(bankAccountService, times(BANK_ACCOUNT_SERVICE_INVOCATION_COUNT)).getAllUserAccounts(accountOwner);
-                verify(operationService, times(OPERATION_SERVICE_INVOCATION_COUNT)).findAllByUserLimitRecent(bankAccount);
+                verify(bankAccountService, times(BANK_ACCOUNT_SERVICE_INVOCATION_COUNT)).getAllUserAccounts(accountOwner.getId());
+                verify(transactionService, times(OPERATION_SERVICE_INVOCATION_COUNT)).getAllRecentTransactions(bankAccount.getId());
                 verify(userService, times(USER_SERVICE_INVOCATION_COUNT)).getCurrentUser();
 
                 verifyNoMoreInteractions(bankAccountService);
-                verifyNoMoreInteractions(operationService);
+                verifyNoMoreInteractions(transactionService);
                 verifyNoMoreInteractions(userService);
             }
         }

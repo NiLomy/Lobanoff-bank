@@ -2,28 +2,22 @@ package ru.kpfu.itis.lobanov.data.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.lobanov.data.entities.BankAccount;
 import ru.kpfu.itis.lobanov.data.entities.Card;
 import ru.kpfu.itis.lobanov.data.entities.Operation;
-import ru.kpfu.itis.lobanov.data.entities.User;
 import ru.kpfu.itis.lobanov.data.mappers.BankAccountMapper;
 import ru.kpfu.itis.lobanov.data.repositories.BankAccountRepository;
 import ru.kpfu.itis.lobanov.data.repositories.CardRepository;
-import ru.kpfu.itis.lobanov.data.repositories.OperationRepository;
-import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
+import ru.kpfu.itis.lobanov.data.repositories.TransactionRepository;
 import ru.kpfu.itis.lobanov.data.services.BankAccountService;
 import ru.kpfu.itis.lobanov.data.services.DateService;
 import ru.kpfu.itis.lobanov.dtos.AccountStatementDto;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
-import ru.kpfu.itis.lobanov.dtos.CardDto;
-import ru.kpfu.itis.lobanov.dtos.UserDto;
+import ru.kpfu.itis.lobanov.dtos.requests.BindCardRequest;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -34,7 +28,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     private final BankAccountRepository bankAccountRepository;
     private final CardRepository cardRepository;
     private final BankAccountMapper bankAccountMapper;
-    private final OperationRepository operationRepository;
+    private final TransactionRepository transactionRepository;
     private final DateService dateService;
 
     @Override
@@ -43,13 +37,13 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public List<BankAccountDto> getAllUserAccounts(UserDto userDto) {
-        return bankAccountMapper.toListResponse(bankAccountRepository.findAllByOwnerId(userDto.getId()));
+    public List<BankAccountDto> getAllUserAccounts(Long userId) {
+        return bankAccountMapper.toListResponse(bankAccountRepository.findAllByOwnerId(userId));
     }
 
     @Override
-    public List<BankAccountDto> getAllUserCardAccounts(UserDto userDto) {
-        return bankAccountMapper.toListResponse(bankAccountRepository.findAllCardsByOwnerId(userDto.getId()));
+    public List<BankAccountDto> getAllUserCardAccounts(Long userId) {
+        return bankAccountMapper.toListResponse(bankAccountRepository.findAllCardsByOwnerId(userId));
     }
 
     @Override
@@ -76,9 +70,9 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
-    public BankAccountDto bindCard(Long accountId, CardDto cardDto) {
-        BankAccount account = bankAccountRepository.findById(accountId).orElseThrow(IllegalArgumentException::new);
-        Card card = cardRepository.findById(cardDto.getId()).orElseThrow(IllegalArgumentException::new);
+    public BankAccountDto bindCard(BindCardRequest request) {
+        BankAccount account = bankAccountRepository.findById(Long.parseLong(request.getAccountId())).orElseThrow(IllegalArgumentException::new);
+        Card card = cardRepository.findById(Long.parseLong(request.getCardId())).orElseThrow(IllegalArgumentException::new);
         account.getCards().add(card);
         return bankAccountMapper.toResponse(bankAccountRepository.save(account));
     }
@@ -90,11 +84,11 @@ public class BankAccountServiceImpl implements BankAccountService {
         LocalDate dateFrom = dateService.getFullDate(date);
         LocalDate dateTo = dateService.getNextMonth(date);
 
-        Long lastMonthDeposit = operationRepository.getBeginningMonthDeposit(account, dateFrom);
+        Long lastMonthDeposit = transactionRepository.getBeginningMonthDeposit(account, dateFrom);
         if (lastMonthDeposit == null) lastMonthDeposit = 0L;
 
-        List<Operation> replenishmentOperations = operationRepository.findAllByAccountToAndBetweenDates(account, dateFrom, dateTo);
-        List<Operation> transferOperations = operationRepository.findAllByAccountFromAndBetweenDates(account, dateFrom, dateTo);
+        List<Operation> replenishmentOperations = transactionRepository.findAllByAccountToAndBetweenDates(account, dateFrom, dateTo);
+        List<Operation> transferOperations = transactionRepository.findAllByAccountFromAndBetweenDates(account, dateFrom, dateTo);
 
         long replenishment = replenishmentOperations.stream().map(Operation::getAmount).mapToLong(Long::longValue).sum();
         long transfer = transferOperations.stream().map(Operation::getAmount).mapToLong(Long::longValue).sum();

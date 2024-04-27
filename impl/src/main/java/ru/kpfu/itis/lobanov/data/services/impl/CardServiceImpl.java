@@ -13,6 +13,7 @@ import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
 import ru.kpfu.itis.lobanov.data.services.CardService;
 import ru.kpfu.itis.lobanov.dtos.CardDto;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
+import ru.kpfu.itis.lobanov.dtos.requests.CreateCardRequest;
 import ru.kpfu.itis.lobanov.utils.CreditCardNumberGenerator;
 
 import java.time.LocalDate;
@@ -34,8 +35,8 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardDto create(Long accountId) {
-        BankAccount bankAccount = bankAccountRepository.findById(accountId).orElseThrow(IllegalArgumentException::new);
+    public CardDto create(CreateCardRequest request) {
+        BankAccount bankAccount = bankAccountRepository.findById(Long.parseLong(request.getAccountId())).orElseThrow(IllegalArgumentException::new);
         Random random = new Random();
         LocalDate localDate = LocalDate.now();
         int year = localDate.getYear() % 100 + 4;

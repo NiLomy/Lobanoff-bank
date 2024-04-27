@@ -10,29 +10,24 @@ import ru.kpfu.itis.lobanov.data.entities.Card;
 import ru.kpfu.itis.lobanov.data.entities.User;
 import ru.kpfu.itis.lobanov.data.mappers.BankAccountMapper;
 import ru.kpfu.itis.lobanov.data.mappers.CardMapper;
-import ru.kpfu.itis.lobanov.data.mappers.OperationMapper;
+import ru.kpfu.itis.lobanov.data.mappers.TransactionMapper;
 import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
 import ru.kpfu.itis.lobanov.data.mappers.impl.BankAccountMapperImpl;
 import ru.kpfu.itis.lobanov.data.mappers.impl.CardMapperImpl;
-import ru.kpfu.itis.lobanov.data.mappers.impl.OperationMapperImpl;
+import ru.kpfu.itis.lobanov.data.mappers.impl.TransactionMapperImpl;
 import ru.kpfu.itis.lobanov.data.mappers.impl.UserMapperImpl;
 import ru.kpfu.itis.lobanov.data.repositories.BankAccountRepository;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
 import ru.kpfu.itis.lobanov.data.services.BankAccountService;
-import ru.kpfu.itis.lobanov.data.services.OperationService;
-import ru.kpfu.itis.lobanov.data.services.RegistrationService;
+import ru.kpfu.itis.lobanov.data.services.TransactionService;
 import ru.kpfu.itis.lobanov.data.services.impl.BankAccountServiceImpl;
-import ru.kpfu.itis.lobanov.data.services.impl.OperationServiceImpl;
-import ru.kpfu.itis.lobanov.data.services.impl.RegistrationServiceImpl;
+import ru.kpfu.itis.lobanov.data.services.impl.TransactionServiceImpl;
 import ru.kpfu.itis.lobanov.data.services.impl.UserServiceImpl;
 import ru.kpfu.itis.lobanov.dtos.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.doNothing;
 
 @TestConfiguration
 public class TestConfig {
@@ -115,8 +110,8 @@ public class TestConfig {
     }
 
     @Bean
-    public OperationMapper operationMapper() {
-        return new OperationMapperImpl();
+    public TransactionMapper operationMapper() {
+        return new TransactionMapperImpl();
     }
 
     @Bean
@@ -131,16 +126,9 @@ public class TestConfig {
 
     @Bean
     public UserServiceImpl userService() {
-        return new UserServiceImpl(userRepository(), userMapper());
+        return new UserServiceImpl(userRepository(), passwordEncoder(), userMapper());
     }
 
-    @Bean
-    public RegistrationService registrationService() {
-        RegistrationForm registrationForm = new RegistrationForm("test1@mail.com", "password", "password");
-        RegistrationService registrationService = Mockito.mock(RegistrationServiceImpl.class);
-        doNothing().when(registrationService).register(isA(RegistrationForm.class));
-        return registrationService;
-    }
 
     @Bean
     public BankAccountService bankAccountService() {
@@ -149,7 +137,7 @@ public class TestConfig {
     }
 
     @Bean
-    OperationService operationService() {
-        return Mockito.mock(OperationServiceImpl.class);
+    TransactionService operationService() {
+        return Mockito.mock(TransactionServiceImpl.class);
     }
 }

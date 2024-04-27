@@ -13,10 +13,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.kpfu.itis.lobanov.configs.SecurityConfig;
 import ru.kpfu.itis.lobanov.configs.TestConfig;
-import ru.kpfu.itis.lobanov.controllers.auth.RegistrationController;
-import ru.kpfu.itis.lobanov.data.services.RegistrationService;
+import ru.kpfu.itis.lobanov.data.services.UserService;
 import ru.kpfu.itis.lobanov.data.services.impl.UserDetailsServiceImpl;
-import ru.kpfu.itis.lobanov.dtos.RegistrationForm;
+import ru.kpfu.itis.lobanov.dtos.forms.RegistrationForm;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -25,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.kpfu.itis.lobanov.utils.Constants.*;
 
-@WebMvcTest(RegistrationController.class)
+@WebMvcTest
 @Import({TestConfig.class, SecurityConfig.class, UserDetailsServiceImpl.class, DataSourceAutoConfiguration.class})
 @ExtendWith(SpringExtension.class)
 @DisplayName("RegistrationController API test")
@@ -33,7 +32,7 @@ public class RegistrationControllerTests {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
-    private RegistrationService registrationService;
+    private UserService userService;
 
     private static RegistrationForm registrationForm;
 
@@ -44,7 +43,7 @@ public class RegistrationControllerTests {
 
     @BeforeEach
     public void setUpServices() {
-        doNothing().when(registrationService).register(any(RegistrationForm.class));
+        doNothing().when(userService).register(any(RegistrationForm.class));
     }
 
     @Nested
@@ -96,7 +95,7 @@ public class RegistrationControllerTests {
                                 .content(asJsonString(registrationForm))
                                 .contentType(MediaType.APPLICATION_JSON));
 
-                verifyNoInteractions(registrationService);
+                verifyNoInteractions(userService);
             }
         }
 
@@ -121,7 +120,7 @@ public class RegistrationControllerTests {
                                 .content(asJsonString(registrationForm))
                                 .contentType(MediaType.APPLICATION_JSON));
 
-                verifyNoInteractions(registrationService);
+                verifyNoInteractions(userService);
             }
         }
     }

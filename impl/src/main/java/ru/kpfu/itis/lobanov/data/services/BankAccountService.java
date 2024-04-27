@@ -6,15 +6,16 @@ import ru.kpfu.itis.lobanov.dtos.AccountStatementDto;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
 import ru.kpfu.itis.lobanov.dtos.CardDto;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
+import ru.kpfu.itis.lobanov.dtos.requests.BindCardRequest;
 
 import java.util.List;
 
 public interface BankAccountService {
     List<BankAccountDto> getAllAccounts();
 
-    List<BankAccountDto> getAllUserAccounts(UserDto userDto);
+    List<BankAccountDto> getAllUserAccounts(Long userId);
 
-    List<BankAccountDto> getAllUserCardAccounts(UserDto userDto);
+    List<BankAccountDto> getAllUserCardAccounts(Long userId);
 
     void createAccount(BankAccountDto bankAccountDto);
 
@@ -24,7 +25,7 @@ public interface BankAccountService {
 
     BankAccountDto updateAccountName(Long id, String name);
 
-    BankAccountDto bindCard(Long accountId, CardDto cardDto);
+    BankAccountDto bindCard(BindCardRequest request);
 
     AccountStatementDto getStatement(Long accountId, String date);
 }

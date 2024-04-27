@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.kpfu.itis.lobanov.data.entities.BankAccount;
 import ru.kpfu.itis.lobanov.data.mappers.BankAccountMapper;
 import ru.kpfu.itis.lobanov.data.mappers.CardMapper;
-import ru.kpfu.itis.lobanov.data.mappers.OperationMapper;
+import ru.kpfu.itis.lobanov.data.mappers.TransactionMapper;
 import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class BankAccountMapperImpl implements BankAccountMapper {
     private final UserMapper userMapper;
     private final CardMapper cardMapper;
-    private final OperationMapper operationMapper;
+    private final TransactionMapper transactionMapper;
 
     @Override
     public BankAccountDto toResponse(BankAccount bankAccount) {
@@ -27,12 +27,14 @@ public class BankAccountMapperImpl implements BankAccountMapper {
                 .deposit(bankAccount.getDeposit())
                 .owner(userMapper.toResponse(bankAccount.getOwner()))
                 .cards(cardMapper.toListResponse(bankAccount.getCards()))
-                .operations(operationMapper.toListResponse(bankAccount.getOperations()))
+                .operations(transactionMapper.toListResponse(bankAccount.getOperations()))
                 .build();
     }
 
     @Override
     public List<BankAccountDto> toListResponse(List<BankAccount> set) {
+        if (set == null) return null;
+
         return set.stream().map(this::toResponse).collect(Collectors.toList());
     }
 }

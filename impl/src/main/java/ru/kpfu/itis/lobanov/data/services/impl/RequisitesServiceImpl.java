@@ -19,6 +19,11 @@ public class RequisitesServiceImpl implements RequisitesService {
     private final RequisitesMapper requisitesMapper;
 
     @Override
+    public RequisitesDto getById(Long requisitesId) {
+        return requisitesMapper.toResponse(requisitesRepository.findById(requisitesId).orElseThrow(IllegalArgumentException::new));
+    }
+
+    @Override
     public RequisitesDto getRequisites(Long accountId) {
         BankAccount account = bankAccountRepository.findById(accountId).orElseThrow(IllegalArgumentException::new);
         return requisitesMapper.toResponse(requisitesRepository.findByPayeeAccount(account));

@@ -2,7 +2,6 @@ package ru.kpfu.itis.lobanov.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +27,7 @@ public class BankAccountDto {
     @NotNull(message = "Owner of the bank account shouldn't be null.")
     private UserDto owner;
     @Schema(description = "Operations of the bank account.")
-    private List<OperationDto> operations;
+    private List<TransactionDto> operations;
     @Schema(description = "Cards of the bank account.")
     private List<CardDto> cards;
 }
