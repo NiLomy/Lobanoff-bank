@@ -9,16 +9,19 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import ru.kpfu.itis.lobanov.filters.JwtAuthenticationFilter;
 
 import javax.sql.DataSource;
 
@@ -27,7 +30,7 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
-    private final DataSource dataSource;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,21 +45,11 @@ public class SecurityConfig {
                         .requestMatchers("/transfers/**").authenticated()
                         .requestMatchers("/admin").hasAuthority("ADMIN")
                         .anyRequest().permitAll())
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/login")
-                        .usernameParameter("email")
-                        .passwordParameter("password")
-                        .defaultSuccessUrl("/profile")
-                        .failureUrl("/login?error"))
-                .rememberMe(rememberMe -> rememberMe
-                        .rememberMeCookieName("remember-me")
-                        .rememberMeParameter("remember-me")
-                        .tokenRepository(persistentTokenRepository()))
-                .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                        .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("SESSIONID"))
+                .formLogin(AbstractHttpConfigurer::disable)
+                .rememberMe(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable)
+                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -70,12 +63,5 @@ public class SecurityConfig {
         AuthenticationManagerBuilder managerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         managerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
         return managerBuilder.build();
-    }
-
-    @Bean
-    public PersistentTokenRepository persistentTokenRepository() {
-        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
-        jdbcTokenRepository.setDataSource(dataSource);
-        return jdbcTokenRepository;
     }
 }

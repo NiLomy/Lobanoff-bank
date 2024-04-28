@@ -3,18 +3,18 @@ package ru.kpfu.itis.lobanov.data.mappers.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.kpfu.itis.lobanov.data.entities.Card;
-import ru.kpfu.itis.lobanov.data.mappers.BankAccountMapper;
-import ru.kpfu.itis.lobanov.data.mappers.CardMapper;
-import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
+import ru.kpfu.itis.lobanov.data.entities.User;
+import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.dtos.CardDto;
+import ru.kpfu.itis.lobanov.dtos.UserDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class CardMapperImpl implements CardMapper {
-    private final UserMapper userMapper;
+public class CardMapper implements Mapper<Card, CardDto> {
+    private final Mapper<User, UserDto> userMapper;
 
     @Override
     public CardDto toResponse(Card card) {

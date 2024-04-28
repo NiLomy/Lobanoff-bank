@@ -2,9 +2,10 @@ package ru.kpfu.itis.lobanov.data.mappers.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.kpfu.itis.lobanov.data.entities.User;
 import ru.kpfu.itis.lobanov.data.entities.UserMessage;
-import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
-import ru.kpfu.itis.lobanov.data.mappers.UserMessageMapper;
+import ru.kpfu.itis.lobanov.data.mappers.Mapper;
+import ru.kpfu.itis.lobanov.dtos.UserDto;
 import ru.kpfu.itis.lobanov.dtos.UserMessageDto;
 
 import java.util.List;
@@ -12,8 +13,8 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class UserMessageMapperImpl implements UserMessageMapper {
-    private final UserMapper userMapper;
+public class UserMessageMapper implements Mapper<UserMessage, UserMessageDto> {
+    private final Mapper<User, UserDto> userMapper;
 
     @Override
     public UserMessageDto toResponse(UserMessage userMessage) {

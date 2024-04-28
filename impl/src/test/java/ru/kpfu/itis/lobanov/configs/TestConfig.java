@@ -8,21 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.kpfu.itis.lobanov.data.entities.BankAccount;
 import ru.kpfu.itis.lobanov.data.entities.Card;
 import ru.kpfu.itis.lobanov.data.entities.User;
-import ru.kpfu.itis.lobanov.data.mappers.BankAccountMapper;
-import ru.kpfu.itis.lobanov.data.mappers.CardMapper;
-import ru.kpfu.itis.lobanov.data.mappers.TransactionMapper;
-import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
-import ru.kpfu.itis.lobanov.data.mappers.impl.BankAccountMapperImpl;
-import ru.kpfu.itis.lobanov.data.mappers.impl.CardMapperImpl;
-import ru.kpfu.itis.lobanov.data.mappers.impl.TransactionMapperImpl;
-import ru.kpfu.itis.lobanov.data.mappers.impl.UserMapperImpl;
 import ru.kpfu.itis.lobanov.data.repositories.BankAccountRepository;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
 import ru.kpfu.itis.lobanov.data.services.BankAccountService;
 import ru.kpfu.itis.lobanov.data.services.TransactionService;
 import ru.kpfu.itis.lobanov.data.services.impl.BankAccountServiceImpl;
 import ru.kpfu.itis.lobanov.data.services.impl.TransactionServiceImpl;
-import ru.kpfu.itis.lobanov.data.services.impl.UserServiceImpl;
 import ru.kpfu.itis.lobanov.dtos.*;
 
 import java.util.ArrayList;
@@ -102,31 +93,6 @@ public class TestConfig {
         BankAccountRepository bankAccountRepository = Mockito.mock(BankAccountRepository.class);
         Mockito.when(bankAccountRepository.findById(1L)).thenReturn(Optional.of(bankAccount));
         return bankAccountRepository;
-    }
-
-    @Bean
-    public UserMapper userMapper() {
-        return new UserMapperImpl();
-    }
-
-    @Bean
-    public TransactionMapper operationMapper() {
-        return new TransactionMapperImpl();
-    }
-
-    @Bean
-    public CardMapper cardMapper() {
-        return new CardMapperImpl(userMapper());
-    }
-
-    @Bean
-    public BankAccountMapper bankAccountMapper() {
-        return new BankAccountMapperImpl(userMapper(), cardMapper(), operationMapper());
-    }
-
-    @Bean
-    public UserServiceImpl userService() {
-        return new UserServiceImpl(userRepository(), passwordEncoder(), userMapper());
     }
 
 

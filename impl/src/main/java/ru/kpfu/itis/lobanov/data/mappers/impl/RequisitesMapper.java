@@ -3,16 +3,18 @@ package ru.kpfu.itis.lobanov.data.mappers.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.kpfu.itis.lobanov.data.entities.Requisites;
-import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
+import ru.kpfu.itis.lobanov.data.entities.User;
+import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.dtos.RequisitesDto;
+import ru.kpfu.itis.lobanov.dtos.UserDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class RequisitesMapper {
-    private final UserMapper userMapper;
+public class RequisitesMapper implements Mapper<Requisites, RequisitesDto> {
+    private final Mapper<User, UserDto> userMapper;
 
     public RequisitesDto toResponse(Requisites requisites) {
         return RequisitesDto.builder()

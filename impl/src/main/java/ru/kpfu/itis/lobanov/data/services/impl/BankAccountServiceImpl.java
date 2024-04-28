@@ -7,8 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.lobanov.data.entities.BankAccount;
 import ru.kpfu.itis.lobanov.data.entities.Card;
 import ru.kpfu.itis.lobanov.data.entities.Operation;
-import ru.kpfu.itis.lobanov.data.mappers.BankAccountMapper;
+import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.data.repositories.BankAccountRepository;
+import ru.kpfu.itis.lobanov.data.repositories.BankInfoRepository;
 import ru.kpfu.itis.lobanov.data.repositories.CardRepository;
 import ru.kpfu.itis.lobanov.data.repositories.TransactionRepository;
 import ru.kpfu.itis.lobanov.data.services.BankAccountService;
@@ -27,7 +28,7 @@ import java.util.*;
 public class BankAccountServiceImpl implements BankAccountService {
     private final BankAccountRepository bankAccountRepository;
     private final CardRepository cardRepository;
-    private final BankAccountMapper bankAccountMapper;
+    private final Mapper<BankAccount, BankAccountDto> bankAccountMapper;
     private final TransactionRepository transactionRepository;
     private final DateService dateService;
 

@@ -8,12 +8,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.dtos.forms.RegistrationForm;
 import ru.kpfu.itis.lobanov.dtos.Role;
 import ru.kpfu.itis.lobanov.dtos.State;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
 import ru.kpfu.itis.lobanov.data.entities.User;
-import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
 import ru.kpfu.itis.lobanov.data.services.UserService;
 
@@ -26,7 +26,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserMapper userMapper;
+    private final Mapper<User, UserDto> userMapper;
 
     @Override
     public UserDto getById(Long userId) {

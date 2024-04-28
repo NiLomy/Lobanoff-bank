@@ -3,21 +3,24 @@ package ru.kpfu.itis.lobanov.data.mappers.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.kpfu.itis.lobanov.data.entities.BankAccount;
-import ru.kpfu.itis.lobanov.data.mappers.BankAccountMapper;
-import ru.kpfu.itis.lobanov.data.mappers.CardMapper;
-import ru.kpfu.itis.lobanov.data.mappers.TransactionMapper;
-import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
+import ru.kpfu.itis.lobanov.data.entities.Card;
+import ru.kpfu.itis.lobanov.data.entities.Operation;
+import ru.kpfu.itis.lobanov.data.entities.User;
+import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
+import ru.kpfu.itis.lobanov.dtos.CardDto;
+import ru.kpfu.itis.lobanov.dtos.TransactionDto;
+import ru.kpfu.itis.lobanov.dtos.UserDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class BankAccountMapperImpl implements BankAccountMapper {
-    private final UserMapper userMapper;
-    private final CardMapper cardMapper;
-    private final TransactionMapper transactionMapper;
+public class BankAccountMapper implements Mapper<BankAccount, BankAccountDto> {
+    private final Mapper<User, UserDto> userMapper;
+    private final Mapper<Card, CardDto> cardMapper;
+    private final Mapper<Operation, TransactionDto> transactionMapper;
 
     @Override
     public BankAccountDto toResponse(BankAccount bankAccount) {

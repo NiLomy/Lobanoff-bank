@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.lobanov.data.entities.BankAccount;
 import ru.kpfu.itis.lobanov.data.entities.Operation;
 import ru.kpfu.itis.lobanov.data.entities.User;
-import ru.kpfu.itis.lobanov.data.mappers.TransactionMapper;
+import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.data.repositories.BankAccountRepository;
 import ru.kpfu.itis.lobanov.data.repositories.TransactionRepository;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
@@ -24,7 +24,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final BankAccountRepository bankAccountRepository;
     private final UserRepository userRepository;
-    private final TransactionMapper transactionMapper;
+    private final Mapper<Operation, TransactionDto> transactionMapper;
 
     @Override
     public TransactionDto getById(Long transactionId) {

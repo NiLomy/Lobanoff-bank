@@ -2,14 +2,14 @@ package ru.kpfu.itis.lobanov.data.mappers.impl;
 
 import org.springframework.stereotype.Component;
 import ru.kpfu.itis.lobanov.data.entities.User;
-import ru.kpfu.itis.lobanov.data.mappers.UserMapper;
+import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class UserMapperImpl implements UserMapper {
+public class UserMapper implements Mapper<User, UserDto> {
 
     @Override
     public UserDto toResponse(User userEntity) {

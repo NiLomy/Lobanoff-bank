@@ -8,4 +8,5 @@ public class BankingConstants {
     public static final String WEIGHTS = "71371371371371371371371";
     public static final String FIRST_RUSSIAN_CORRESPONDENT_NUMBERS = "301";
     public static final String SECOND_RUSSIAN_CORRESPONDENT_NUMBERS = "01";
+    public static final String CREDIT_CARD_BIN = "413723";
 }
