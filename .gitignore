@@ -37,3 +37,4 @@ out/
 ### VS Code ###
 .vscode/
 /impl/src/main/resources/application.yml
+/chat-service/src/main/resources/application.yml

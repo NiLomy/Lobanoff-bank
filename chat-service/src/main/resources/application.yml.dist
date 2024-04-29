@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: chat-service
+  data:
+    mongodb:
+      database: your db
+      port: 27017
+      uri: your uri
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration

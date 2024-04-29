@@ -7,6 +7,13 @@ plugins {
 group = 'ru.kpfu.itis'
 version = '0.0.1-SNAPSHOT'
 
+bootJar {
+    enabled = false
+}
+jar {
+    enabled = true
+}
+
 repositories {
     mavenCentral()
 }

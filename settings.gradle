@@ -1,3 +1,4 @@
 rootProject.name = 'oris-semester-work-3'
 include 'api'
 include 'impl'
+include 'chat-service'
