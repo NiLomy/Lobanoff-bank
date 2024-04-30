@@ -4,6 +4,7 @@ server:
       cookie:
         name: SESSIONID
     application-display-name: Lobanoff
+  port: 8081
 
 spring:
   main:
