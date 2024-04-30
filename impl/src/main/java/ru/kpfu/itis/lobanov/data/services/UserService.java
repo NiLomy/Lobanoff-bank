@@ -12,10 +12,6 @@ public interface UserService {
 
     UserDto getUserByPhone(String phone);
 
-    UserDto getCurrentUser();
-
-    UserDto register(RegistrationForm registrationForm);
-
     UserDto banUser(Long userId);
 
     UserDto deleteUser(Long userId);

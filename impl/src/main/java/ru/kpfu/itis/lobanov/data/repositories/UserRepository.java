@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.QueryHints;
 import ru.kpfu.itis.lobanov.data.entities.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByIsDeletedIsFalse();
@@ -24,10 +25,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByPhone(String phone);
 
+    Optional<User> findByVerificationCode(String verificationCode);
+
     @Query("select u from User u left join fetch Card c on u = c.owner where c.number = :card")
     User findByCard(String card);
 
     @Modifying
     @Query("update User set state = :state where id = :id")
     User updateStateById(Long id, String state);
+
+    boolean existsByEmail(String email);
 }

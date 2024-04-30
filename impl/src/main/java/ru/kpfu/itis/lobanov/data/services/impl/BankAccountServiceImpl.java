@@ -9,7 +9,6 @@ import ru.kpfu.itis.lobanov.data.entities.Card;
 import ru.kpfu.itis.lobanov.data.entities.Operation;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.data.repositories.BankAccountRepository;
-import ru.kpfu.itis.lobanov.data.repositories.BankInfoRepository;
 import ru.kpfu.itis.lobanov.data.repositories.CardRepository;
 import ru.kpfu.itis.lobanov.data.repositories.TransactionRepository;
 import ru.kpfu.itis.lobanov.data.services.BankAccountService;
@@ -19,7 +18,7 @@ import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
 import ru.kpfu.itis.lobanov.dtos.requests.BindCardRequest;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
 
 @Slf4j
 @Service

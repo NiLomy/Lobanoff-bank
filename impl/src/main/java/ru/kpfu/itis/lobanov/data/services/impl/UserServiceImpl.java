@@ -25,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final Mapper<User, UserDto> userMapper;
 
     @Override
@@ -41,36 +40,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByPhone(String phone) {
         return userMapper.toResponse(userRepository.findByPhone(phone));
-    }
-
-    @Override
-    public UserDto getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS")))
-            return null;
-        User user = (User) authentication.getPrincipal();
-        return UserDto.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .role(user.getRole())
-                .isDeleted(user.getIsDeleted())
-                .build();
-    }
-
-    @Override
-    public UserDto register(RegistrationForm registrationForm) {
-        if (registrationForm.getPassword().equals(registrationForm.getConfirmPassword())) {
-            User user = User.builder()
-                    .email(registrationForm.getEmail())
-                    .password(passwordEncoder.encode(registrationForm.getPassword()))
-                    .role(Role.USER)
-                    .state(State.ACTIVE)
-                    .isDeleted(false)
-                    .build();
-            return userMapper.toResponse(userRepository.save(user));
-        }
-        return null;
     }
 
     @Override

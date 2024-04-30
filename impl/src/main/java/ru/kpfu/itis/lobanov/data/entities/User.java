@@ -56,6 +56,9 @@ public class User implements UserDetails {
     @NotNull
     private Boolean isDeleted;
 
+    @Column(name = "verification_code")
+    private String verificationCode;
+
 //    @OneToMany
 //    @ToString.Exclude
 //    private List<Card> cards;

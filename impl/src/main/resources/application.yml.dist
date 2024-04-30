@@ -22,5 +22,30 @@ spring:
   sql:
     init:
       mode: always
+  liquibase:
+    enabled: true
+  mail:
+    host: smtp.gmail.com
+    username: {username}
+    password: {password}
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
 
+jwt:
+  secret:
+    access: {access}
+    refresh: {refresh}
+
+mail:
+  from: {from}
+  sender: Lobanoff bank
+  subject: Please verify your account
 

@@ -8,9 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class RegistrationForm {
+    @NotBlank
+    private String name;
+    @NotBlank
+    private String lastname;
+    @NotBlank
+    private String patronymic;
     @Schema(description = "Email of the new client.", example = "test@mail.com")
     @NotBlank(message = "Email shouldn't be empty.")
     @Email(message = "Email should be valid.")

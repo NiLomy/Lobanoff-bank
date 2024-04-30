@@ -21,9 +21,6 @@ public interface UserApi {
     @GetMapping("/all")
     ResponseEntity<List<UserDto>> getAllUsers();
 
-    @PostMapping("/register")
-    ResponseEntity<UserDto> register(@RequestBody RegistrationForm registrationForm);
-
     @PostMapping("/ban/{id}")
     ResponseEntity<UserDto> banUser(@PathVariable("id") String userId);
 
