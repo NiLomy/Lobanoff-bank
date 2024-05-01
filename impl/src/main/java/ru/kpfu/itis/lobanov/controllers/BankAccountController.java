@@ -3,7 +3,7 @@ package ru.kpfu.itis.lobanov.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kpfu.itis.lobanov.api.BankAccountApi;
 import ru.kpfu.itis.lobanov.data.services.BankAccountService;
@@ -19,6 +19,7 @@ public class BankAccountController implements BankAccountApi {
     private final BankAccountService bankAccountService;
 
     @Override
+    @CrossOrigin(origins = "http://localhost:8060")
     public ResponseEntity<BankAccountDto> getAccountById(String accountId) {
         try {
             BankAccountDto bankAccount = bankAccountService.getAccountById(Long.parseLong(accountId));

@@ -12,4 +12,28 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8083/impl/api/v1/users/6
+GET http://localhost:8080/impl/api/v1/users/6
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI1IiwiZW1haWwiOiJ1c2VyQG1haWwucnUiLCJhdXRob3JpdHkiOiJVU0VSIiwiZW5hYmxlZCI6dHJ1ZSwiaWF0IjoxNzE0NTQ2OTA1LCJuYmYiOjE3MTQ1NDY5MDUsImV4cCI6MTcxNDU0NzIwNX0.mvvkwevfHWk0oxocYbeRFyBkuRGWZKCXkSwzTpucCnLRfvj29YGvx5P-JJJsRYAp
+
+###
+
+GET http://localhost:8080/impl/api/v1/accounts/1
+
+###
+
+POST http://localhost:8080/impl/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@mail.ru",
+  "password": "qwert"
+}
+
+###
+
+GET http://localhost:8080/impl/api/v1/auth/access
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI1IiwiaWF0IjoxNzE0NTQ2OTA0LCJuYmYiOjE3MTQ1NDY5MDQsImV4cCI6MTcxNzEzODkwNH0.jawyehl_dMooU81smyKFBH6h_eO-NQ6oiMGbMgt49wrhc_tQhijwsTrSWMbdcK0P"
+}

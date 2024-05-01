@@ -1,5 +1,6 @@
 package ru.kpfu.itis.lobanov.data.entities;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.validator.constraints.CreditCardNumber;
+import ru.kpfu.itis.lobanov.utils.CardNumberMaskingSerializer;
 
 import java.util.Objects;
 
@@ -26,6 +28,7 @@ public class Card {
 
     @NotNull
     @CreditCardNumber(message = "Not valid credit card number!")
+    @JsonSerialize(using = CardNumberMaskingSerializer.class)
     private String number;
 
     @NotNull

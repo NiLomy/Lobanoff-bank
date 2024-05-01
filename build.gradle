@@ -17,9 +17,7 @@ configurations {
 	}
 }
 
-repositories {
-	mavenCentral()
-}
+
 
 bootJar {
 	enabled = false
@@ -30,9 +28,12 @@ jar {
 
 allprojects {
 	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
 	apply plugin: 'java-library'
-
+	repositories {
+		mavenCentral()
+	}
 	dependencies {
 		implementation("org.springframework.boot:spring-boot-starter-integration")
 		implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -41,6 +42,38 @@ allprojects {
 		annotationProcessor("org.projectlombok:lombok")
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
 		testImplementation("org.springframework.integration:spring-integration-test")
+	}
+}
+
+project(':gateway-service') {
+	ext {
+		set('springCloudVersion', "2023.0.1")
+	}
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.cloud:spring-cloud-starter-gateway-mvc'
+		implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+		implementation("org.springframework.boot:spring-boot-starter-security")
+		implementation("org.springframework.integration:spring-integration-security")
+
+		implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.5'
+		runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.5'
+		runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.5'
+
+		implementation project(':api')
+
+		runtimeOnly 'org.postgresql:postgresql'
+
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation 'org.springframework.integration:spring-integration-test'
+		testImplementation("org.springframework.security:spring-security-test")
+	}
+
+	dependencyManagement {
+		imports {
+			mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		}
 	}
 }
 

@@ -13,6 +13,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({NullPointerException.class, IllegalArgumentException.class})
     public ErrorResponse handleAuthenticationException(RuntimeException ex, HttpServletRequest request, HttpServletResponse response){
-        return ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, ex.getMessage().substring(ex.getMessage().indexOf(" "))).build();
+        return ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, ex.getMessage().substring(ex.getMessage().indexOf(" ")).trim()).build();
     }
 }
