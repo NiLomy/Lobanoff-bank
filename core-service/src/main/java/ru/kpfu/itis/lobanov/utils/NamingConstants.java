@@ -1,6 +1,14 @@
 package ru.kpfu.itis.lobanov.utils;
 
 public class NamingConstants {
+    public static final String BANK_NAME = "Lobanoff bank";
+    public static final String TRANSACTION_METHOD_TRANSFER = "TRANSFER";
+    public static final String TRANSACTION_TYPE_PENDING = "PENDING";
+
+
+    public static final String ADMIN_EMAIL = "admin@mail.ru";
+
+
     public static final String CURRENT_USER_KEY = "currentUser";
     public static final String CURRENT_ACCOUNT_KEY = "currentAccount";
     public static final String TRANSACTIONS_KEY = "transactions";
@@ -10,4 +18,6 @@ public class NamingConstants {
     public static final String DATE_FROM_KEY = "dateFrom";
     public static final String DATE_TO_KEY = "dateTo";
     public static final String CURRENT_CARD_KEY = "currentCard";
+
+    private NamingConstants() {}
 }

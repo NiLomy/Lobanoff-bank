@@ -1,6 +1,7 @@
 package ru.kpfu.itis.lobanov.data.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -24,11 +25,14 @@ public class Requisites {
     @OneToOne
     private BankAccount payeeAccount;
 
+    @NotNull
+    @Column(name = "corr_account", length = 20)
+    private String corrAccount;
+
     private String code;
 
     private String bankName;
 
-    private String corrAccount;
 
     @Override
     public final boolean equals(Object o) {

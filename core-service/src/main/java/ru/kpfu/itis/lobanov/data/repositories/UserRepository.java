@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    List<User> findAllByIsDeletedIsFalse();
+    List<User> findAllByDeletedIsFalse();
 
     @QueryHints(value = {
             @QueryHint(name = "org.hibernate.readOnly", value = "true"),
@@ -21,9 +21,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @QueryHint(name = "jakarta.persistence.cache.storeMode", value = "USE"),
             @QueryHint(name = "org.hibernate.comment", value = "Retrieve client by his email")
     })
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-    User findByPhone(String phone);
+    Optional<User> findByPhone(String phone);
 
     Optional<User> findByVerificationCode(String verificationCode);
 

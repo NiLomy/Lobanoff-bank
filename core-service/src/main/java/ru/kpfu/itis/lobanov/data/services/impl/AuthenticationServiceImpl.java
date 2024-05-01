@@ -117,7 +117,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public TokenResponse login(@NonNull LoginForm loginForm) {
         validateLoginForm(loginForm);
 
-        User user = userRepository.findByEmail(loginForm.getEmail());
+        User user = userRepository.findByEmail(loginForm.getEmail()).orElseThrow(IllegalArgumentException::new);
 
         if (passwordEncoder.matches(loginForm.getPassword(), user.getPassword())) {
             return generateToken(user);

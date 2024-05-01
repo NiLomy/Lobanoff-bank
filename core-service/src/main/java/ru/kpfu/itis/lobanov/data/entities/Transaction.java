@@ -2,12 +2,13 @@ package ru.kpfu.itis.lobanov.data.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Getter
@@ -17,40 +18,59 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class BankAccount {
+@Table(name = "transactions")
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    private String name;
+    @CreationTimestamp(source = SourceType.DB)
+    private Timestamp date;
 
     @NotNull
-    private String number;
-
-    @NotNull
-    @PositiveOrZero(message = "Deposit must not be negative number!")
-    private BigDecimal deposit;
+    @Column(name = "init_amount")
+    private BigDecimal initAmount;
 
     @ManyToOne
     private Currency currency;
 
     @ManyToOne
-    private BankAccountType type;
+    private TransactionType type;
+
+    @ManyToOne
+    private TransactionMethod method;
+
+    private Long from;
+
+    private Long to;
 
     @NotNull
-    @ManyToOne
-    private User owner;
+    @Column(name = "bank_name_from")
+    private String bankNameFrom;
 
-    @OneToMany
-    @ToString.Exclude
-    private List<Transaction> transactions;
+    @NotNull
+    @Column(name = "bank_name_to")
+    private String bankNameTo;
 
-    @OneToMany
-    @ToString.Exclude
-    private List<Card> cards;
+    @Column(name = "terminal_ip")
+    private String terminalIp;
 
-    private Boolean main;
+    @Column(name = "service_company")
+    private String serviceCompany;
+
+    @Column(length = 150)
+    private String message;
+
+    private BigDecimal commission;
+
+    private BigDecimal cashback;
+
+    @Column(name = "risk_indicator")
+    private Integer riskIndicator;
+
+    @Column(name = "total_amount")
+    private BigDecimal totalAmount;
 
     @Override
     public final boolean equals(Object o) {
@@ -59,8 +79,8 @@ public class BankAccount {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        BankAccount that = (BankAccount) o;
-        return getId() != null && Objects.equals(getId(), that.getId());
+        Transaction transaction = (Transaction) o;
+        return getId() != null && Objects.equals(getId(), transaction.getId());
     }
 
     @Override

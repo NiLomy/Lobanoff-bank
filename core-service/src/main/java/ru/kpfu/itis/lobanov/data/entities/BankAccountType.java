@@ -1,12 +1,16 @@
 package ru.kpfu.itis.lobanov.data.entities;
 
+// счет, кредит, вклад и тп
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Getter
@@ -16,26 +20,21 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Operation {
+@Table(name = "account_types")
+public class BankAccountType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    private LocalDate date;
+    private String name;
 
-    @NotNull
-    private Long amount;
+    private String description;
 
-    @NotNull
-    @ManyToOne
-    private BankAccount from;
-
-    @NotNull
-    @ManyToOne
-    private BankAccount to;
-
-    private String message;
+    @NonNull
+    @UpdateTimestamp(source = SourceType.DB)
+    @Column(name = "row_change_time")
+    private Timestamp rowChangeTime;
 
     @Override
     public final boolean equals(Object o) {
@@ -44,8 +43,8 @@ public class Operation {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Operation operation = (Operation) o;
-        return getId() != null && Objects.equals(getId(), operation.getId());
+        BankAccountType that = (BankAccountType) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.QueryHints;
 import ru.kpfu.itis.lobanov.data.entities.BankAccount;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
 
@@ -22,10 +23,13 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
     List<BankAccount> findAllCardsByOwnerId(Long ownerId);
 
     @Query("select b from BankAccount b left join b.cards c where c.number = :card")
-    BankAccount findByCardNumber(String card);
+    Optional<BankAccount> findByCardNumber(String card);
 
     @Query("select b from BankAccount b")
-    BankAccount findByContractNumber(String contractNumber);
+    Optional<BankAccount> findByContractNumber(String contractNumber);
+
+    @Query("select b from BankAccount b where b.owner.id = :userId and b.main = true")
+    Optional<BankAccount> findUserMainAccount(Long userId);
 
     @Modifying
     @Query("update BankAccount set name = :name where id = :id")

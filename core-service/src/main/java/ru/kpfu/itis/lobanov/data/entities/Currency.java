@@ -3,35 +3,40 @@ package ru.kpfu.itis.lobanov.data.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Getter
 @Setter
 @ToString
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class UserMessage {
+@Table(name = "currencies")
+public class Currency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    private String content;
+    private String name;
 
     @NotNull
-    @ManyToOne
-    private User author;
+    @Column(length = 2)
+    private String isoCode;
 
-    @NotNull
-    private Date createdAt;
+    private String icon;
 
-    @ManyToOne
-    private UserMessage repliedOn;
+    @NonNull
+    @UpdateTimestamp(source = SourceType.DB)
+    @Column(name = "row_change_time")
+    private Timestamp rowChangeTime;
 
     @Override
     public final boolean equals(Object o) {
@@ -40,8 +45,8 @@ public class UserMessage {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        UserMessage that = (UserMessage) o;
-        return getId() != null && Objects.equals(getId(), that.getId());
+        Currency currency = (Currency) o;
+        return getId() != null && Objects.equals(getId(), currency.getId());
     }
 
     @Override

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -22,7 +23,9 @@ public class BankAccountDto {
     private String name;
     @Schema(description = "Deposit of the bank account.", example = "10000")
     @NotNull(message = "Deposit of the bank account shouldn't be empty.")
-    private Long deposit;
+    private BigDecimal deposit;
+    private CurrencyDto currency;
+    private String type;
     @Schema(description = "Owner of the bank account.")
     @NotNull(message = "Owner of the bank account shouldn't be null.")
     private UserDto owner;
@@ -30,4 +33,5 @@ public class BankAccountDto {
     private List<TransactionDto> operations;
     @Schema(description = "Cards of the bank account.")
     private List<CardDto> cards;
+    private Boolean main;
 }

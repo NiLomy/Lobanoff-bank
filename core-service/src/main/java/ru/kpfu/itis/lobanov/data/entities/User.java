@@ -54,9 +54,9 @@ public class User implements UserDetails {
     private Role role;
 
     @NotNull
-    private Boolean isDeleted;
+    private Boolean deleted;
 
-    @Column(name = "verification_code")
+    @Column(name = "verification_code", length = 128)
     private String verificationCode;
 
 //    @OneToMany

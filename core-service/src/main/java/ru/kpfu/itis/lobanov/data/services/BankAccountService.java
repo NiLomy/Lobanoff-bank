@@ -23,6 +23,8 @@ public interface BankAccountService {
 
     BankAccountDto getAccountById(Long id);
 
+    BankAccountDto getUserMainAccount(Long userId);
+
     BankAccountDto updateAccountName(Long id, String name);
 
     BankAccountDto bindCard(BindCardRequest request);

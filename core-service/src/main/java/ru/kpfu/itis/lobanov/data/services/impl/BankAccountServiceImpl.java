@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.lobanov.data.entities.BankAccount;
 import ru.kpfu.itis.lobanov.data.entities.Card;
-import ru.kpfu.itis.lobanov.data.entities.Operation;
+import ru.kpfu.itis.lobanov.data.entities.Transaction;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.data.repositories.BankAccountRepository;
 import ru.kpfu.itis.lobanov.data.repositories.CardRepository;
@@ -17,6 +17,7 @@ import ru.kpfu.itis.lobanov.dtos.AccountStatementDto;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
 import ru.kpfu.itis.lobanov.dtos.requests.BindCardRequest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -63,6 +64,11 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
+    public BankAccountDto getUserMainAccount(Long userId) {
+        return bankAccountMapper.toResponse(bankAccountRepository.findUserMainAccount(userId).orElse(null));
+    }
+
+    @Override
     public BankAccountDto updateAccountName(Long id, String name) {
         bankAccountRepository.updateNameById(id, name);
         BankAccount account = bankAccountRepository.findById(id).orElseThrow(IllegalArgumentException::new);
@@ -84,20 +90,23 @@ public class BankAccountServiceImpl implements BankAccountService {
         LocalDate dateFrom = dateService.getFullDate(date);
         LocalDate dateTo = dateService.getNextMonth(date);
 
-        Long lastMonthDeposit = transactionRepository.getBeginningMonthDeposit(account, dateFrom);
-        if (lastMonthDeposit == null) lastMonthDeposit = 0L;
+        BigDecimal lastMonthDeposit = transactionRepository.getBeginningMonthDeposit(account, dateFrom);
+        if (lastMonthDeposit == null) lastMonthDeposit = BigDecimal.ZERO;
 
-        List<Operation> replenishmentOperations = transactionRepository.findAllByAccountToAndBetweenDates(account, dateFrom, dateTo);
-        List<Operation> transferOperations = transactionRepository.findAllByAccountFromAndBetweenDates(account, dateFrom, dateTo);
+        List<Transaction> replenishmentTransactions = transactionRepository.findAllByAccountToAndBetweenDates(account, dateFrom, dateTo);
+        List<Transaction> transferTransactions = transactionRepository.findAllByAccountFromAndBetweenDates(account, dateFrom, dateTo);
 
-        long replenishment = replenishmentOperations.stream().map(Operation::getAmount).mapToLong(Long::longValue).sum();
-        long transfer = transferOperations.stream().map(Operation::getAmount).mapToLong(Long::longValue).sum();
-        Long newDeposit = lastMonthDeposit + replenishment - transfer;
+        BigDecimal replenishment = replenishmentTransactions.stream().map(Transaction::getInitAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal transfer = transferTransactions.stream().map(Transaction::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal newDeposit = lastMonthDeposit.add(replenishment).subtract(transfer);
+
+        BigDecimal cashback = transactionRepository.getCashbackBetweenDates(accountId, dateFrom, dateTo);
 
         return AccountStatementDto.builder()
                 .startBalance(lastMonthDeposit)
                 .receipts(replenishment)
-                .interest(0L)
+                .interest(BigDecimal.ZERO)
+                .cashback(cashback)
                 .expenses(transfer)
                 .endBalance(newDeposit)
                 .build();

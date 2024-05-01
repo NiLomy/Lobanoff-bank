@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Data
@@ -18,8 +20,12 @@ public class TransactionDto {
     private Long id;
     @Schema(description = "Date of the transaction.", example = "01.01.2001")
     @NotNull(message = "Date of the transaction shouldn't be null.")
-    private LocalDate date;
+    private Timestamp date;
+    private CurrencyDto currency;
+    private String type;
+    private String message;
+    private BigDecimal cashback;
     @Schema(description = "The amount of money that needs to be transferred.", example = "10000")
     @NotNull(message = "The amount of money shouldn't be null.")
-    private Long amount;
+    private BigDecimal amount;
 }

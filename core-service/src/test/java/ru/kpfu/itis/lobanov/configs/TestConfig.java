@@ -16,6 +16,7 @@ import ru.kpfu.itis.lobanov.data.services.impl.BankAccountServiceImpl;
 import ru.kpfu.itis.lobanov.data.services.impl.TransactionServiceImpl;
 import ru.kpfu.itis.lobanov.dtos.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class TestConfig {
                         .password("testPassword")
                         .role(Role.USER)
                         .state(State.ACTIVE)
-                        .isDeleted(false)
+                        .deleted(false)
                         .build()
         );
         users.add(
@@ -47,11 +48,11 @@ public class TestConfig {
                         .password("testPassword")
                         .role(Role.USER)
                         .state(State.ACTIVE)
-                        .isDeleted(false)
+                        .deleted(false)
                         .build()
         );
         UserRepository userRepository = Mockito.mock(UserRepository.class);
-        Mockito.when(userRepository.findAllByIsDeletedIsFalse()).thenReturn(users);
+        Mockito.when(userRepository.findAllByDeletedIsFalse()).thenReturn(users);
         Mockito.when(userRepository.updateStateById(3L, State.BANNED.name())).thenReturn(
                 User.builder()
                         .id(3L)
@@ -59,7 +60,7 @@ public class TestConfig {
                         .password("testPassword")
                         .role(Role.USER)
                         .state(State.BANNED)
-                        .isDeleted(false)
+                        .deleted(false)
                         .build()
         );
         return userRepository;
@@ -73,7 +74,7 @@ public class TestConfig {
                 .password("testPassword")
                 .role(Role.USER)
                 .state(State.ACTIVE)
-                .isDeleted(false)
+                .deleted(false)
                 .build();
         Card card = Card.builder()
                 .owner(owner)
@@ -86,8 +87,8 @@ public class TestConfig {
                 .name("AAAA")
                 .owner(owner)
                 .cards(List.of(card))
-                .deposit(1000L)
-                .operations(null)
+                .deposit(new BigDecimal(1000))
+                .transactions(null)
                 .number("1")
                 .build();
         BankAccountRepository bankAccountRepository = Mockito.mock(BankAccountRepository.class);

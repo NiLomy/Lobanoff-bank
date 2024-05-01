@@ -2,12 +2,13 @@ package ru.kpfu.itis.lobanov.data.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.math.BigDecimal;
-import java.util.List;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Getter
@@ -17,7 +18,8 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class BankAccount {
+@Table(name = "transaction_methods")
+public class TransactionMethod {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,32 +27,12 @@ public class BankAccount {
     @NotNull
     private String name;
 
-    @NotNull
-    private String number;
+    private String description;
 
-    @NotNull
-    @PositiveOrZero(message = "Deposit must not be negative number!")
-    private BigDecimal deposit;
-
-    @ManyToOne
-    private Currency currency;
-
-    @ManyToOne
-    private BankAccountType type;
-
-    @NotNull
-    @ManyToOne
-    private User owner;
-
-    @OneToMany
-    @ToString.Exclude
-    private List<Transaction> transactions;
-
-    @OneToMany
-    @ToString.Exclude
-    private List<Card> cards;
-
-    private Boolean main;
+    @NonNull
+    @UpdateTimestamp(source = SourceType.DB)
+    @Column(name = "row_change_time")
+    private Timestamp rowChangeTime;
 
     @Override
     public final boolean equals(Object o) {
@@ -59,7 +41,7 @@ public class BankAccount {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        BankAccount that = (BankAccount) o;
+        TransactionMethod that = (TransactionMethod) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 

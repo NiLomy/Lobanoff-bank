@@ -2,14 +2,9 @@ package ru.kpfu.itis.lobanov.data.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
-import ru.kpfu.itis.lobanov.dtos.forms.RegistrationForm;
 import ru.kpfu.itis.lobanov.dtos.Role;
 import ru.kpfu.itis.lobanov.dtos.State;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
@@ -34,12 +29,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        return userMapper.toListResponse(userRepository.findAllByIsDeletedIsFalse());
+        return userMapper.toListResponse(userRepository.findAllByDeletedIsFalse());
     }
 
     @Override
     public UserDto getUserByPhone(String phone) {
-        return userMapper.toResponse(userRepository.findByPhone(phone));
+        return userMapper.toResponse(userRepository.findByPhone(phone).orElse(null));
     }
 
     @Override
@@ -58,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto deleteUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
-        user.setIsDeleted(true);
+        user.setDeleted(true);
         log.info("User {} was deleted.", user);
         return userMapper.toResponse(userRepository.save(user));
     }

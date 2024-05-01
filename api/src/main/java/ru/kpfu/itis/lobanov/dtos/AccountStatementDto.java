@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,17 +16,18 @@ import lombok.NoArgsConstructor;
 public class AccountStatementDto {
     @Schema(description = "Balance at the beginning of the period.", example = "1000")
     @NotNull(message = "Balance shouldn't be null.")
-    private Long startBalance;
+    private BigDecimal startBalance;
     @Schema(description = "The amount of receipts.", example = "1000")
     @NotNull(message = "Receipts shouldn't be null.")
-    private Long receipts;
+    private BigDecimal receipts;
     @Schema(description = "The amount of accrued interest.", example = "1000")
     @NotNull(message = "The amount of accrued interest shouldn't be null.")
-    private Long interest;
+    private BigDecimal interest;
+    private BigDecimal cashback;
     @Schema(description = "The amount of expenses.", example = "1000")
     @NotNull(message = "Expenses shouldn't be null.")
-    private Long expenses;
+    private BigDecimal expenses;
     @Schema(description = "Balance at the end of the period.", example = "1000")
     @NotNull(message = "Balance shouldn't be null.")
-    private Long endBalance;
+    private BigDecimal endBalance;
 }

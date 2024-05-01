@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,5 +20,5 @@ public class BetweenAccountsTransferForm {
     private Long to;
     @Schema(description = "The amount of money that needs to be transferred.", example = "10000")
     @NotNull(message = "The amount of money shouldn't be null.")
-    private Long amount;
+    private BigDecimal amount;
 }

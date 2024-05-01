@@ -25,7 +25,7 @@ public class UserMapper implements Mapper<User, UserDto> {
                 .email(userEntity.getEmail())
                 .phone(userEntity.getPhone())
                 .role(userEntity.getRole())
-                .isDeleted(userEntity.getIsDeleted())
+                .isDeleted(userEntity.getDeleted())
                 .build();
     }
 
