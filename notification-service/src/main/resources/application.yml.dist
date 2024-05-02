@@ -1,0 +1,36 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: notification-service
+  rabbitmq:
+    host: {host}
+    port: 5673
+    username: {username}
+    password: {password}
+    exchange: event-exchange
+    template:
+      email:
+        queue: email-sender-queue
+        routing:
+          key: email.sender
+  mail:
+    host: smtp.gmail.com
+    username: {username}
+    password: {password}
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
+
+mail:
+  from: {from}
+  sender: Lobanoff bank
+  subject: Please verify your account

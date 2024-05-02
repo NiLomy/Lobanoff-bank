@@ -1,4 +1,4 @@
-package ru.kpfu.itis.lobanov.configs;
+package ru.kpfu.itis.lobanov.notificationservice.configs;
 
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.cache.TemplateLoader;

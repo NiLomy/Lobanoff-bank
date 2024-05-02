@@ -1,30 +1,22 @@
 package ru.kpfu.itis.lobanov.data.services.impl;
 
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import io.jsonwebtoken.Claims;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import ru.kpfu.itis.lobanov.configs.MailContentConfig;
 import ru.kpfu.itis.lobanov.data.entities.RefreshToken;
 import ru.kpfu.itis.lobanov.data.entities.User;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.data.repositories.RefreshTokenRepository;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
 import ru.kpfu.itis.lobanov.data.services.AuthenticationService;
+import ru.kpfu.itis.lobanov.data.services.MessagingService;
 import ru.kpfu.itis.lobanov.dtos.Role;
 import ru.kpfu.itis.lobanov.dtos.State;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
@@ -33,9 +25,6 @@ import ru.kpfu.itis.lobanov.dtos.forms.RegistrationForm;
 import ru.kpfu.itis.lobanov.dtos.responses.TokenResponse;
 import ru.kpfu.itis.lobanov.utils.JwtProvider;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -44,11 +33,9 @@ import java.util.Optional;
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final MessagingService messagingService;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
-    private final JavaMailSender javaMailSender;
-    private final MailContentConfig mailContentConfig;
-    private final FreeMarkerConfigurer freeMarkerConfigurer;
     private final Mapper<User, UserDto> userMapper;
 
     @Override
@@ -65,36 +52,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .verificationCode(code)
                 .role(Role.USER)
                 .state(State.BANNED)
+                .deleted(false)
                 .build();
 
-        sendVerificationCode(registrationForm.getEmail(), registrationForm.getName(), code);
+        messagingService.sendEmail(registrationForm.getEmail(), registrationForm.getName(), code);
 
         user = userRepository.save(user);
         return generateToken(user);
-    }
-
-    @Override
-    public void sendVerificationCode(@NonNull String mail, @NonNull String name, @NonNull String code) {
-        validateDataForEmail(mail, name, code);
-
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
-
-        try {
-            Template freemarkerTemplate = freeMarkerConfigurer.getConfiguration().getTemplate("test.ftlh");
-            Map<String, Object> templateModel = new HashMap<>();
-            templateModel.put("name", name);
-            templateModel.put("code", code);
-            String htmlBody = FreeMarkerTemplateUtils.processTemplateIntoString(freemarkerTemplate, templateModel);
-            helper.setFrom(mailContentConfig.getFrom(), mailContentConfig.getSender());
-            helper.setTo(mail);
-            helper.setSubject(mailContentConfig.getSubject());
-            helper.setText(htmlBody, true);
-
-            javaMailSender.send(mimeMessage);
-        } catch (MessagingException | TemplateException | IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -205,7 +169,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new IllegalArgumentException("Confirm password should be provided");
 
         if (userRepository.existsByEmail(email)) throw new IllegalArgumentException("This email is already exists.");
-        if (password.equals(registrationForm.getConfirmPassword()))
+        if (!password.equals(registrationForm.getConfirmPassword()))
             throw new IllegalArgumentException("Passwords don't match.");
     }
 
@@ -215,11 +179,5 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (email == null || email.isBlank()) throw new IllegalArgumentException("Email should be provided");
         if (password == null || password.isBlank()) throw new IllegalArgumentException("Password should be provided");
-    }
-
-    private void validateDataForEmail(@NonNull String mail, @NonNull String name, @NonNull String code) {
-        if (mail.isBlank()) throw new IllegalArgumentException("Email should be provided");
-        if (name.isBlank()) throw new IllegalArgumentException("Name should be provided");
-        if (code.isBlank()) throw new IllegalArgumentException("Verification code should be provided");
     }
 }

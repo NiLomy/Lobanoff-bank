@@ -36,7 +36,9 @@ out/
 
 ### VS Code ###
 .vscode/
-/impl/src/main/resources/application.yml
 /chat-service/src/main/resources/application.yml
 /registry-service/src/main/resources/application.yml
 /gateway-service/src/main/resources/application.yml
+/core-service/src/main/resources/application.yml
+/notification-service/src/main/resources/application.yml
+/commission-service/src/main/resources/application.yml

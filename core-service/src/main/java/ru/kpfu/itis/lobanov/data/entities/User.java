@@ -59,14 +59,6 @@ public class User implements UserDetails {
     @Column(name = "verification_code", length = 128)
     private String verificationCode;
 
-//    @OneToMany
-//    @ToString.Exclude
-//    private List<Card> cards;
-//
-//    @OneToMany
-//    @ToString.Exclude
-//    private List<BankAccount> accounts;
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
