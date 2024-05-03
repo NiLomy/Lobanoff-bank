@@ -11,8 +11,8 @@ import ru.kpfu.itis.lobanov.commissionservice.services.CommissionChargeService;
 public class RabbitMqListener {
     private final CommissionChargeService commissionChargeService;
 
-    @RabbitListener(queues = "${spring.rabbitmq.template.transaction.queue}")
-    public void rec2(Transaction transaction) {
+    @RabbitListener(queues = "${spring.rabbitmq.template.transaction.commission.queue}")
+    public void receiveTransactionMessage(Transaction transaction) {
         commissionChargeService.chargeCommission(transaction);
     }
 }

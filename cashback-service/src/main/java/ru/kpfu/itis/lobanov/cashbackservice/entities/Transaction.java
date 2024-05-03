@@ -1,4 +1,4 @@
-package ru.kpfu.itis.lobanov.commissionservice.entities;
+package ru.kpfu.itis.lobanov.cashbackservice.entities;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

@@ -13,6 +13,7 @@ import org.hibernate.proxy.HibernateProxy;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -66,6 +67,9 @@ public class Transaction implements Serializable {
 
     @Column(length = 150)
     private String message;
+
+    @ManyToOne
+    private Category category;
 
     private BigDecimal commission;
 

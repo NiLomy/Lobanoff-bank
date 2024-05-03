@@ -1,4 +1,4 @@
-package ru.kpfu.itis.lobanov.commissionservice.configs;
+package ru.kpfu.itis.lobanov.cashbackservice.configs;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -24,14 +24,14 @@ public class RabbitMqConfig {
     String password;
     @Value("${spring.rabbitmq.exchange}")
     String exchange;
-    @Value("${spring.rabbitmq.template.transaction.commission.queue}")
-    String transactionCommissionQueue;
-    @Value("${spring.rabbitmq.template.transaction.commission.routing.key}")
-    String transactionCommissionRoutingKey;
     @Value("${spring.rabbitmq.template.transaction.cashback.queue}")
     String transactionCashbackQueue;
     @Value("${spring.rabbitmq.template.transaction.cashback.routing.key}")
     String transactionCashbackRoutingKey;
+    @Value("${spring.rabbitmq.template.transaction.final.queue}")
+    String transactionFinalQueue;
+    @Value("${spring.rabbitmq.template.transaction.final.routing.key}")
+    String transactionFinalRoutingKey;
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -52,19 +52,6 @@ public class RabbitMqConfig {
     }
 
     @Bean
-    public Queue transactionCommissionQueue() {
-        return new Queue(transactionCommissionQueue);
-    }
-
-    @Bean
-    public Binding transactionComissionBinding() {
-        return BindingBuilder
-                .bind(transactionCommissionQueue())
-                .to(directExchange())
-                .with(transactionCommissionRoutingKey);
-    }
-
-    @Bean
     public Queue transactionCashbackQueue() {
         return new Queue(transactionCashbackQueue);
     }
@@ -75,5 +62,18 @@ public class RabbitMqConfig {
                 .bind(transactionCashbackQueue())
                 .to(directExchange())
                 .with(transactionCashbackRoutingKey);
+    }
+
+    @Bean
+    public Queue transactionFinalQueue() {
+        return new Queue(transactionFinalQueue);
+    }
+
+    @Bean
+    public Binding transactionFinalBinding() {
+        return BindingBuilder
+                .bind(transactionFinalQueue())
+                .to(directExchange())
+                .with(transactionFinalRoutingKey);
     }
 }

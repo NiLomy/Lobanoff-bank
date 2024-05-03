@@ -12,7 +12,7 @@ public class RabbitMqListener {
     private final EmailSenderService emailSenderService;
 
     @RabbitListener(queues = "${spring.rabbitmq.template.email.queue}")
-    public void rec2(EmailDto emailDto) {
+    public void receiveEmailMessage(EmailDto emailDto) {
         emailSenderService.sendVerificationCode(emailDto);
     }
 }
