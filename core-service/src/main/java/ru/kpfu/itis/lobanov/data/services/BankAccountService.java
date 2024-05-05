@@ -7,6 +7,8 @@ import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
 import ru.kpfu.itis.lobanov.dtos.CardDto;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
 import ru.kpfu.itis.lobanov.dtos.requests.BindCardRequest;
+import ru.kpfu.itis.lobanov.dtos.requests.CloseAccountRequest;
+import ru.kpfu.itis.lobanov.dtos.requests.CreateAccountRequest;
 
 import java.util.List;
 
@@ -17,9 +19,9 @@ public interface BankAccountService {
 
     List<BankAccountDto> getAllUserCardAccounts(Long userId);
 
-    void createAccount(BankAccountDto bankAccountDto);
+    BankAccountDto createAccount(CreateAccountRequest request);
 
-    void closeAccount(BankAccountDto bankAccountDto);
+    void closeAccount(CloseAccountRequest request);
 
     BankAccountDto getAccountById(Long id);
 

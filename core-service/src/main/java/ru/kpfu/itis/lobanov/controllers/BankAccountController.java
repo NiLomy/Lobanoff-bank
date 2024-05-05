@@ -10,6 +10,8 @@ import ru.kpfu.itis.lobanov.data.services.BankAccountService;
 import ru.kpfu.itis.lobanov.dtos.AccountStatementDto;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
 import ru.kpfu.itis.lobanov.dtos.requests.BindCardRequest;
+import ru.kpfu.itis.lobanov.dtos.requests.CloseAccountRequest;
+import ru.kpfu.itis.lobanov.dtos.requests.CreateAccountRequest;
 
 import java.util.List;
 
@@ -81,13 +83,25 @@ public class BankAccountController implements BankAccountApi {
     }
 
     @Override
-    public ResponseEntity<BankAccountDto> createAccount() {
-        return null;
+    public ResponseEntity<BankAccountDto> createAccount(CreateAccountRequest request) {
+        try {
+            BankAccountDto bankAccount = bankAccountService.createAccount(request);
+
+            return new ResponseEntity<>(bankAccount, HttpStatus.CREATED);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override
-    public ResponseEntity<BankAccountDto> closeAccount() {
-        return null;
+    public ResponseEntity<?> closeAccount(CloseAccountRequest request) {
+        try {
+            bankAccountService.closeAccount(request);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override

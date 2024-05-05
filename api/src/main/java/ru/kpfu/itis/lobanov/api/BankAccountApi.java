@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.kpfu.itis.lobanov.dtos.AccountStatementDto;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
 import ru.kpfu.itis.lobanov.dtos.requests.BindCardRequest;
+import ru.kpfu.itis.lobanov.dtos.requests.CloseAccountRequest;
+import ru.kpfu.itis.lobanov.dtos.requests.CreateAccountRequest;
 
 import java.util.List;
 
@@ -42,10 +44,10 @@ public interface BankAccountApi {
     ResponseEntity<AccountStatementDto> getAccountStatement(@PathVariable("id") String accountId, @RequestParam("date") String date);
 
     @PostMapping("/create")
-    ResponseEntity<BankAccountDto> createAccount();
+    ResponseEntity<BankAccountDto> createAccount(@RequestBody CreateAccountRequest request);
 
     @PostMapping("/close")
-    ResponseEntity<BankAccountDto> closeAccount();
+    ResponseEntity<?> closeAccount(@RequestBody CloseAccountRequest request);
 
     @PostMapping("/bind-card")
     ResponseEntity<BankAccountDto> bindCardToAccount(@RequestBody BindCardRequest request);
