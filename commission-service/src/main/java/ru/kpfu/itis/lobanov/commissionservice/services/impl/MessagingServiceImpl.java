@@ -20,6 +20,6 @@ public class MessagingServiceImpl implements MessagingService {
 
     @Override
     public void sendTransactionToChargeCashback(@NonNull Transaction transaction) {
-        template.convertAndSend(transactionCashbackRoutingKey, transaction);
+        template.convertAndSend(exchange, transactionCashbackRoutingKey, transaction);
     }
 }

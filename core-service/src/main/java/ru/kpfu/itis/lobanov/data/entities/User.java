@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -54,6 +55,7 @@ public class User implements UserDetails {
     private Role role;
 
     @NotNull
+    @ColumnDefault("false")
     private Boolean deleted;
 
     @Column(name = "verification_code", length = 128)

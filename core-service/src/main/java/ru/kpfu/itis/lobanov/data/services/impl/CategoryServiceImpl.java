@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void uploadCategories() {
-        try (FileReader reader = new FileReader("impl/src/main/resources/static/categories.json")) {
+        try (FileReader reader = new FileReader("core-service/src/main/resources/static/categories.json")) {
             JsonArray json = JsonParser.parseReader(reader).getAsJsonArray();
             for (JsonElement element : json.asList()) {
                 JsonObject data = element.getAsJsonObject();

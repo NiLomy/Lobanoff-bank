@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.lobanov.data.entities.*;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.data.repositories.*;
+import ru.kpfu.itis.lobanov.data.services.MessagingService;
 import ru.kpfu.itis.lobanov.data.services.TransactionService;
 import ru.kpfu.itis.lobanov.dtos.TransactionDto;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
@@ -33,6 +34,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionTypeRepository transactionTypeRepository;
     private final TransactionMethodRepository transactionMethodRepository;
     private final UserRepository userRepository;
+    private final MessagingService messagingService;
     private final Mapper<Transaction, TransactionDto> transactionMapper;
 
     @Override
@@ -230,6 +232,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .build();
 
         transaction = transactionRepository.save(transaction);
+        messagingService.sendTransactionToChargeCommission(transaction);
 
         // TODO make this logic in final stage of transaction processing
         currentAccount.setDeposit(currentAccount.getDeposit().subtract(amount));

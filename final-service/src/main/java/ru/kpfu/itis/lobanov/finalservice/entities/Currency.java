@@ -1,11 +1,13 @@
-package ru.kpfu.itis.lobanov.data.entities;
+package ru.kpfu.itis.lobanov.finalservice.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 
 @Getter
@@ -15,20 +17,25 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "categories")
-public class Category {
+@Table(name = "currencies")
+public class Currency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @NotBlank
-    private String title;
+    private String name;
 
     @NotNull
-    @NotBlank
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 2)
+    private String isoCode;
+
     private String icon;
+
+    @NonNull
+    @UpdateTimestamp(source = SourceType.DB)
+    @Column(name = "row_change_time")
+    private Timestamp rowChangeTime;
 
     @Override
     public final boolean equals(Object o) {
@@ -37,8 +44,8 @@ public class Category {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Category category = (Category) o;
-        return getId() != null && Objects.equals(getId(), category.getId());
+        Currency currency = (Currency) o;
+        return getId() != null && Objects.equals(getId(), currency.getId());
     }
 
     @Override

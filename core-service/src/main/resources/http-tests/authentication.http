@@ -37,3 +37,24 @@ Content-Type: application/json
 {
   "refreshToken": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI1IiwiaWF0IjoxNzE0NTQ2OTA0LCJuYmYiOjE3MTQ1NDY5MDQsImV4cCI6MTcxNzEzODkwNH0.jawyehl_dMooU81smyKFBH6h_eO-NQ6oiMGbMgt49wrhc_tQhijwsTrSWMbdcK0P"
 }
+
+###
+
+GET http://localhost:8081/api/v1/bank-info/upload
+
+###
+
+GET http://localhost:8081/api/v1/category/upload
+
+###
+
+POST http://localhost:8080/core/api/v1/transactions/transfer/between-accounts
+Content-Type: application/json
+
+{
+  "from": 3,
+  "to": 2,
+  "amount": 100
+}
+
+###

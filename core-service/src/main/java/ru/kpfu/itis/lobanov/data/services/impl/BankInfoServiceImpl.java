@@ -31,7 +31,7 @@ public class BankInfoServiceImpl implements BankInfoService {
 
     @Override
     public void uploadInfo() {
-        try (FileReader reader = new FileReader("impl/src/main/resources/static/russia.json")) {
+        try (FileReader reader = new FileReader("core-service/src/main/resources/static/russia.json")) {
             JsonArray json = JsonParser.parseReader(reader).getAsJsonArray();
             for (JsonElement element : json.asList()) {
                 JsonObject data = element.getAsJsonObject();

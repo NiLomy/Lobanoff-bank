@@ -1,7 +1,6 @@
-package ru.kpfu.itis.lobanov.data.entities;
+package ru.kpfu.itis.lobanov.finalservice.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +12,6 @@ import org.hibernate.proxy.HibernateProxy;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -22,7 +20,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Transaction.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Transaction.class)
 @Entity
 @Table(name = "transactions")
 public class Transaction implements Serializable {

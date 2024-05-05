@@ -43,3 +43,4 @@ out/
 /notification-service/src/main/resources/application.yml
 /commission-service/src/main/resources/application.yml
 /cashback-service/src/main/resources/application.yml
+/final-service/src/main/resources/application.yml

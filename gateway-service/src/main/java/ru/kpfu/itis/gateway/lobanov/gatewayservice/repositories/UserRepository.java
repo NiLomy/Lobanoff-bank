@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    List<User> findAllByIsDeletedIsFalse();
+    List<User> findAllByDeletedIsFalse();
 
     @QueryHints(value = {
             @QueryHint(name = "org.hibernate.readOnly", value = "true"),

@@ -1,4 +1,4 @@
-package ru.kpfu.itis.lobanov.data.entities;
+package ru.kpfu.itis.lobanov.finalservice.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

@@ -23,7 +23,7 @@ public class MessagingServiceImpl implements MessagingService {
 
     @Override
     public void sendTransactionToChargeCommission(@NonNull Transaction transaction) {
-        template.convertAndSend(transactionRoutingKey, transaction);
+        template.convertAndSend(exchange, transactionRoutingKey, transaction);
     }
 
     @Override

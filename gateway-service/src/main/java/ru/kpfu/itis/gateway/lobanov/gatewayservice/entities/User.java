@@ -54,18 +54,10 @@ public class User implements UserDetails {
     private Role role;
 
     @NotNull
-    private Boolean isDeleted;
+    private Boolean deleted;
 
     @Column(name = "verification_code")
     private String verificationCode;
-
-//    @OneToMany
-//    @ToString.Exclude
-//    private List<Card> cards;
-//
-//    @OneToMany
-//    @ToString.Exclude
-//    private List<BankAccount> accounts;
 
     @Override
     public final boolean equals(Object o) {
