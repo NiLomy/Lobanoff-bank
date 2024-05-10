@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "bank_info")
+@Table(name = "card_infos")
 public class BankInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

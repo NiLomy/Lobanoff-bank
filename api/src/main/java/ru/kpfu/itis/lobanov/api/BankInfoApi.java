@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Tag(name = "Bank Account Api", description = "Provides methods for bank accounts")
-@RequestMapping(path = "/api/v1/bank-info", produces = "application/json")
+@RequestMapping(path = "/api/v1/card-info", produces = "application/json")
 @CrossOrigin(origins = "http://localhost:3000")
 public interface BankInfoApi {
 

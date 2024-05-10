@@ -23,7 +23,6 @@ public class UserMapper implements Mapper<User, UserDto> {
                 .lastname(userEntity.getLastname())
                 .patronymic(userEntity.getPatronymic())
                 .email(userEntity.getEmail())
-                .phone(userEntity.getPhone())
                 .role(userEntity.getRole())
                 .isDeleted(userEntity.getDeleted())
                 .build();

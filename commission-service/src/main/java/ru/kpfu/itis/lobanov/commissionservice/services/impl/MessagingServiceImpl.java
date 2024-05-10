@@ -1,5 +1,7 @@
 package ru.kpfu.itis.lobanov.commissionservice.services.impl;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -19,7 +21,7 @@ public class MessagingServiceImpl implements MessagingService {
     String transactionCashbackRoutingKey;
 
     @Override
-    public void sendTransactionToChargeCashback(@NonNull Transaction transaction) {
+    public void sendTransactionToChargeCashback(@NotNull @Valid Transaction transaction) {
         template.convertAndSend(exchange, transactionCashbackRoutingKey, transaction);
     }
 }

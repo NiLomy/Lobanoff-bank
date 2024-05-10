@@ -64,6 +64,20 @@ project(':api') {
 	}
 }
 
+project(':database') {
+	bootJar {
+		enabled = false
+	}
+	jar {
+		enabled = true
+	}
+
+	dependencies {
+		implementation 'org.liquibase:liquibase-core'
+		runtimeOnly 'org.postgresql:postgresql'
+	}
+}
+
 project(':registry-service') {
 	ext {
 		set('springCloudVersion', "2023.0.1")
@@ -163,6 +177,7 @@ project(':core-service') {
 
 	dependencies {
 		implementation project(':api')
+		implementation project(':database')
 
 		implementation "javax.mail:javax.mail-api:1.6.2"
 

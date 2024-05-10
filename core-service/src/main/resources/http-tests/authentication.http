@@ -17,11 +17,13 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI1IiwiZW1haWwiOiJ1c2VyQG1ha
 
 ###
 
-GET http://localhost:8080/impl/api/v1/accounts/1
+GET http://localhost:8081/api/v1/category/upload
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJsb2Jhbm92Lm5pa2l0YTIwMThAeWFuZGV4LnJ1IiwiYXV0aG9yaXR5IjoiVVNFUiIsImVuYWJsZWQiOmZhbHNlLCJpYXQiOjE3MTUyODUwMTMsIm5iZiI6MTcxNTI4NTAxMywiZXhwIjoxNzE1Mjg1MzEzfQ.uVzrKb_x3Yz8x3BG5avroPd_qiPzEFJjqpx84vtl3yvJA4ADPmfyOZgPEroxUfNg
+
 
 ###
 
-POST http://localhost:8080/impl/api/v1/auth/login
+POST http://localhost:8081/api/v1/auth/login
 Content-Type: application/json
 
 {

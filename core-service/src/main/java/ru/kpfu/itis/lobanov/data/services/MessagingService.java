@@ -6,5 +6,5 @@ import ru.kpfu.itis.lobanov.data.entities.Transaction;
 public interface MessagingService {
     void sendTransactionToChargeCommission(@NonNull Transaction transaction);
 
-    void sendEmail(@NonNull String mail, @NonNull String name, @NonNull String code);
+    void sendEmail(@NonNull String mail, @NonNull String name, @NonNull String url);
 }

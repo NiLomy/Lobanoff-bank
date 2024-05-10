@@ -1,5 +1,7 @@
 package ru.kpfu.itis.lobanov.commissionservice.services.impl;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,7 @@ public class CommissionChargeServiceImpl implements CommissionChargeService {
     private final MessagingService messagingService;
 
     @Override
-    public void chargeCommission(@NonNull Transaction transaction) {
+    public void chargeCommission(@NotNull @Valid Transaction transaction) {
         if (transaction.getInitAmount().compareTo(BigDecimal.valueOf(100_000)) >= 0) {
             transaction.setCommission(transaction.getInitAmount().multiply(BigDecimal.valueOf(0.05)));
         } else {

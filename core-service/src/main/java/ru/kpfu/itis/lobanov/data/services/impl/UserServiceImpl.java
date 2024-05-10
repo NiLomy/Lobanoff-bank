@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
             return userMapper.toResponse(userRepository.updateStateById(userId, State.BANNED.toString()));
         } else {
             log.warn("You can not ban {} because of his role.", user);
-            return null;
+            return null;    
         }
     }
 

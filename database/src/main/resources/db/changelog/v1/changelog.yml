@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: "Nikita Lobanov"
+  - include:
+      file: DDL/2024-05-10--01-create-tables.sql
+      relativeToChangelogFile: true
+  - include:
+      file: DDL/2024-05-10--02-add-constraints.sql
+      relativeToChangelogFile: true
+  - include:
+      file: DML/2024-05-10--03-add-categories.sql
+      relativeToChangelogFile: true
+  - include:
+      file: DML/2024-05-10--04-add-card-infos.sql
+      relativeToChangelogFile: true

@@ -27,11 +27,11 @@ public class MessagingServiceImpl implements MessagingService {
     }
 
     @Override
-    public void sendEmail(@NonNull String mail, @NonNull String name, @NonNull String code) {
+    public void sendEmail(@NonNull String mail, @NonNull String name, @NonNull String url) {
         EmailDto emailDto = EmailDto.builder()
                         .email(mail)
                         .receiverName(name)
-                        .code(code)
+                        .url(url)
                         .build();
         template.convertAndSend(exchange, emailRoutingKey, emailDto);
     }

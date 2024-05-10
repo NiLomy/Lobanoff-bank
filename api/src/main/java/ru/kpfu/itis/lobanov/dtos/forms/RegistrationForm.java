@@ -25,4 +25,5 @@ public class RegistrationForm {
     @Schema(description = "Confirmed password of the new client.")
     @NotBlank(message = "Confirmed password shouldn't be empty.")
     private String confirmPassword;
+    private String url;
 }

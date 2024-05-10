@@ -55,7 +55,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .deleted(false)
                 .build();
 
-        messagingService.sendEmail(registrationForm.getEmail(), registrationForm.getName(), code);
+        messagingService.sendEmail(registrationForm.getEmail(), registrationForm.getName(), registrationForm.getUrl() + code);
 
         user = userRepository.save(user);
         return generateToken(user);

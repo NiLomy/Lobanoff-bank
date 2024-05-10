@@ -28,7 +28,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
     @Override
     public void sendVerificationCode(@NonNull EmailDto emailDto) {
-        validateDataForEmail(emailDto.getEmail(), emailDto.getReceiverName(), emailDto.getCode());
+        validateDataForEmail(emailDto.getEmail(), emailDto.getReceiverName(), emailDto.getUrl());
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
@@ -37,7 +37,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             Template freemarkerTemplate = freeMarkerConfigurer.getConfiguration().getTemplate("test.ftlh");
             Map<String, Object> templateModel = new HashMap<>();
             templateModel.put("name", emailDto.getReceiverName());
-            templateModel.put("code", emailDto.getCode());
+            templateModel.put("url", emailDto.getUrl());
             String htmlBody = FreeMarkerTemplateUtils.processTemplateIntoString(freemarkerTemplate, templateModel);
             helper.setFrom(mailContentConfig.getFrom(), mailContentConfig.getSender());
             helper.setTo(emailDto.getEmail());
