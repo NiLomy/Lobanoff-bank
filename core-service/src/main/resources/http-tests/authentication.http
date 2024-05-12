@@ -12,14 +12,18 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/impl/api/v1/users/6
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI1IiwiZW1haWwiOiJ1c2VyQG1haWwucnUiLCJhdXRob3JpdHkiOiJVU0VSIiwiZW5hYmxlZCI6dHJ1ZSwiaWF0IjoxNzE0NTQ2OTA1LCJuYmYiOjE3MTQ1NDY5MDUsImV4cCI6MTcxNDU0NzIwNX0.mvvkwevfHWk0oxocYbeRFyBkuRGWZKCXkSwzTpucCnLRfvj29YGvx5P-JJJsRYAp
+GET http://localhost:8080/core/api/v1/users/all
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJsb2Jhbm92Lm5pa2l0YTIwMThAeWFuZGV4LnJ1IiwiYXV0aG9yaXR5IjoiVVNFUiIsImVuYWJsZWQiOmZhbHNlLCJpYXQiOjE3MTU0NDMyNzYsIm5iZiI6MTcxNTQ0MzI3NiwiZXhwIjoxNzE1NDQzNTc2fQ.uC1hRtIBJUQ_5lwe0GN5PneOSup0YmlVPdFRuOHOYnUfrG2Rdb06isbS-CVeqMWC
 
 ###
 
 GET http://localhost:8081/api/v1/category/upload
 Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJsb2Jhbm92Lm5pa2l0YTIwMThAeWFuZGV4LnJ1IiwiYXV0aG9yaXR5IjoiVVNFUiIsImVuYWJsZWQiOmZhbHNlLCJpYXQiOjE3MTUyODUwMTMsIm5iZiI6MTcxNTI4NTAxMywiZXhwIjoxNzE1Mjg1MzEzfQ.uVzrKb_x3Yz8x3BG5avroPd_qiPzEFJjqpx84vtl3yvJA4ADPmfyOZgPEroxUfNg
 
+
+###
+
+GET http://localhost:8080/core/test
 
 ###
 

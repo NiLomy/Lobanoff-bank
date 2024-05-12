@@ -29,7 +29,11 @@ public class Currency {
 
     @NotNull
     @Column(length = 2)
-    private String isoCode;
+    private String isoCode2;
+
+    @NotNull
+    @Column(length = 3)
+    private String isoCode3;
 
     private String icon;
 

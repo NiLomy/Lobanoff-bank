@@ -5,14 +5,14 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ru.kpfu.itis.lobanov.data.entities.BankAccount;
+import ru.kpfu.itis.lobanov.data.entities.Account;
 import ru.kpfu.itis.lobanov.data.entities.Card;
 import ru.kpfu.itis.lobanov.data.entities.User;
-import ru.kpfu.itis.lobanov.data.repositories.BankAccountRepository;
+import ru.kpfu.itis.lobanov.data.repositories.AccountRepository;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
-import ru.kpfu.itis.lobanov.data.services.BankAccountService;
+import ru.kpfu.itis.lobanov.data.services.AccountService;
 import ru.kpfu.itis.lobanov.data.services.TransactionService;
-import ru.kpfu.itis.lobanov.data.services.impl.BankAccountServiceImpl;
+import ru.kpfu.itis.lobanov.data.services.impl.AccountServiceImpl;
 import ru.kpfu.itis.lobanov.data.services.impl.TransactionServiceImpl;
 import ru.kpfu.itis.lobanov.dtos.*;
 
@@ -67,7 +67,7 @@ public class TestConfig {
     };
 
     @Bean
-    public BankAccountRepository bankAccountRepository() {
+    public AccountRepository bankAccountRepository() {
         User owner = User.builder()
                 .id(1L)
                 .email("test@mail.com")
@@ -83,7 +83,7 @@ public class TestConfig {
                 .number("1144485810352102")
                 .build();
 
-        BankAccount bankAccount = BankAccount.builder()
+        Account account = Account.builder()
                 .name("AAAA")
                 .owner(owner)
                 .cards(List.of(card))
@@ -91,15 +91,15 @@ public class TestConfig {
                 .transactions(null)
                 .number("1")
                 .build();
-        BankAccountRepository bankAccountRepository = Mockito.mock(BankAccountRepository.class);
-        Mockito.when(bankAccountRepository.findById(1L)).thenReturn(Optional.of(bankAccount));
-        return bankAccountRepository;
+        AccountRepository accountRepository = Mockito.mock(AccountRepository.class);
+        Mockito.when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
+        return accountRepository;
     }
 
 
     @Bean
-    public BankAccountService bankAccountService() {
-        return Mockito.mock(BankAccountServiceImpl.class);
+    public AccountService bankAccountService() {
+        return Mockito.mock(AccountServiceImpl.class);
 //        return new BankAccountServiceImpl(bankAccountRepository(), userRepository(), null, bankAccountMapper(), null);
     }
 

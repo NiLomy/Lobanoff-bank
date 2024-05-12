@@ -24,7 +24,7 @@ public class Requisites {
     private User payee;
 
     @OneToOne
-    private BankAccount payeeAccount;
+    private Account payeeAccount;
 
     @NotNull
     @Column(name = "corr_account", length = 20)

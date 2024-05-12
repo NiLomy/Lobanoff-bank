@@ -30,11 +30,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
-    private String lastname;
-
-    private String patronymic;
+    @OneToOne
+    private Passport passport;
 
     @Email
     @NotNull

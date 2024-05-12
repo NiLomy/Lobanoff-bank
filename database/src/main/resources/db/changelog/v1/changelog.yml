@@ -14,3 +14,12 @@ databaseChangeLog:
   - include:
       file: DML/2024-05-10--04-add-card-infos.sql
       relativeToChangelogFile: true
+  - include:
+      file: DML/2024-05-12--05-add-account-types.sql
+      relativeToChangelogFile: true
+  - include:
+      file: DML/2024-05-12--06-add-add-transaction-methods.sql
+      relativeToChangelogFile: true
+  - include:
+      file: DML/2024-05-12--07-add-transaction-types.sql
+      relativeToChangelogFile: true

@@ -18,7 +18,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table(name = "accounts")
-public class BankAccount {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,7 +37,7 @@ public class BankAccount {
     private Currency currency;
 
     @ManyToOne
-    private BankAccountType type;
+    private AccountType type;
 
     @NotNull
     @ManyToOne
@@ -60,7 +60,7 @@ public class BankAccount {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        BankAccount that = (BankAccount) o;
+        Account that = (Account) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 

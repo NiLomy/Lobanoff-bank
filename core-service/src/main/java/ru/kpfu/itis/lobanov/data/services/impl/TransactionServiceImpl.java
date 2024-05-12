@@ -30,7 +30,7 @@ import static ru.kpfu.itis.lobanov.utils.NamingConstants.*;
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
-    private final BankAccountRepository bankAccountRepository;
+    private final AccountRepository accountRepository;
     private final TransactionTypeRepository transactionTypeRepository;
     private final TransactionMethodRepository transactionMethodRepository;
     private final UserRepository userRepository;
@@ -54,7 +54,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDto transferByPhone(@NonNull PhoneTransferForm phoneTransferForm) {
-        BankAccount currentAccount = bankAccountRepository.findById(phoneTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
+        Account currentAccount = accountRepository.findById(phoneTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
 
         if (currentAccount.getDeposit().compareTo(phoneTransferForm.getAmount()) < 0) {
             throw new NotEnoughMoneyException(NOT_ENOUGH_MONEY_FOR_OPERATION);
@@ -62,7 +62,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         User anotherUser = userRepository.findByPhone(phoneTransferForm.getPhone())
                 .orElse(userRepository.findByEmail(ADMIN_EMAIL).orElseThrow(IllegalArgumentException::new));
-        BankAccount anotherAccount = bankAccountRepository.findAllByOwnerId(anotherUser.getId()).get(0);
+        Account anotherAccount = accountRepository.findAllByOwnerId(anotherUser.getId()).get(0);
         TransactionMethod method = transactionMethodRepository.findByName(TRANSACTION_METHOD_TRANSFER)
                 .orElseThrow(() -> new TransactionMethodNotFoundException(NO_SUCH_TRANSACTION_METHOD));
 
@@ -82,13 +82,13 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDto transferBetweenAccounts(@NonNull BetweenAccountsTransferForm betweenAccountsTransferForm) {
-        BankAccount accountToTransferFrom = bankAccountRepository.findById(betweenAccountsTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
+        Account accountToTransferFrom = accountRepository.findById(betweenAccountsTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
 
         if (accountToTransferFrom.getDeposit().compareTo(betweenAccountsTransferForm.getAmount()) <= 0) {
             throw new NotEnoughMoneyException(NOT_ENOUGH_MONEY_FOR_OPERATION);
         }
 
-        BankAccount accountToTransferTo = bankAccountRepository.findById(betweenAccountsTransferForm.getTo()).orElseThrow(IllegalArgumentException::new);
+        Account accountToTransferTo = accountRepository.findById(betweenAccountsTransferForm.getTo()).orElseThrow(IllegalArgumentException::new);
         TransactionMethod method = transactionMethodRepository.findByName(TRANSACTION_METHOD_TRANSFER)
                 .orElseThrow(() -> new TransactionMethodNotFoundException(NO_SUCH_TRANSACTION_METHOD));
 
@@ -107,14 +107,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDto transferByCard(@NonNull CardTransferForm cardTransferForm) {
-        BankAccount currentAccount = bankAccountRepository.findById(cardTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
+        Account currentAccount = accountRepository.findById(cardTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
 
         if (currentAccount.getDeposit().compareTo(cardTransferForm.getAmount()) <= 0) {
             throw new NotEnoughMoneyException(NOT_ENOUGH_MONEY_FOR_OPERATION);
         }
 
-        BankAccount anotherAccount = bankAccountRepository.findByCardNumber(cardTransferForm.getCard())
-                .orElse(bankAccountRepository.findAllByOwnerId(
+        Account anotherAccount = accountRepository.findByCardNumber(cardTransferForm.getCard())
+                .orElse(accountRepository.findAllByOwnerId(
                         userRepository.findByEmail(ADMIN_EMAIL).orElseThrow(IllegalArgumentException::new).getId()
                 ).get(0));
         TransactionMethod method = transactionMethodRepository.findByName(TRANSACTION_METHOD_TRANSFER)
@@ -135,14 +135,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDto transferByAccountDetails(@NonNull AccountDetailsTransferForm accountDetailsTransferForm) {
-        BankAccount currentAccount = bankAccountRepository.findById(accountDetailsTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
+        Account currentAccount = accountRepository.findById(accountDetailsTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
 
         if (currentAccount.getDeposit().compareTo(accountDetailsTransferForm.getAmount()) <= 0) {
             throw new NotEnoughMoneyException(NOT_ENOUGH_MONEY_FOR_OPERATION);
         }
         // TODO implement contracts
-        BankAccount anotherAccount = bankAccountRepository.findByContractNumber(accountDetailsTransferForm.getContractNumber())
-                .orElse(bankAccountRepository.findAllByOwnerId(
+        Account anotherAccount = accountRepository.findByContractNumber(accountDetailsTransferForm.getContractNumber())
+                .orElse(accountRepository.findAllByOwnerId(
                         userRepository.findByEmail(ADMIN_EMAIL).orElseThrow(IllegalArgumentException::new).getId()
                 ).get(0));
         TransactionMethod method = transactionMethodRepository.findByName(TRANSACTION_METHOD_TRANSFER)
@@ -163,14 +163,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDto replenishByCard(@NonNull CardReplenishForm cardReplenishForm) {
-        BankAccount currentAccount = bankAccountRepository.findByCardNumber(cardReplenishForm.getCard()).orElseThrow(IllegalArgumentException::new);
+        Account currentAccount = accountRepository.findByCardNumber(cardReplenishForm.getCard()).orElseThrow(IllegalArgumentException::new);
 
         if (currentAccount.getDeposit().compareTo(cardReplenishForm.getAmount()) <= 0) {
             throw new NotEnoughMoneyException(NOT_ENOUGH_MONEY_FOR_OPERATION);
         }
 
-        BankAccount anotherAccount = bankAccountRepository.findById(cardReplenishForm.getTo())
-                .orElse(bankAccountRepository.findAllByOwnerId(
+        Account anotherAccount = accountRepository.findById(cardReplenishForm.getTo())
+                .orElse(accountRepository.findAllByOwnerId(
                         userRepository.findByEmail(ADMIN_EMAIL).orElseThrow(IllegalArgumentException::new).getId()
                 ).get(0));
 
@@ -190,11 +190,56 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionMapper.toResponse(transaction);
     }
 
+    @Override
+    public void chargeInterestTransaction(Account account, BigDecimal amount) {
+        final LocalDateTime now = LocalDateTime.now();
+        final Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
+
+        TransactionType type = transactionTypeRepository.findByName(TRANSACTION_TYPE_INTEREST).orElseThrow(
+                () -> new TransactionTypeNotFoundException(NO_SUCH_TRANSACTION_TYPE)
+        );
+        TransactionMethod method = transactionMethodRepository.findByName(TRANSACTION_METHOD_TRANSFER)
+                .orElseThrow(() -> new TransactionMethodNotFoundException(NO_SUCH_TRANSACTION_METHOD));
+
+        Account adminAccount = accountRepository.findAllByOwnerId(
+                userRepository.findByEmail(ADMIN_EMAIL).orElseThrow(IllegalArgumentException::new).getId()
+        ).get(0);
+
+        Transaction transaction = Transaction.builder()
+                .date(Timestamp.from(instant))
+                .initAmount(amount)
+                .currency(account.getCurrency())
+                .type(type)
+                .method(method)
+                .from(adminAccount.getId())
+                .to(account.getId())
+                .bankNameFrom(BANK_NAME)
+                .bankNameTo(BANK_NAME)
+                .terminalIp(null)
+                .serviceCompany(BANK_NAME)
+                .message(null)
+                .commission(BigDecimal.ZERO)
+                .cashback(BigDecimal.ZERO)
+                .riskIndicator(0)
+                .totalAmount(amount)
+                .build();
+
+        transaction = transactionRepository.save(transaction);
+
+        account.setDeposit(account.getDeposit().add(amount));
+
+        account.getTransactions().add(transaction);
+        adminAccount.getTransactions().add(transaction);
+
+        accountRepository.save(account);
+        accountRepository.save(adminAccount);
+    }
+
     private Transaction createTransaction(
             @NonNull
-            BankAccount currentAccount,
+            Account currentAccount,
             @NonNull
-            BankAccount anotherAccount,
+            Account anotherAccount,
             @NonNull
             BigDecimal amount,
             @NonNull
@@ -213,7 +258,6 @@ public class TransactionServiceImpl implements TransactionService {
         final Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
 
         Optional<TransactionType> optionalType = transactionTypeRepository.findByName(TRANSACTION_TYPE_PENDING);
-
         if (optionalType.isEmpty()) throw new TransactionTypeNotFoundException(NO_SUCH_TRANSACTION_TYPE);
 
         Transaction transaction = Transaction.builder()
@@ -237,6 +281,10 @@ public class TransactionServiceImpl implements TransactionService {
         // TODO make this logic in final stage of transaction processing
         currentAccount.setDeposit(currentAccount.getDeposit().subtract(amount));
         anotherAccount.setDeposit(anotherAccount.getDeposit().add(amount));
+        currentAccount.getTransactions().add(transaction);
+        anotherAccount.getTransactions().add(transaction);
+        accountRepository.save(currentAccount);
+        accountRepository.save(anotherAccount);
         return transaction;
     }
 

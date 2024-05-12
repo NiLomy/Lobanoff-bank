@@ -1,6 +1,7 @@
 package ru.kpfu.itis.lobanov.data.mappers.impl;
 
 import org.springframework.stereotype.Component;
+import ru.kpfu.itis.lobanov.data.entities.Passport;
 import ru.kpfu.itis.lobanov.data.entities.User;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
@@ -17,11 +18,13 @@ public class UserMapper implements Mapper<User, UserDto> {
             return null;
         }
 
+        Passport passport = userEntity.getPassport();
+
         return UserDto.builder()
                 .id(userEntity.getId())
-                .name(userEntity.getName())
-                .lastname(userEntity.getLastname())
-                .patronymic(userEntity.getPatronymic())
+                .name(passport.getName())
+                .lastname(passport.getLastname())
+                .patronymic(passport.getPatronymic())
                 .email(userEntity.getEmail())
                 .role(userEntity.getRole())
                 .isDeleted(userEntity.getDeleted())

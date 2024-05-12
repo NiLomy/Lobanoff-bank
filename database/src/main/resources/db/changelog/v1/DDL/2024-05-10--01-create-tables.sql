@@ -1,22 +1,20 @@
-CREATE TABLE IF NOT EXISTS passports (
-    id BIGSERIAL PRIMARY KEY,
-    series SMALLINT NOT NULL,
-    number INTEGER NOT NULL,
-    birthday DATE NOT NULL,
-    gender CHAR(1) NOT NULL,
-    department_code CHAR(7) NOT NULL,
-    issued_by VARCHAR NOT NULL,
-    issued_date DATE NOT NULL,
-    address VARCHAR NOT NULL,
-    row_change_time timestamptz NOT NULL DEFAULT current_timestamp
-);
+CREATE TABLE IF NOT EXISTS passports (id BIGSERIAL PRIMARY KEY
+    , name VARCHAR(100) NOT NULL
+    , lastname VARCHAR(100) NOT NULL
+    , patronymic VARCHAR(100)
+    , series SMALLINT NOT NULL
+    , number INTEGER NOT NULL
+    , birthday DATE NOT NULL
+    , gender CHAR(1) NOT NULL
+    , department_code CHAR(7) NOT NULL
+    , issued_by VARCHAR NOT NULL
+    , issued_date DATE NOT NULL
+    , address VARCHAR NOT NULL
+    , row_change_time timestamptz NOT NULL DEFAULT current_timestamp);
 
 CREATE TABLE IF NOT EXISTS users (id BIGSERIAL PRIMARY KEY
     , deleted BOOLEAN NOT NULL
     , email VARCHAR NOT NULL
-    , name VARCHAR(100) NOT NULL
-    , lastname VARCHAR(100) NOT NULL
-    , patronymic VARCHAR(100)
     , password VARCHAR NOT NULL
     , role VARCHAR(50) NOT NULL
     , state VARCHAR(50) NOT NULL
@@ -30,7 +28,8 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (user_id BIGINT PRIMARY KEY
     , row_change_time timestamptz NOT NULL DEFAULT current_timestamp);
 
 CREATE TABLE IF NOT EXISTS currencies (id SMALLSERIAL PRIMARY KEY
-    , iso_code VARCHAR(2) NOT NULL
+    , iso_code_2 VARCHAR(2) NOT NULL
+    , iso_code_3 VARCHAR(3) NOT NULL
     , name VARCHAR NOT NULL
     , icon TEXT
     , row_change_time timestamptz NOT NULL DEFAULT current_timestamp);
@@ -124,3 +123,8 @@ CREATE TABLE IF NOT EXISTS transactions (id BIGSERIAL PRIMARY KEY
 CREATE TABLE IF NOT EXISTS accounts_transactions (account_id BIGINT NOT NULL
     , transaction_id BIGINT NOT NULL
     , row_change_time timestamptz NOT NULL DEFAULT current_timestamp);
+
+CREATE TABLE IF NOT EXISTS shedlock(name VARCHAR(64) PRIMARY KEY
+    , lock_until TIMESTAMP NOT NULL
+    , locked_at TIMESTAMP NOT NULL DEFAULT current_timestamp
+    , locked_by VARCHAR(255) NOT NULL);

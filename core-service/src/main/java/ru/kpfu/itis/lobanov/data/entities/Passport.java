@@ -11,6 +11,7 @@ import java.util.Objects;
 @Table(name = "passports")
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +19,9 @@ public class Passport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
+    private String lastname;
+    private String patronymic;
     private Short series;
     private Integer number;
     private Date birthday;

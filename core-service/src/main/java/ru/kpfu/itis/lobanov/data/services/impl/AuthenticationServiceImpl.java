@@ -10,9 +10,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kpfu.itis.lobanov.data.entities.Passport;
 import ru.kpfu.itis.lobanov.data.entities.RefreshToken;
 import ru.kpfu.itis.lobanov.data.entities.User;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
+import ru.kpfu.itis.lobanov.data.repositories.PassportRepository;
 import ru.kpfu.itis.lobanov.data.repositories.RefreshTokenRepository;
 import ru.kpfu.itis.lobanov.data.repositories.UserRepository;
 import ru.kpfu.itis.lobanov.data.services.AuthenticationService;
@@ -23,6 +25,7 @@ import ru.kpfu.itis.lobanov.dtos.UserDto;
 import ru.kpfu.itis.lobanov.dtos.forms.LoginForm;
 import ru.kpfu.itis.lobanov.dtos.forms.RegistrationForm;
 import ru.kpfu.itis.lobanov.dtos.responses.TokenResponse;
+import ru.kpfu.itis.lobanov.utils.DateProvider;
 import ru.kpfu.itis.lobanov.utils.JwtProvider;
 
 import java.util.Optional;
@@ -32,10 +35,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
+    private final PassportRepository passportRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final MessagingService messagingService;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final DateProvider dateProvider;
     private final Mapper<User, UserDto> userMapper;
 
     @Override
@@ -43,10 +48,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         validateRegistrationForm(registrationForm);
 
         String code = RandomString.make(128);
+        Passport passport = Passport.builder()
+                .series(registrationForm.getSeries())
+                .number(registrationForm.getNumber())
+                .birthday(dateProvider.parseDate(registrationForm.getBirthday()))
+                .gender(registrationForm.getGender())
+                .departmentCode(registrationForm.getDepartmentCode())
+                .issuedBy(registrationForm.getIssuedBy())
+                .issuedDate(dateProvider.parseDate(registrationForm.getIssuedDate()))
+                .address(registrationForm.getAddress())
+                .build();
+
+        passport = passportRepository.save(passport);
+
         User user = User.builder()
-                .name(registrationForm.getName())
-                .lastname(registrationForm.getLastname())
-                .patronymic(registrationForm.getPatronymic())
+                .passport(passport)
                 .email(registrationForm.getEmail())
                 .password(passwordEncoder.encode(registrationForm.getPassword()))
                 .verificationCode(code)

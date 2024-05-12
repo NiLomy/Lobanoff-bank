@@ -16,9 +16,9 @@ public class MessagingServiceImpl implements MessagingService {
     private final RabbitTemplate template;
 
     @Value("${spring.rabbitmq.exchange}")
-    String exchange;
+    private String exchange;
     @Value("${spring.rabbitmq.template.transaction.cashback.routing.key}")
-    String transactionCashbackRoutingKey;
+    private String transactionCashbackRoutingKey;
 
     @Override
     public void sendTransactionToChargeCashback(@NotNull @Valid Transaction transaction) {

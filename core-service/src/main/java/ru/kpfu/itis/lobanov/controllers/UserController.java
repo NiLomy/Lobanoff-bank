@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.kpfu.itis.lobanov.api.UserApi;
 import ru.kpfu.itis.lobanov.data.services.AuthenticationService;
 import ru.kpfu.itis.lobanov.data.services.UserService;
-import ru.kpfu.itis.lobanov.dtos.forms.RegistrationForm;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
 
 import java.util.List;

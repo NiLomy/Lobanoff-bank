@@ -9,18 +9,17 @@ import org.springframework.stereotype.Service;
 import ru.kpfu.itis.lobanov.data.entities.BankInfo;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.data.repositories.BankInfoRepository;
-import ru.kpfu.itis.lobanov.data.services.BankInfoService;
+import ru.kpfu.itis.lobanov.data.services.CardInfoService;
 import ru.kpfu.itis.lobanov.dtos.BankInfoDto;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class BankInfoServiceImpl implements BankInfoService {
+public class CardInfoServiceImpl implements CardInfoService {
     private final BankInfoRepository bankInfoRepository;
     private final Mapper<BankInfo, BankInfoDto> bankInfoMapper;
 

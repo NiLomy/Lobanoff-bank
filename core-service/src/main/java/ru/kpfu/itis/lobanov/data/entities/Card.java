@@ -46,7 +46,7 @@ public class Card {
     private User owner;
 
     @ManyToOne
-    private BankAccount account;
+    private Account account;
 
     @Override
     public final boolean equals(Object o) {

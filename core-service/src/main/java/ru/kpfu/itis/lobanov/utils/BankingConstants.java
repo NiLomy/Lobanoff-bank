@@ -1,5 +1,7 @@
 package ru.kpfu.itis.lobanov.utils;
 
+import java.math.BigDecimal;
+
 public class BankingConstants {
     public static final String BALANCE_ACCOUNT_OF_AN_INDIVIDUAL = "40817";
     public static final String CURRENCY_CODE_OF_THE_RUSSIAN_RUBLE = "810";
@@ -9,4 +11,5 @@ public class BankingConstants {
     public static final String FIRST_RUSSIAN_CORRESPONDENT_NUMBERS = "301";
     public static final String SECOND_RUSSIAN_CORRESPONDENT_NUMBERS = "01";
     public static final String CREDIT_CARD_BIN = "413723";
+    public static final BigDecimal SAVINGS_ACCOUNT_PERCENTAGE = BigDecimal.valueOf(0.01);
 }

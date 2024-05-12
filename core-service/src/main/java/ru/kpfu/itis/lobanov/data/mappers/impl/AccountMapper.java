@@ -11,28 +11,28 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class BankAccountMapper implements Mapper<BankAccount, BankAccountDto> {
+public class AccountMapper implements Mapper<Account, BankAccountDto> {
     private final Mapper<User, UserDto> userMapper;
     private final Mapper<Card, CardDto> cardMapper;
     private final Mapper<Transaction, TransactionDto> transactionMapper;
     private final Mapper<Currency, CurrencyDto> currencyMapper;
 
     @Override
-    public BankAccountDto toResponse(BankAccount bankAccount) {
+    public BankAccountDto toResponse(Account account) {
         return BankAccountDto.builder()
-                .id(bankAccount.getId())
-                .name(bankAccount.getName())
-                .deposit(bankAccount.getDeposit())
-                .currency(currencyMapper.toResponse(bankAccount.getCurrency()))
-                .type(bankAccount.getType().getName())
-                .owner(userMapper.toResponse(bankAccount.getOwner()))
-                .cards(cardMapper.toListResponse(bankAccount.getCards()))
-                .operations(transactionMapper.toListResponse(bankAccount.getTransactions()))
+                .id(account.getId())
+                .name(account.getName())
+                .deposit(account.getDeposit())
+                .currency(currencyMapper.toResponse(account.getCurrency()))
+                .type(account.getType().getName())
+                .owner(userMapper.toResponse(account.getOwner()))
+                .cards(cardMapper.toListResponse(account.getCards()))
+                .operations(transactionMapper.toListResponse(account.getTransactions()))
                 .build();
     }
 
     @Override
-    public List<BankAccountDto> toListResponse(List<BankAccount> set) {
+    public List<BankAccountDto> toListResponse(List<Account> set) {
         if (set == null) return null;
 
         return set.stream().map(this::toResponse).collect(Collectors.toList());
