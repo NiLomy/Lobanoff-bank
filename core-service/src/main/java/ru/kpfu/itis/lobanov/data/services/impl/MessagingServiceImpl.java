@@ -1,6 +1,5 @@
 package ru.kpfu.itis.lobanov.data.services.impl;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,17 +21,18 @@ public class MessagingServiceImpl implements MessagingService {
     String emailRoutingKey;
 
     @Override
-    public void sendTransactionToChargeCommission(@NonNull Transaction transaction) {
+    public void sendTransactionToChargeCommission(Transaction transaction) {
         template.convertAndSend(exchange, transactionRoutingKey, transaction);
     }
 
     @Override
-    public void sendEmail(@NonNull String mail, @NonNull String name, @NonNull String url) {
+    public void sendEmail(String mail, String name, String url) {
         EmailDto emailDto = EmailDto.builder()
-                        .email(mail)
-                        .receiverName(name)
-                        .url(url)
-                        .build();
+                .email(mail)
+                .receiverName(name)
+                .url(url)
+                .build();
+
         template.convertAndSend(exchange, emailRoutingKey, emailDto);
     }
 }

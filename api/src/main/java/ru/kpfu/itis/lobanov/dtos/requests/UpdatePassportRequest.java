@@ -6,7 +6,10 @@ import java.util.Date;
 
 @Data
 public class UpdatePassportRequest {
-    private Long id;
+    private String id;
+    private String name;
+    private String lastname;
+    private String patronymic;
     private Short series;
     private Integer number;
     private Date birthday;

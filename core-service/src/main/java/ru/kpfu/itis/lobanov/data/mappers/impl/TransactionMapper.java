@@ -18,6 +18,8 @@ public class TransactionMapper implements Mapper<Transaction, TransactionDto> {
 
     @Override
     public TransactionDto toResponse(Transaction transaction) {
+        if (transaction == null) return null;
+
         return TransactionDto.builder()
                 .id(transaction.getId())
                 .date(transaction.getDate())

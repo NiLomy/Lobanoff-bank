@@ -10,6 +10,10 @@ public class NamingConstants {
     public static final String ACCOUNT_TYPE_SAVINGS = "SAVINGS";
 
     public static final String ADMIN_EMAIL = "admin@mail.ru";
+    public static final String EMAIL_KEY = "email";
+    public static final String AUTHORITY_KEY = "authority";
+    public static final String ENABLED_KEY = "enabled";
+    public static final String RANDOM_INSTANCE_WITH_BINDING = "randomWithBinding";
     public static final String SCHEDULER_LOCK_CHARGE_INTEREST_NAME = "chargeInterest";
 
 

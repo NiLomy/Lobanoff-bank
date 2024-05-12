@@ -19,6 +19,7 @@ import ru.kpfu.itis.lobanov.dtos.requests.CloseAccountRequest;
 import ru.kpfu.itis.lobanov.dtos.requests.CreateAccountRequest;
 import ru.kpfu.itis.lobanov.exceptions.TransactionTypeNotFoundException;
 import ru.kpfu.itis.lobanov.utils.AccountNumberGenerator;
+import ru.kpfu.itis.lobanov.utils.CurrentUserContext;
 import ru.kpfu.itis.lobanov.utils.DateProvider;
 
 import java.math.BigDecimal;
@@ -26,6 +27,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static ru.kpfu.itis.lobanov.utils.BankingConstants.BANK_IDENTIFICATION_CODE;
 import static ru.kpfu.itis.lobanov.utils.BankingConstants.SAVINGS_ACCOUNT_PERCENTAGE;
 import static ru.kpfu.itis.lobanov.utils.ExceptionMessages.NO_SUCH_TRANSACTION_TYPE;
 import static ru.kpfu.itis.lobanov.utils.NamingConstants.*;
@@ -40,6 +42,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountTypeRepository accountTypeRepository;
     private final CurrencyRepository currencyRepository;
     private final UserRepository userRepository;
+    private final RequisitesRepository requisitesRepository;
     private final TransactionRepository transactionRepository;
     private final TransactionService transactionService;
     private final CurrencyConverterService currencyConverterService;
@@ -76,7 +79,20 @@ public class AccountServiceImpl implements AccountService {
                 .deposit(BigDecimal.ZERO)
                 .number(numberGenerator.generatePersonalAccountNumber())
                 .build();
-        return bankAccountMapper.toResponse(accountRepository.save(account));
+
+        account = accountRepository.save(account);
+
+        Requisites requisites = Requisites.builder()
+                .payee(owner)
+                .payeeAccount(account)
+                .corrAccount(numberGenerator.generateCorrespondentAccountNumber())
+                .code(BANK_IDENTIFICATION_CODE)
+                .bankName(BANK_NAME)
+                .build();
+
+        requisitesRepository.save(requisites);
+
+        return bankAccountMapper.toResponse(account);
     }
 
     @Override
@@ -105,10 +121,16 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public BankAccountDto bindCard(BindCardRequest request) {
+        User user = CurrentUserContext.getCurrentUser();
         Account account = accountRepository.findById(Long.parseLong(request.getAccountId())).orElseThrow(IllegalArgumentException::new);
-        Card card = cardRepository.findById(Long.parseLong(request.getCardId())).orElseThrow(IllegalArgumentException::new);
-        account.getCards().add(card);
-        return bankAccountMapper.toResponse(accountRepository.save(account));
+
+        if (!account.getOwner().equals(user)) {
+            return null;
+        } else {
+            Card card = cardRepository.findById(Long.parseLong(request.getCardId())).orElseThrow(IllegalArgumentException::new);
+            account.getCards().add(card);
+            return bankAccountMapper.toResponse(accountRepository.save(account));
+        }
     }
 
     @Override

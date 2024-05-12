@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kpfu.itis.lobanov.dtos.forms.RegistrationForm;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
+import ru.kpfu.itis.lobanov.dtos.requests.UpdateUserRequest;
 
 import java.util.List;
 
@@ -15,11 +16,11 @@ public interface UserApi {
     @GetMapping("/{id}")
     ResponseEntity<UserDto> getUserById(@PathVariable("id") String userId);
 
-    @GetMapping("/current")
-    ResponseEntity<UserDto> getCurrentUser();
-
     @GetMapping("/all")
     ResponseEntity<List<UserDto>> getAllUsers();
+
+    @PutMapping("/update")
+    ResponseEntity<UserDto> updateUser(@RequestBody UpdateUserRequest request);
 
     @PostMapping("/ban/{id}")
     ResponseEntity<UserDto> banUser(@PathVariable("id") String userId);

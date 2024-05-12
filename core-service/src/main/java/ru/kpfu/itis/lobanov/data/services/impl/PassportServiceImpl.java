@@ -9,6 +9,8 @@ import ru.kpfu.itis.lobanov.data.services.PassportService;
 import ru.kpfu.itis.lobanov.dtos.PassportDto;
 import ru.kpfu.itis.lobanov.dtos.requests.SavePassportRequest;
 import ru.kpfu.itis.lobanov.dtos.requests.UpdatePassportRequest;
+import ru.kpfu.itis.lobanov.exceptions.PassportAlreadyInUseException;
+import ru.kpfu.itis.lobanov.exceptions.PassportNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,10 @@ public class PassportServiceImpl implements PassportService {
 
     @Override
     public PassportDto save(SavePassportRequest request) {
+        if (passportRepository.existsBySeriesAndNumber(request.getSeries(), request.getNumber())) {
+            throw new PassportAlreadyInUseException("This passport is already occupied by another user");
+        }
+
         Passport passport = Passport.builder()
                 .series(request.getSeries())
                 .number(request.getNumber())
@@ -39,8 +45,12 @@ public class PassportServiceImpl implements PassportService {
 
     @Override
     public PassportDto update(UpdatePassportRequest request) {
-        Passport passport = passportRepository.findById(request.getId()).orElseThrow(IllegalArgumentException::new);
+        Passport passport = passportRepository.findById(Long.parseLong(request.getId())).orElseThrow(
+                () -> new PassportNotFoundException(String.format("Couldn't find passport by id = %s", request.getId())));
 
+        passport.setName(request.getName());
+        passport.setLastname(request.getLastname());
+        passport.setPatronymic(request.getPatronymic());
         passport.setSeries(request.getSeries());
         passport.setNumber(request.getNumber());
         passport.setBirthday(request.getBirthday());

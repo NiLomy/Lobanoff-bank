@@ -1,6 +1,7 @@
 package ru.kpfu.itis.lobanov.data.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
@@ -9,6 +10,8 @@ import org.hibernate.proxy.HibernateProxy;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+
+import static ru.kpfu.itis.lobanov.utils.ValidationMessages.*;
 
 @Getter
 @Setter
@@ -23,14 +26,16 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = NAME_NOT_NULL)
+    @NotBlank(message = NAME_NOT_BLANK)
     private String name;
 
-    @NotNull
+    @NotNull(message = NUMBER_NOT_NULL)
+    @NotBlank(message = NAME_NOT_BLANK)
     private String number;
 
-    @NotNull
-    @PositiveOrZero(message = "Deposit must not be negative number!")
+    @NotNull(message = AMOUNT_NOT_NULL)
+    @PositiveOrZero(message = AMOUNT_POSITIVE_OR_ZERO)
     private BigDecimal deposit;
 
     @ManyToOne
@@ -51,6 +56,7 @@ public class Account {
     @ToString.Exclude
     private List<Card> cards;
 
+    @NotNull(message = MAIN_ACCOUNT_NOT_NULL)
     private Boolean main;
 
     @Override

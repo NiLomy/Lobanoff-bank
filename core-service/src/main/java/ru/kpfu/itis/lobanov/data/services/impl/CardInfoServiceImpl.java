@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.kpfu.itis.lobanov.data.entities.BankInfo;
+import ru.kpfu.itis.lobanov.data.entities.CardInfo;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.data.repositories.BankInfoRepository;
 import ru.kpfu.itis.lobanov.data.services.CardInfoService;
@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CardInfoServiceImpl implements CardInfoService {
     private final BankInfoRepository bankInfoRepository;
-    private final Mapper<BankInfo, BankInfoDto> bankInfoMapper;
+    private final Mapper<CardInfo, BankInfoDto> bankInfoMapper;
 
     @Override
     public Map<String, BankInfoDto> getAll() {
-        return bankInfoRepository.findAll().stream().collect(Collectors.toMap(BankInfo::getBin, bankInfoMapper::toResponse));
+        return bankInfoRepository.findAll().stream().collect(Collectors.toMap(CardInfo::getBin, bankInfoMapper::toResponse));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CardInfoServiceImpl implements CardInfoService {
             for (JsonElement element : json.asList()) {
                 JsonObject data = element.getAsJsonObject();
                 bankInfoRepository.save(
-                        BankInfo.builder()
+                        CardInfo.builder()
                                 .bin(data.get("bin").getAsString())
                                 .brand(data.get("brand").getAsString())
                                 .type(data.get("type").getAsString())

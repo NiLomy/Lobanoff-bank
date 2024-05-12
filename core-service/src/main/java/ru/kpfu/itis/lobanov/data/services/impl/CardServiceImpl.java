@@ -24,6 +24,7 @@ import static ru.kpfu.itis.lobanov.utils.BankingConstants.CREDIT_CARD_BIN;
 public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
     private final AccountRepository accountRepository;
+    private final CreditCardNumberGenerator creditCardNumberGenerator;
     private final Mapper<Card, CardDto> cardMapper;
 
     @Override
@@ -42,7 +43,7 @@ public class CardServiceImpl implements CardService {
         int cvv = 100 + random.nextInt(900);
         Card card = cardRepository.save(
                 Card.builder()
-                        .number(CreditCardNumberGenerator.generate(CREDIT_CARD_BIN, 16))
+                        .number(creditCardNumberGenerator.generate(CREDIT_CARD_BIN, 16))
                         .expiration(String.format("%02d/%02d", month, year))
                         .cvv(String.valueOf(cvv))
                         .owner(account.getOwner())

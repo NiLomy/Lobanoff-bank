@@ -3,6 +3,7 @@ package ru.kpfu.itis.lobanov.data.entities;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -11,6 +12,9 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 import ru.kpfu.itis.lobanov.utils.CardNumberMaskingSerializer;
 
 import java.util.Objects;
+
+import static ru.kpfu.itis.lobanov.utils.ValidationMessages.*;
+import static ru.kpfu.itis.lobanov.utils.ValueConstants.CVV_LENGTH;
 
 @Getter
 @Setter
@@ -25,23 +29,27 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = NAME_NOT_NULL)
+    @NotBlank(message = NAME_NOT_BLANK)
     private String name;
 
-    @NotNull
-    @CreditCardNumber(message = "Not valid credit card number!")
+    @CreditCardNumber(message = CARD_NUMBER)
     @JsonSerialize(using = CardNumberMaskingSerializer.class)
+    @NotNull(message = CARD_NUMBER_NOT_NULL)
+    @NotBlank(message = CARD_NUMBER_NOT_BLANK)
     private String number;
 
-    @NotNull
-    @Pattern(regexp="^(0[1-9]|1[0-2])([/])([2-9][0-9])$",
-            message="Must be formatted MM/YY!")
+    @NotNull(message = EXPIRATION_NOT_NULL)
+    @NotBlank(message = EXPIRATION_NOT_BLANK)
+    @Pattern(regexp = "^(0[1-9]|1[0-2])([/])([2-9][0-9])$",
+            message = EXPIRATION_DATE_REGEX)
     private String expiration;
 
-    @NotNull
-    @Digits(integer = 3, fraction = 0, message = "Invalid CVV!")
+    @NotNull(message = CVV_NOT_NULL)
+    @NotBlank(message = CVV_NOT_EMPTY)
+    @Digits(integer = CVV_LENGTH, fraction = 0, message = CVV_SIZE)
     private String cvv;
 
-    @NotNull
     @ManyToOne
     private User owner;
 

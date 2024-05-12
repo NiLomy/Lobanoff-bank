@@ -1,12 +1,8 @@
 package ru.kpfu.itis.lobanov.data.services.impl;
 
 import io.jsonwebtoken.Claims;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final Mapper<User, UserDto> userMapper;
 
     @Override
-    public TokenResponse register(@NonNull RegistrationForm registrationForm) {
+    public TokenResponse register(RegistrationForm registrationForm) {
         validateRegistrationForm(registrationForm);
 
         String code = RandomString.make(128);
@@ -78,7 +74,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public TokenResponse verify(@NonNull String code) {
+    public TokenResponse verify(String code) {
         if (code.isBlank()) throw new IllegalArgumentException("Verification code should be provided");
 
         Optional<User> optionalUser = userRepository.findByVerificationCode(code);
@@ -94,7 +90,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public TokenResponse login(@NonNull LoginForm loginForm) {
+    public TokenResponse login(LoginForm loginForm) {
         validateLoginForm(loginForm);
 
         User user = userRepository.findByEmail(loginForm.getEmail()).orElseThrow(IllegalArgumentException::new);
@@ -105,7 +101,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public TokenResponse getAccessToken(@NonNull String refreshToken) {
+    public TokenResponse getAccessToken(String refreshToken) {
         if (refreshToken.isBlank()) throw new IllegalArgumentException("Refresh token should be provided");
 
         if (jwtProvider.validateRefreshToken(refreshToken)) {
@@ -124,7 +120,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public TokenResponse refreshTokens(@NonNull String refreshToken) {
+    public TokenResponse refreshTokens(String refreshToken) {
         if (refreshToken.isBlank()) throw new IllegalArgumentException("Refresh token should be provided");
 
         if (jwtProvider.validateRefreshToken(refreshToken)) {
@@ -141,16 +137,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         throw new IllegalArgumentException("Invalid JWT");
     }
 
-    @Override
-    public UserDto getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated() || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS")))
-            return null;
-        User user = (User) authentication.getPrincipal();
-        return userMapper.toResponse(user);
-    }
-
-    private TokenResponse generateToken(@NonNull User user) {
+    private TokenResponse generateToken(User user) {
         String refreshToken = jwtProvider.generateRefreshToken(user);
         String accessToken = jwtProvider.generateAccessToken(user);
 
@@ -167,7 +154,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new TokenResponse(accessToken, refreshToken);
     }
 
-    private void validateRegistrationForm(@NonNull RegistrationForm registrationForm) {
+    private void validateRegistrationForm(RegistrationForm registrationForm) {
         String name = registrationForm.getName();
         String lastname = registrationForm.getLastname();
         String patronymic = registrationForm.getPatronymic();
@@ -189,7 +176,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new IllegalArgumentException("Passwords don't match.");
     }
 
-    private void validateLoginForm(@NonNull LoginForm loginForm) {
+    private void validateLoginForm(LoginForm loginForm) {
         String email = loginForm.getEmail();
         String password = loginForm.getPassword();
 

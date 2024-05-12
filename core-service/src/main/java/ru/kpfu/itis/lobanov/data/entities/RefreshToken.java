@@ -1,10 +1,15 @@
 package ru.kpfu.itis.lobanov.data.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
+
+import static ru.kpfu.itis.lobanov.utils.ValidationMessages.TOKEN_NOT_BLANK;
+import static ru.kpfu.itis.lobanov.utils.ValidationMessages.TOKEN_NOT_NULL;
 
 @Getter
 @Setter
@@ -24,6 +29,8 @@ public class RefreshToken {
     @MapsId
     private User user;
 
+    @NotNull(message = TOKEN_NOT_NULL)
+    @NotBlank(message = TOKEN_NOT_BLANK)
     private String token;
 
     @Override

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.lobanov.data.services.CurrencyApiService;
 import ru.kpfu.itis.lobanov.data.services.CurrencyConverterService;
+import ru.kpfu.itis.lobanov.exceptions.ApiException;
 import ru.kpfu.itis.lobanov.utils.CurrencyJsonParser;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class CurrencyConverterServiceImpl implements CurrencyConverterService {
             BigDecimal valueTo = parser.parseValue(json, currencyTo);
             return amount.multiply(valueTo).divide(valueFrom, AMOUNT_SCALE, RoundingMode.HALF_EVEN);
         } catch (IOException e) {
-            throw new RuntimeException(e); // TODO
+            throw new ApiException(e);
         }
     }
 }

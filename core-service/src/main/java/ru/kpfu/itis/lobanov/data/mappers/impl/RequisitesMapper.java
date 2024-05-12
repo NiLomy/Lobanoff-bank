@@ -17,6 +17,8 @@ public class RequisitesMapper implements Mapper<Requisites, RequisitesDto> {
     private final Mapper<User, UserDto> userMapper;
 
     public RequisitesDto toResponse(Requisites requisites) {
+        if (requisites == null) return null;
+
         return RequisitesDto.builder()
                 .id(requisites.getId())
                 .payee(userMapper.toResponse(requisites.getPayee()))
@@ -28,6 +30,8 @@ public class RequisitesMapper implements Mapper<Requisites, RequisitesDto> {
     }
 
     public List<RequisitesDto> toListResponse(List<Requisites> set) {
+        if (set == null) return null;
+
         return set.stream().map(this::toResponse).collect(Collectors.toList());
     }
 }

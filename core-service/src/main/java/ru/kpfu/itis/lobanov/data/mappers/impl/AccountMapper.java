@@ -19,6 +19,8 @@ public class AccountMapper implements Mapper<Account, BankAccountDto> {
 
     @Override
     public BankAccountDto toResponse(Account account) {
+        if (account == null) return null;
+
         return BankAccountDto.builder()
                 .id(account.getId())
                 .name(account.getName())

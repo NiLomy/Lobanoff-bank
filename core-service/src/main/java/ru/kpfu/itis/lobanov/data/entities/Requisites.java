@@ -1,11 +1,15 @@
 package ru.kpfu.itis.lobanov.data.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
+
+import static ru.kpfu.itis.lobanov.utils.ValidationMessages.*;
+import static ru.kpfu.itis.lobanov.utils.ValueConstants.CORRESPONDENT_ACCOUNT_LENGTH;
 
 @Getter
 @Setter
@@ -26,12 +30,17 @@ public class Requisites {
     @OneToOne
     private Account payeeAccount;
 
-    @NotNull
-    @Column(name = "corr_account", length = 20)
+    @Column(name = "corr_account", length = CORRESPONDENT_ACCOUNT_LENGTH)
+    @NotNull(message = ACCOUNT_NOT_NULL)
+    @NotBlank(message = ACCOUNT_NOT_BLANK)
     private String corrAccount;
 
+    @NotNull(message = BANK_IDENTIFICATION_CODE_NOT_NULL)
+    @NotBlank(message = BANK_IDENTIFICATION_CODE_NOT_BLANK)
     private String code;
 
+    @NotNull(message = BANK_NAME_NOT_NULL)
+    @NotBlank(message = BANK_NAME_NOT_BLANK)
     private String bankName;
 
 

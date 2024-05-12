@@ -18,6 +18,8 @@ public class CardMapper implements Mapper<Card, CardDto> {
 
     @Override
     public CardDto toResponse(Card card) {
+        if (card == null) return null;
+
         return CardDto.builder()
                 .id(card.getId())
                 .name(card.getName())
@@ -29,6 +31,8 @@ public class CardMapper implements Mapper<Card, CardDto> {
 
     @Override
     public List<CardDto> toListResponse(List<Card> set) {
+        if (set == null) return null;
+
         return set.stream().map(this::toResponse).collect(Collectors.toList());
     }
 }

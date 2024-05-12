@@ -28,7 +28,7 @@ ALTER TABLE users
 
 ALTER TABLE refresh_tokens
     ADD CONSTRAINT fk_refresh_tokens_users
-        FOREIGN KEY (user_id) REFERENCES users (id);
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE;
 
 ALTER TABLE accounts
     ADD CONSTRAINT unique_accounts_number
@@ -36,60 +36,60 @@ ALTER TABLE accounts
 
 ALTER TABLE accounts
     ADD CONSTRAINT fk_accounts_currencies
-        FOREIGN KEY (currency_id) REFERENCES currencies (id);
+        FOREIGN KEY (currency_id) REFERENCES currencies (id) ON DELETE CASCADE;
 
 ALTER TABLE accounts
     ADD CONSTRAINT fk_accounts_types
-        FOREIGN KEY (type_id) REFERENCES account_types (id);
+        FOREIGN KEY (type_id) REFERENCES account_types (id) ON DELETE CASCADE;
 
 ALTER TABLE accounts
     ADD CONSTRAINT fk_accounts_users
-        FOREIGN KEY (owner_id) REFERENCES users (id);
+        FOREIGN KEY (owner_id) REFERENCES users (id) ON DELETE CASCADE;
 
 ALTER TABLE requisites
     ADD CONSTRAINT fk_requisites_users
-        FOREIGN KEY (payee_id) REFERENCES users (id);
+        FOREIGN KEY (payee_id) REFERENCES users (id) ON DELETE CASCADE;
 
 ALTER TABLE requisites
     ADD CONSTRAINT fk_requisites_accounts
-        FOREIGN KEY (payee_account_id) REFERENCES accounts (id);
+        FOREIGN KEY (payee_account_id) REFERENCES accounts (id) ON DELETE CASCADE;
 
 ALTER TABLE cards
     ADD CONSTRAINT fk_cards_accounts
-        FOREIGN KEY (account_id) REFERENCES accounts (id);
+        FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE;
 
 ALTER TABLE accounts_cards
     ADD CONSTRAINT fk_accounts_cards_account
-        FOREIGN KEY (account_id) REFERENCES accounts (id);
+        FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE;
 
 ALTER TABLE accounts_cards
     ADD CONSTRAINT fk_accounts_cards_card
-        FOREIGN KEY (card_id) REFERENCES cards (id);
+        FOREIGN KEY (card_id) REFERENCES cards (id) ON DELETE CASCADE;
 
 ALTER TABLE cashback_categories
     ADD CONSTRAINT fk_cashback_categories_category
-        FOREIGN KEY (category_id) REFERENCES categories (id);
+        FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE;
 
 ALTER TABLE transactions
     ADD CONSTRAINT fk_transactions_currencies
-        FOREIGN KEY (currency_id) REFERENCES currencies (id);
+        FOREIGN KEY (currency_id) REFERENCES currencies (id) ON DELETE CASCADE;
 
 ALTER TABLE transactions
     ADD CONSTRAINT fk_transactions_methods
-        FOREIGN KEY (method_id) REFERENCES transaction_methods (id);
+        FOREIGN KEY (method_id) REFERENCES transaction_methods (id) ON DELETE CASCADE;
 
 ALTER TABLE transactions
     ADD CONSTRAINT fk_transactions_types
-        FOREIGN KEY (type_id) REFERENCES transaction_types (id);
+        FOREIGN KEY (type_id) REFERENCES transaction_types (id) ON DELETE CASCADE;
 
 ALTER TABLE transactions
     ADD CONSTRAINT fk_transactions_categories
-        FOREIGN KEY (category_id) REFERENCES categories (id);
+        FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE;
 
 ALTER TABLE accounts_transactions
     ADD CONSTRAINT fk_accounts_transactions_account
-        FOREIGN KEY (account_id) REFERENCES accounts (id);
+        FOREIGN KEY (account_id) REFERENCES accounts (id) ON DELETE CASCADE;
 
 ALTER TABLE accounts_transactions
     ADD CONSTRAINT fk_accounts_transactions_transaction
-        FOREIGN KEY (transaction_id) REFERENCES transactions (id);
+        FOREIGN KEY (transaction_id) REFERENCES transactions (id) ON DELETE CASCADE;

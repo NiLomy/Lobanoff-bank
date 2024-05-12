@@ -8,13 +8,14 @@ import ru.kpfu.itis.lobanov.dtos.UserDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserMapper implements Mapper<User, UserDto> {
 
     @Override
     public UserDto toResponse(User userEntity) {
-        if ( userEntity == null ) {
+        if (userEntity == null) {
             return null;
         }
 
@@ -33,15 +34,10 @@ public class UserMapper implements Mapper<User, UserDto> {
 
     @Override
     public List<UserDto> toListResponse(List<User> set) {
-        if ( set == null ) {
+        if (set == null) {
             return null;
         }
 
-        List<UserDto> list = new ArrayList<UserDto>( set.size() );
-        for ( User user : set ) {
-            list.add( toResponse( user ) );
-        }
-
-        return list;
+        return set.stream().map(this::toResponse).collect(Collectors.toList());
     }
 }

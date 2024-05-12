@@ -109,7 +109,7 @@ public class BankAccountController implements BankAccountApi {
         try {
             BankAccountDto bankAccount = accountService.bindCard(request);
 
-            if (bankAccount == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (bankAccount == null) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
             return new ResponseEntity<>(bankAccount, HttpStatus.OK);
         } catch (NumberFormatException e) {

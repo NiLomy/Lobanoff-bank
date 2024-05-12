@@ -1,7 +1,7 @@
 package ru.kpfu.itis.lobanov.data.mappers.impl;
 
 import org.springframework.stereotype.Component;
-import ru.kpfu.itis.lobanov.data.entities.BankInfo;
+import ru.kpfu.itis.lobanov.data.entities.CardInfo;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.dtos.BankInfoDto;
 
@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class BankInfoMapper implements Mapper<BankInfo, BankInfoDto> {
+public class BankInfoMapper implements Mapper<CardInfo, BankInfoDto> {
 
     @Override
-    public BankInfoDto toResponse(BankInfo entity) {
+    public BankInfoDto toResponse(CardInfo entity) {
         if (entity == null) return null;
 
         return BankInfoDto.builder()
@@ -28,7 +28,7 @@ public class BankInfoMapper implements Mapper<BankInfo, BankInfoDto> {
     }
 
     @Override
-    public List<BankInfoDto> toListResponse(List<BankInfo> set) {
+    public List<BankInfoDto> toListResponse(List<CardInfo> set) {
         if (set == null) return null;
 
         return set.stream().map(this::toResponse).collect(Collectors.toList());

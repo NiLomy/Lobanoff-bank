@@ -10,12 +10,15 @@ import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.kpfu.itis.lobanov.dtos.State;
 import ru.kpfu.itis.lobanov.dtos.Role;
+import ru.kpfu.itis.lobanov.dtos.State;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
+
+import static ru.kpfu.itis.lobanov.utils.ValidationMessages.*;
+import static ru.kpfu.itis.lobanov.utils.ValueConstants.VERIFICATION_CODE_LENGTH;
 
 @Getter
 @Setter
@@ -36,13 +39,15 @@ public class User implements UserDetails {
     @Email
     @NotNull
     @Column(unique = true)
-    @NotBlank(message = "Email is required!")
+    @NotNull(message = EMAIL_NOT_NULL)
+    @NotBlank(message = EMAIL_NOT_BLANK)
     private String email;
 
     private String phone;
 
     @NotNull
-    @NotBlank(message = "Password is required!")
+    @NotNull(message = PASSWORD_NOT_NULL)
+    @NotBlank(message = PASSWORD_NOT_BLANK)
     private String password;
 
     @Enumerated(value = EnumType.STRING)
@@ -51,11 +56,11 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-    @NotNull
+    @NotNull(message = DELETED_NOT_NULL)
     @ColumnDefault("false")
     private Boolean deleted;
 
-    @Column(name = "verification_code", length = 128)
+    @Column(name = "verification_code", length = VERIFICATION_CODE_LENGTH)
     private String verificationCode;
 
     @Override

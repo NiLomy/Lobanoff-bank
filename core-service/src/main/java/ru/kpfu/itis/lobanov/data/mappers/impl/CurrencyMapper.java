@@ -1,10 +1,8 @@
 package ru.kpfu.itis.lobanov.data.mappers.impl;
 
 import org.springframework.stereotype.Component;
-import ru.kpfu.itis.lobanov.data.entities.BankInfo;
 import ru.kpfu.itis.lobanov.data.entities.Currency;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
-import ru.kpfu.itis.lobanov.dtos.BankInfoDto;
 import ru.kpfu.itis.lobanov.dtos.CurrencyDto;
 
 import java.util.List;

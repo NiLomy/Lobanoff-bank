@@ -1,10 +1,8 @@
 package ru.kpfu.itis.lobanov.data.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
@@ -13,8 +11,9 @@ import org.hibernate.proxy.HibernateProxy;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Objects;
+
+import static ru.kpfu.itis.lobanov.utils.ValidationMessages.*;
 
 @Getter
 @Setter
@@ -22,7 +21,6 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Transaction.class)
 @Entity
 @Table(name = "transactions")
 public class Transaction implements Serializable {
@@ -30,12 +28,13 @@ public class Transaction implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = DATE_NOT_NULL)
     @CreationTimestamp(source = SourceType.DB)
     private Timestamp date;
 
-    @NotNull
     @Column(name = "init_amount")
+    @NotNull(message = AMOUNT_NOT_NULL)
+    @PositiveOrZero(message = AMOUNT_POSITIVE_OR_ZERO)
     private BigDecimal initAmount;
 
     @ManyToOne
@@ -51,11 +50,9 @@ public class Transaction implements Serializable {
 
     private Long to;
 
-    @NotNull
     @Column(name = "bank_name_from")
     private String bankNameFrom;
 
-    @NotNull
     @Column(name = "bank_name_to")
     private String bankNameTo;
 
@@ -63,6 +60,7 @@ public class Transaction implements Serializable {
     private String terminalIp;
 
     @Column(name = "service_company")
+    @NotNull(message = SERVICE_COMPANY_NOT_NULL)
     private String serviceCompany;
 
     @Column(length = 150)

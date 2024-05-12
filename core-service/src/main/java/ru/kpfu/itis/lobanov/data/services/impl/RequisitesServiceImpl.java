@@ -9,6 +9,7 @@ import ru.kpfu.itis.lobanov.data.repositories.AccountRepository;
 import ru.kpfu.itis.lobanov.data.repositories.RequisitesRepository;
 import ru.kpfu.itis.lobanov.data.services.RequisitesService;
 import ru.kpfu.itis.lobanov.dtos.RequisitesDto;
+import ru.kpfu.itis.lobanov.exceptions.RequisitesNotFoundException;
 
 @Service
 @Transactional
@@ -20,12 +21,13 @@ public class RequisitesServiceImpl implements RequisitesService {
 
     @Override
     public RequisitesDto getById(Long requisitesId) {
-        return requisitesMapper.toResponse(requisitesRepository.findById(requisitesId).orElseThrow(IllegalArgumentException::new));
+        return requisitesMapper.toResponse(requisitesRepository.findById(requisitesId).orElse(null));
     }
 
     @Override
     public RequisitesDto getRequisites(Long accountId) {
-        Account account = accountRepository.findById(accountId).orElseThrow(IllegalArgumentException::new);
+        Account account = accountRepository.findById(accountId).orElseThrow(
+                () -> new RequisitesNotFoundException(String.format("Requisites cannot be found by id = %d", accountId)));
         return requisitesMapper.toResponse(requisitesRepository.findByPayeeAccount(account));
     }
 }

@@ -1,5 +1,6 @@
 package ru.kpfu.itis.lobanov.data.services.impl;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,22 +39,22 @@ public class TransactionServiceImpl implements TransactionService {
     private final Mapper<Transaction, TransactionDto> transactionMapper;
 
     @Override
-    public TransactionDto getById(@NonNull Long transactionId) {
+    public TransactionDto getById(Long transactionId) {
         return transactionMapper.toResponse(transactionRepository.findById(transactionId).orElse(null));
     }
 
     @Override
-    public List<TransactionDto> getAllOperationsFromUser(@NonNull UserDto userDto) {
+    public List<TransactionDto> getAllOperationsFromUser(UserDto userDto) {
         return transactionMapper.toListResponse(transactionRepository.findAllByUser(userDto.getId()));
     }
 
     @Override
-    public List<TransactionDto> getAllRecentTransactions(@NonNull Long accountId) {
+    public List<TransactionDto> getAllRecentTransactions(Long accountId) {
         return transactionMapper.toListResponse(transactionRepository.findAllByUserLimitRecent(accountId));
     }
 
     @Override
-    public TransactionDto transferByPhone(@NonNull PhoneTransferForm phoneTransferForm) {
+    public TransactionDto transferByPhone(PhoneTransferForm phoneTransferForm) {
         Account currentAccount = accountRepository.findById(phoneTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
 
         if (currentAccount.getDeposit().compareTo(phoneTransferForm.getAmount()) < 0) {
@@ -81,7 +82,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDto transferBetweenAccounts(@NonNull BetweenAccountsTransferForm betweenAccountsTransferForm) {
+    public TransactionDto transferBetweenAccounts(BetweenAccountsTransferForm betweenAccountsTransferForm) {
         Account accountToTransferFrom = accountRepository.findById(betweenAccountsTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
 
         if (accountToTransferFrom.getDeposit().compareTo(betweenAccountsTransferForm.getAmount()) <= 0) {
@@ -106,7 +107,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDto transferByCard(@NonNull CardTransferForm cardTransferForm) {
+    public TransactionDto transferByCard(CardTransferForm cardTransferForm) {
         Account currentAccount = accountRepository.findById(cardTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
 
         if (currentAccount.getDeposit().compareTo(cardTransferForm.getAmount()) <= 0) {
@@ -134,7 +135,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDto transferByAccountDetails(@NonNull AccountDetailsTransferForm accountDetailsTransferForm) {
+    public TransactionDto transferByAccountDetails(AccountDetailsTransferForm accountDetailsTransferForm) {
         Account currentAccount = accountRepository.findById(accountDetailsTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
 
         if (currentAccount.getDeposit().compareTo(accountDetailsTransferForm.getAmount()) <= 0) {
@@ -162,7 +163,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDto replenishByCard(@NonNull CardReplenishForm cardReplenishForm) {
+    public TransactionDto replenishByCard(CardReplenishForm cardReplenishForm) {
         Account currentAccount = accountRepository.findByCardNumber(cardReplenishForm.getCard()).orElseThrow(IllegalArgumentException::new);
 
         if (currentAccount.getDeposit().compareTo(cardReplenishForm.getAmount()) <= 0) {
@@ -236,17 +237,17 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private Transaction createTransaction(
-            @NonNull
+            @NotNull
             Account currentAccount,
-            @NonNull
+            @NotNull
             Account anotherAccount,
-            @NonNull
+            @NotNull
             BigDecimal amount,
-            @NonNull
+            @NotNull
             TransactionMethod method,
-            @NonNull
+            @NotNull
             String bankNameFrom,
-            @NonNull
+            @NotNull
             String bankNameTo,
             String terminalIp,
             String serviceCompany,

@@ -8,6 +8,7 @@ import ru.kpfu.itis.lobanov.api.UserApi;
 import ru.kpfu.itis.lobanov.data.services.AuthenticationService;
 import ru.kpfu.itis.lobanov.data.services.UserService;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
+import ru.kpfu.itis.lobanov.dtos.requests.UpdateUserRequest;
 
 import java.util.List;
 
@@ -27,21 +28,21 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<UserDto> getCurrentUser() {
-        UserDto user = authenticationService.getCurrentUser();
-
-        if (user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @Override
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = userService.getAllUsers();
 
         if (users == null || users.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<UserDto> updateUser(UpdateUserRequest request) {
+        UserDto user = userService.update(request);
+
+        if (user == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @Override
