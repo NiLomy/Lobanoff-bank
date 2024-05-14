@@ -5,26 +5,107 @@ spring:
     gateway:
       mvc:
         routes:
+          - id: core-service
+            uri:
+              ${services.url.core}
+            predicates:
+              - Path=/core/**
+            filters:
+              - StripPrefix=1
+
           - id: chat-service
             uri:
-              http://localhost:8082
+              ${services.url.chat}
             predicates:
               - Path=/chat/**
             filters:
               - StripPrefix=1
 
-          - id: impl-service
+          - id: notification-service
             uri:
-              http://localhost:8081
+              ${services.url.notification}
             predicates:
-              - Path=/impl/**
+              - Path=/notification/**
             filters:
               - StripPrefix=1
-              - RewritePath=/impl/(?<segment>.*), /$\{<!-- -->segment}
+
+          - id: commission-service
+            uri:
+              ${services.url.commission}
+            predicates:
+              - Path=/commission/**
+            filters:
+              - StripPrefix=1
+
+          - id: cashback-service
+            uri:
+              ${services.url.cashback}
+            predicates:
+              - Path=/cashback/**
+            filters:
+              - StripPrefix=1
+
+          - id: final-service
+            uri:
+              ${services.url.final}
+            predicates:
+              - Path=/final/**
+            filters:
+              - StripPrefix=1
+
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: ${database.url}
+    username: ${database.username}
+    password: ${database.password}
+  jpa:
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db-changelog-master.yml
+    url: ${database.url}
+    user: ${database.username}
+    password: ${database.password}
+    driver-class-name: org.postgresql.Driver
 
 server:
-  port: 8080
+  port: ${PORT:8080}
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8090/eureka
+      defaultZone: http://${EUREKA_HOST:{host}}:${EUREKA_PORT:8090}/eureka
+    region: default
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+jwt:
+  secret:
+    access: {access}
+    refresh: {refresh}
+
+services:
+  url:
+    core: http://${CORE_HOST:{host}}:${CORE_PORT:8081}
+    chat: http://{host}:8082
+    notification: http://{host}:8083
+    commission: http://{host}:8084
+    cashback: http://{host}:8085
+    final: http://{host}:8086
+
+database:
+  url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:Lobanoff bank}
+  username: ${DATABASE_USERNAME:postgres}
+  password: ${DATABASE_PASSWORD:postgres}

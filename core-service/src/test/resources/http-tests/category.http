@@ -1,0 +1,7 @@
+### GET request to get all categories
+GET {{host}}}/{{category-url}}/all
+Authorization: {{authorization}}
+
+### GET request to upload categories
+GET {{host}}}/{{category-url}}/upload
+Authorization: {{authorization}}

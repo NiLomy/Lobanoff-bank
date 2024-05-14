@@ -1,0 +1,54 @@
+### GET request to get account by id
+GET {{host}}}/{{account-url}}/{{accountId}}
+Authorization: {{authorization}}
+
+### GET request to get all accounts
+GET {{host}}}/{{account-url}}/all
+Authorization: {{authorization}}
+
+### GET request to get all accounts of user by his id
+GET {{host}}}/{{account-url}}/all/user/{{userId}}
+Authorization: {{authorization}}
+
+### GET request to get all accounts with cards of user by his id
+GET {{host}}}/{{account-url}}/all-cards/user/{{userId}}
+Authorization: {{authorization}}
+
+### GET request to get statement by account id
+GET {{host}}}/{{account-url}}/statement/{{accountId}}?date={{date}}
+Authorization: {{authorization}}
+
+### POST request to create account
+POST {{host}}}/{{account-url}}/create
+Authorization: {{authorization}}
+Content-Type: application/json
+
+{
+  "name": "Best account",
+  "accountId": "1",
+  "typeId": "1",
+  "ownerId": "1"
+}
+
+### POST request to close account
+POST {{host}}}/{{account-url}}/close
+Authorization: {{authorization}}
+Content-Type: application/json
+
+{
+  "accountId": "1"
+}
+
+### POST request to bind card to account
+POST {{host}}}/{{account-url}}/bind-card
+Authorization: {{authorization}}
+Content-Type: application/json
+
+{
+  "accountId": "1",
+  "cardId": "1"
+}
+
+### PATCH request to update account name
+PATCH {{host}}}/{{account-url}}/update/name/{{accountId}}?name={{accountName}}
+Authorization: {{authorization}}

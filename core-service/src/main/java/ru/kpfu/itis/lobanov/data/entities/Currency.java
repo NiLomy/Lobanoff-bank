@@ -30,19 +30,18 @@ public class Currency {
     @NotBlank(message = NAME_NOT_BLANK)
     private String name;
 
-    @Column(length = 2)
+    @Column(name = "iso_code_2", length = 2)
     @NotNull(message = ISO_CODE_NOT_NULL)
     @NotBlank(message = ISO_CODE_NOT_BLANK)
     private String isoCode2;
 
-    @Column(length = 3)
+    @Column(name = "iso_code_3", length = 3)
     @NotNull(message = ISO_CODE_NOT_NULL)
     @NotBlank(message = ISO_CODE_NOT_BLANK)
     private String isoCode3;
 
     private String icon;
 
-    @NotNull
     @UpdateTimestamp(source = SourceType.DB)
     @Column(name = "row_change_time")
     private Timestamp rowChangeTime;

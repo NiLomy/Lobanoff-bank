@@ -45,6 +45,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         String code = RandomString.make(128);
         Passport passport = Passport.builder()
+                .name(registrationForm.getName())
+                .lastname(registrationForm.getLastname())
+                .patronymic(registrationForm.getPatronymic())
                 .series(registrationForm.getSeries())
                 .number(registrationForm.getNumber())
                 .birthday(dateProvider.parseDate(registrationForm.getBirthday()))

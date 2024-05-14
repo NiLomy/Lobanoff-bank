@@ -8,6 +8,9 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
 
+import static ru.kpfu.itis.lobanov.finalservice.utils.ValidationMessages.TITLE_NOT_BLANK;
+import static ru.kpfu.itis.lobanov.finalservice.utils.ValidationMessages.TITLE_NOT_NULL;
+
 @Getter
 @Setter
 @ToString
@@ -21,12 +24,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = TITLE_NOT_NULL)
+    @NotBlank(message = TITLE_NOT_BLANK)
     private String title;
 
-    @NotNull
-    @NotBlank
     @Column(columnDefinition = "TEXT")
     private String icon;
 

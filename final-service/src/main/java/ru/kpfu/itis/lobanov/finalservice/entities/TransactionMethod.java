@@ -1,6 +1,7 @@
 package ru.kpfu.itis.lobanov.finalservice.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SourceType;
@@ -9,6 +10,9 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.sql.Timestamp;
 import java.util.Objects;
+
+import static ru.kpfu.itis.lobanov.finalservice.utils.ValidationMessages.NAME_NOT_BLANK;
+import static ru.kpfu.itis.lobanov.finalservice.utils.ValidationMessages.NAME_NOT_NULL;
 
 @Getter
 @Setter
@@ -23,12 +27,12 @@ public class TransactionMethod {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = NAME_NOT_NULL)
+    @NotBlank(message = NAME_NOT_BLANK)
     private String name;
 
     private String description;
 
-    @NonNull
     @UpdateTimestamp(source = SourceType.DB)
     @Column(name = "row_change_time")
     private Timestamp rowChangeTime;

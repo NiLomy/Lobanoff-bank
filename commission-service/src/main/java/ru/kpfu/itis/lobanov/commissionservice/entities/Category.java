@@ -6,6 +6,9 @@ import lombok.*;
 
 import java.util.Objects;
 
+import static ru.kpfu.itis.lobanov.commissionservice.utils.ValidationMessages.TITLE_NOT_BLANK;
+import static ru.kpfu.itis.lobanov.commissionservice.utils.ValidationMessages.TITLE_NOT_NULL;
+
 @Getter
 @Setter
 @ToString
@@ -15,12 +18,10 @@ import java.util.Objects;
 public class Category {
     private Long id;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = TITLE_NOT_NULL)
+    @NotBlank(message = TITLE_NOT_BLANK)
     private String title;
 
-    @NotNull
-    @NotBlank
     private String icon;
 
     @Override

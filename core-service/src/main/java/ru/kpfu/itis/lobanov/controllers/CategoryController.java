@@ -20,8 +20,8 @@ public class CategoryController implements CategoryApi {
     }
 
     @Override
-    public String uploadCategories() {
+    public ResponseEntity<String> uploadCategories() {
         categoryService.uploadCategories();
-        return "success";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }

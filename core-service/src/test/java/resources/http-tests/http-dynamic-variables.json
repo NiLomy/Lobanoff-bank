@@ -1,0 +1,13 @@
+{
+  "__about__": [
+    "This file provides stubs for dynamic variables used in HTTP Client",
+    "This file serves a documentation purpose and should not be modified manually",
+    "Values of this variables are generated at the runtime"
+  ],
+  "dynamicVariables": {
+    "senderId": {
+      "description": "This dynamic variable provides id of a sender",
+      "sample-value": "1"
+    }
+  }
+}

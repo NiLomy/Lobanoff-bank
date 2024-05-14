@@ -1,10 +1,14 @@
 package ru.kpfu.itis.lobanov.cashbackservice.entities;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.Objects;
+
+import static ru.kpfu.itis.lobanov.cashbackservice.utils.ValidationMessages.NAME_NOT_BLANK;
+import static ru.kpfu.itis.lobanov.cashbackservice.utils.ValidationMessages.NAME_NOT_NULL;
 
 @Getter
 @Setter
@@ -15,12 +19,12 @@ import java.util.Objects;
 public class TransactionMethod {
     private Long id;
 
-    @NotNull
+    @NotNull(message = NAME_NOT_NULL)
+    @NotBlank(message = NAME_NOT_BLANK)
     private String name;
 
     private String description;
 
-    @NonNull
     private Timestamp rowChangeTime;
 
     @Override

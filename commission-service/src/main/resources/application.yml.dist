@@ -1,0 +1,34 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: commission-service
+  rabbitmq:
+    host: {host}
+    port: {port}
+    username: {username}
+    password: {password}
+    exchange: event-exchange
+    template:
+      transaction:
+        commission:
+          queue: transaction-commission-queue
+          routing:
+            key: transaction.commission
+        cashback:
+          queue: transaction-cashback-queue
+          routing:
+            key: transaction.cashback
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://{host}:8090/eureka

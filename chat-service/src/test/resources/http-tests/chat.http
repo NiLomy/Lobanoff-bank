@@ -1,0 +1,14 @@
+### GET request to get count of all messages in chat
+GET {{host}}}/{{api-url}}/messages/{{senderId}}/{{recipientId}}/count
+Authorization: {{authorication}}
+
+### GET request to get all messages in chat
+GET {{host}}}/{{api-url}}/messages/{{senderId}}/{{recipientId}}
+Authorization: {{authorication}}
+
+### GET request to get count of all messages in chat
+GET {{host}}}/{{api-url}}/messages/{{messageId}}
+Authorization: {{authorication}}
+
+
+

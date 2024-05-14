@@ -1,0 +1,100 @@
+version: '3.8'
+volumes:
+  postgres-data:
+  mongo-data:
+
+services:
+  postgres:
+    image: postgres:15.7-alpine3.19
+    network_mode: bridge
+    container_name: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_PASSWORD=nikita2004
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=Lobanoff bank
+    restart: unless-stopped
+
+  rabbitMQ:
+    image: rabbitmq:3-management-alpine
+    network_mode: bridge
+    container_name: rabbit
+    environment:
+      RABBITMQ_DEFAULT_USER: lobanoff
+      RABBITMQ_DEFAULT_PASS: password
+    expose:
+      - "5672:5672"
+      - "15672:15672"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  registry-service:
+    image: registry-service:1.0.0
+    build:
+      context: ./registry-service
+      dockerfile: Dockerfile
+    network_mode: bridge
+    container_name: registry-service
+    expose:
+      - 8090
+    ports:
+      - "8090:8090"
+    restart: unless-stopped
+
+  core-service:
+    image: core-service:1.0.0
+    build:
+      context: ./core-service
+      dockerfile: Dockerfile
+    network_mode: bridge
+    container_name: core-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/Lobanoff bank
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgres:5432/Lobanoff bank
+      - SPRING_LIQUIBASE_ENABLED=true
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry-service:8090/eureka
+      - SPRING_RABBITMQ_HOST=rabbitMQ
+    expose:
+      - 8081
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - rabbitMQ
+      - registry-service
+    links:
+      - postgres
+      - rabbitMQ
+      - registry-service
+
+  gateway-service:
+    image: gateway-service:1.0.0
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    network_mode: bridge
+    container_name: gateway-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/Lobanoff bank
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgres:5432/Lobanoff bank
+      - SPRING_LIQUIBASE_ENABLED=true
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://registry-service:8090/eureka
+      - SERVICES_URL_CORE=http://core-service:8081
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - registry-service
+      - core-service
+    links:
+      - postgres
+      - registry-service
+      - core-service

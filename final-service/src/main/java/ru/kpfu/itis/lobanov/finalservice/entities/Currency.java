@@ -1,6 +1,7 @@
 package ru.kpfu.itis.lobanov.finalservice.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SourceType;
@@ -9,6 +10,8 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.sql.Timestamp;
 import java.util.Objects;
+
+import static ru.kpfu.itis.lobanov.finalservice.utils.ValidationMessages.*;
 
 @Getter
 @Setter
@@ -23,16 +26,22 @@ public class Currency {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = NAME_NOT_NULL)
+    @NotBlank(message = NAME_NOT_BLANK)
     private String name;
 
-    @NotNull
-    @Column(length = 2)
-    private String isoCode;
+    @Column(name = "iso_code_2", length = 2)
+    @NotNull(message = ISO_CODE_NOT_NULL)
+    @NotBlank(message = ISO_CODE_NOT_BLANK)
+    private String isoCode2;
+
+    @Column(name = "iso_code_3", length = 3)
+    @NotNull(message = ISO_CODE_NOT_NULL)
+    @NotBlank(message = ISO_CODE_NOT_BLANK)
+    private String isoCode3;
 
     private String icon;
 
-    @NonNull
     @UpdateTimestamp(source = SourceType.DB)
     @Column(name = "row_change_time")
     private Timestamp rowChangeTime;

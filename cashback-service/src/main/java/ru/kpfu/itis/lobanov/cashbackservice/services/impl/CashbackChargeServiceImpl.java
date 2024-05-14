@@ -1,6 +1,5 @@
 package ru.kpfu.itis.lobanov.cashbackservice.services.impl;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.lobanov.cashbackservice.entities.Category;
@@ -19,14 +18,15 @@ public class CashbackChargeServiceImpl implements CashbackChargeService {
     private final CashbackCategoryService cashbackCategoryService;
 
     @Override
-    public void chargeCashback(@NonNull Transaction transaction) {
+    public void chargeCashback(Transaction transaction) {
         Category category = transaction.getCategory();
         if (category != null) {
             Long categoryId = category.getId();
             CashbackCategoryDto cashbackCategory = cashbackCategoryService.getByCategoryId(categoryId);
-            if (cashbackCategory == null) throw new IllegalArgumentException();
-            BigDecimal cashback = transaction.getInitAmount().subtract(transaction.getCommission()).multiply(cashbackCategory.getCashbackPercentage());
-            transaction.setCashback(cashback);
+            if (cashbackCategory != null) {
+                BigDecimal cashback = transaction.getInitAmount().subtract(transaction.getCommission()).multiply(cashbackCategory.getCashbackPercentage());
+                transaction.setCashback(cashback);
+            }
         } else {
             transaction.setCashback(BigDecimal.ZERO);
         }

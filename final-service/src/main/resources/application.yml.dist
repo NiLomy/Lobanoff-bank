@@ -1,0 +1,51 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: final-service
+  rabbitmq:
+    host: {host}
+    port: {port}
+    username: {username}
+    password: {password}
+    exchange: event-exchange
+    template:
+      transaction:
+        final:
+          queue: transaction-final-queue
+          routing:
+            key: transaction.final
+  datasource:
+    url: jdbc:postgresql://{host}:{port}/{database}
+    username: {username}
+    password: {password}
+  jpa:
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db-changelog-master.yml
+    url: jdbc:postgresql://{host}:{port}/{database}
+    user: {user}
+    password: {password}
+    driver-class-name: org.postgresql.Driver
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://{host}:8090/eureka

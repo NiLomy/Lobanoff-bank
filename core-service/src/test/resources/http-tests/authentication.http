@@ -1,0 +1,55 @@
+### POST request to register user
+POST {{host}}}/{{auth-url}}/register
+Content-Type: application/json
+
+{
+  "name": "Ivan",
+  "lastname": "Ivanov",
+  "patronymic": "Jovanovich",
+  "series": "6518",
+  "number": "375432",
+  "birthday": "01.01.2000",
+  "gender": "M",
+  "departmentCode": "210-001",
+  "issuedBy": "Department",
+  "issuedDate": "01.01.2014",
+  "address": "My home",
+  "email": "testy@mail.com",
+  "phone": "88005553535",
+  "password": "qwerty123!",
+  "confirmPassword": "qwerty123!",
+  "url": "http://localhost:3000?code="
+}
+
+### POST request to verify user
+POST {{host}}}/{{auth-url}}/verify
+Content-Type: application/json
+
+{
+  "code": "yIDzqnzt9Fcc94XaEJyWJIqdajNwxpgO9FvvCijzQEkX083ZYZbZaOOPqvgsO3Vx3wvgvxF1spzQNTUQWY2Ekvogh38oB8AQwAlT2XCzuWSG4i7YkckYwhif3v334dZn"
+}
+
+### POST request to login user
+POST {{host}}}/{{auth-url}}/login
+Content-Type: application/json
+
+{
+  "email": "testy@mail.com",
+  "password": "qwerty123!"
+}
+
+### POST request to gain access token
+POST {{host}}}/{{auth-url}}/access
+Content-Type: application/json
+
+{
+  "refreshToken": "token"
+}
+
+### POST request to gain access and refresh tokens
+POST {{host}}}/{{auth-url}}/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "token"
+}

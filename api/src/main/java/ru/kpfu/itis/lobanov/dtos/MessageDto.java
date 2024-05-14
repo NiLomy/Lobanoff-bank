@@ -1,5 +1,7 @@
 package ru.kpfu.itis.lobanov.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,10 +15,21 @@ import java.util.Date;
 @AllArgsConstructor
 public class MessageDto {
     private String id;
+    @NotNull
+    @NotBlank
     private String senderId;
+    @NotNull
+    @NotBlank
     private String recipientId;
+    @NotNull
+    @NotBlank
     private String senderName;
+    @NotNull
+    @NotBlank
     private String recipientName;
+    @NotNull
+    @NotBlank
     private String content;
+    @NotNull
     private Date timestamp;
 }

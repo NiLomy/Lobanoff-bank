@@ -1,0 +1,42 @@
+### GET request to get passport by id
+GET {{host}}}/{{passport-url}}/{{passportId}}
+Authorization: {{authorization}}
+
+### POST request to save passport
+POST {{host}}}/{{passport-url}}/save
+Authorization: {{authorization}}
+Content-Type: application/json
+
+{
+  "name": "Ivan",
+  "lastname": "Ivanov",
+  "patronymic": "Jovanovich",
+  "series": "6518",
+  "number": "375432",
+  "birthday": "01.01.2000",
+  "gender": "M",
+  "departmentCode": "210-001",
+  "issuedBy": "Department",
+  "issuedDate": "01.01.2014",
+  "address": "My home"
+}
+
+### PUT request to update passport
+PUT {{host}}}/{{passport-url}}/update
+Authorization: {{authorization}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Ivan",
+  "lastname": "Ivanov",
+  "patronymic": "Jovanovich",
+  "series": "6518",
+  "number": "375432",
+  "birthday": "01.01.2000",
+  "gender": "M",
+  "departmentCode": "210-001",
+  "issuedBy": "Department",
+  "issuedDate": "01.01.2014",
+  "address": "My home2"
+}

@@ -1,0 +1,41 @@
+### GET request to get transaction by id
+GET {{host}}}/{{transaction-url}}/{{transactionId}}
+Authorization: {{authorization}}
+
+### GET request to get all transactions by account id
+GET {{host}}}/{{transaction-url}}/account/{{accountId}}
+Authorization: {{authorization}}
+
+### POST request to transfer by phone
+POST {{host}}}/{{transaction-url}}/transfer/phone
+Authorization: {{authorization}}
+Content-Type: application/json
+
+{
+  "from": 1,
+  "phone": "88005553535",
+  "amount": 1000,
+  "message": "Hello!"
+}
+
+### POST request to transfer between accounts
+POST {{host}}}/{{transaction-url}}/transfer/between-accounts
+Authorization: {{authorization}}
+Content-Type: application/json
+
+{
+  "from": 1,
+  "to": 2,
+  "amount": 1000
+}
+
+### POST request to transfer by card
+POST {{host}}}/{{transaction-url}}/transfer/card
+Authorization: {{authorization}}
+Content-Type: application/json
+
+{
+  "from": 1,
+  "card": "1144485810352102",
+  "amount": 1000
+}

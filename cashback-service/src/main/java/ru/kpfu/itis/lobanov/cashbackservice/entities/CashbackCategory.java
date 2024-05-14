@@ -1,11 +1,16 @@
 package ru.kpfu.itis.lobanov.cashbackservice.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+
+import static ru.kpfu.itis.lobanov.cashbackservice.utils.ValidationMessages.*;
 
 @Getter
 @Setter
@@ -20,9 +25,13 @@ public class CashbackCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = ID_NOT_NULL)
+    @PositiveOrZero(message = ID_POSITIVE_OR_ZERO)
     @Column(name = "category_id", unique = true)
     private Long categoryId;
 
+    @NotNull(message = AMOUNT_NOT_NULL)
+    @PositiveOrZero(message = AMOUNT_POSITIVE_OR_ZERO)
     @Column(name = "cashback_percentage")
     private BigDecimal cashbackPercentage;
 

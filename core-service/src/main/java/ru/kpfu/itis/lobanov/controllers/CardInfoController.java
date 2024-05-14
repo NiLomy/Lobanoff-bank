@@ -4,25 +4,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kpfu.itis.lobanov.api.BankInfoApi;
+import ru.kpfu.itis.lobanov.api.CardInfoApi;
 import ru.kpfu.itis.lobanov.data.services.CardInfoService;
-import ru.kpfu.itis.lobanov.dtos.BankInfoDto;
+import ru.kpfu.itis.lobanov.dtos.CardInfoDto;
 
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-public class BankInfoController implements BankInfoApi {
+public class CardInfoController implements CardInfoApi {
     private final CardInfoService cardInfoService;
 
     @Override
-    public ResponseEntity<Map<String, BankInfoDto>> getAllBankInfo() {
+    public ResponseEntity<Map<String, CardInfoDto>> getAllCardInfo() {
         return new ResponseEntity<>(cardInfoService.getAll(), HttpStatus.OK);
     }
 
     @Override
-    public String uploadInfo() {
+    public ResponseEntity<String> uploadInfo() {
         cardInfoService.uploadInfo();
-        return "success";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }

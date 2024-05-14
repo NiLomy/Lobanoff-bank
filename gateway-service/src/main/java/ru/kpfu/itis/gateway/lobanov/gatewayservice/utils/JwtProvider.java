@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.kpfu.itis.gateway.lobanov.gatewayservice.configs.JwtConfig;
 import ru.kpfu.itis.gateway.lobanov.gatewayservice.entities.User;
@@ -16,21 +15,24 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import static ru.kpfu.itis.gateway.lobanov.gatewayservice.utils.NamingConstants.*;
+
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
+    public static final int ACCESS_TOKEN_LIVE_MINUTES = 5;
     private final JwtConfig jwtConfig;
 
     public String generateAccessToken(User user) {
         final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusMinutes(5).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant accessExpirationInstant = now.plusMinutes(ACCESS_TOKEN_LIVE_MINUTES).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
 
         return Jwts.builder()
                 .subject(user.getId().toString())
-                .claim("email", user.getEmail())
-                .claim("authority", user.getRole().name())
-                .claim("enabled", user.isEnabled())
+                .claim(EMAIL_KEY, user.getEmail())
+                .claim(AUTHORITY_KEY, user.getRole().name())
+                .claim(ENABLED_KEY, user.isEnabled())
                 .issuedAt(new Date())
                 .notBefore(new Date())
                 .expiration(accessExpiration)
@@ -40,7 +42,7 @@ public class JwtProvider {
 
     public String generateRefreshToken(User user) {
         final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusDays(30).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant accessExpirationInstant = now.plusMonths(1).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
 
         return Jwts.builder()
@@ -54,7 +56,7 @@ public class JwtProvider {
 
     public boolean validateAccessToken(String accessToken, String email) {
         SecretKey secret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtConfig.getAccess()));
-        return validateToken(accessToken, secret) && getClaims(accessToken, secret).get("email", String.class).equals(email);
+        return validateToken(accessToken, secret) && getClaims(accessToken, secret).get(EMAIL_KEY, String.class).equals(email);
     }
 
     public boolean validateRefreshToken(String refreshToken) {

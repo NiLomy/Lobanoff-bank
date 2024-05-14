@@ -1,5 +1,7 @@
 package ru.kpfu.itis.lobanov.dtos;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CashbackCategoryDto {
+    @NotNull
+    @PositiveOrZero
     private Long categoryId;
+    @NotNull
+    @PositiveOrZero
     private BigDecimal cashbackPercentage;
 }

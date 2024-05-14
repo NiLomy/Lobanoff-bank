@@ -1,6 +1,7 @@
 package ru.kpfu.itis.lobanov.cashbackservice.entities;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
 import java.io.Serializable;
@@ -8,20 +9,22 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+import static ru.kpfu.itis.lobanov.cashbackservice.utils.ValidationMessages.*;
+
 @Getter
 @Setter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Transaction.class)
 public class Transaction implements Serializable {
     private Long id;
 
-    @NotNull
+    @NotNull(message = DATE_NOT_NULL)
     private Timestamp date;
 
-    @NotNull
+    @NotNull(message = AMOUNT_NOT_NULL)
+    @PositiveOrZero(message = AMOUNT_POSITIVE_OR_ZERO)
     private BigDecimal initAmount;
 
     private Currency currency;
@@ -34,14 +37,13 @@ public class Transaction implements Serializable {
 
     private Long to;
 
-    @NotNull
     private String bankNameFrom;
 
-    @NotNull
     private String bankNameTo;
 
     private String terminalIp;
 
+    @NotNull(message = SERVICE_COMPANY_NOT_NULL)
     private String serviceCompany;
 
     private String message;

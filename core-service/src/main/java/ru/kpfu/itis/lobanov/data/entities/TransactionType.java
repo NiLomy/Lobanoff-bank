@@ -33,7 +33,6 @@ public class TransactionType {
 
     private String description;
 
-    @NotNull
     @UpdateTimestamp(source = SourceType.DB)
     @Column(name = "row_change_time")
     private Timestamp rowChangeTime;

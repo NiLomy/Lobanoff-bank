@@ -10,7 +10,7 @@ import ru.kpfu.itis.lobanov.data.entities.CardInfo;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.data.repositories.BankInfoRepository;
 import ru.kpfu.itis.lobanov.data.services.CardInfoService;
-import ru.kpfu.itis.lobanov.dtos.BankInfoDto;
+import ru.kpfu.itis.lobanov.dtos.CardInfoDto;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,10 +21,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CardInfoServiceImpl implements CardInfoService {
     private final BankInfoRepository bankInfoRepository;
-    private final Mapper<CardInfo, BankInfoDto> bankInfoMapper;
+    private final Mapper<CardInfo, CardInfoDto> bankInfoMapper;
 
     @Override
-    public Map<String, BankInfoDto> getAll() {
+    public Map<String, CardInfoDto> getAll() {
         return bankInfoRepository.findAll().stream().collect(Collectors.toMap(CardInfo::getBin, bankInfoMapper::toResponse));
     }
 

@@ -34,3 +34,15 @@ mail:
   from: {from}
   sender: Lobanoff bank
   subject: Please verify your account
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://{host}:8090/eureka

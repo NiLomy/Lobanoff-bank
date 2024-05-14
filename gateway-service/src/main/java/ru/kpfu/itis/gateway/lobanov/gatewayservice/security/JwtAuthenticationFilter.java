@@ -15,6 +15,8 @@ import ru.kpfu.itis.gateway.lobanov.gatewayservice.utils.JwtProvider;
 
 import java.io.IOException;
 
+import static ru.kpfu.itis.gateway.lobanov.gatewayservice.utils.NamingConstants.*;
+
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -23,13 +25,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader(AUTHORIZATION_HEADER);
 
-        if (token == null || !token.startsWith("Bearer ")) {
+        if (token == null || !token.startsWith(BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
-        token = token.substring(7);
+        token = token.substring(BEARER_PREFIX.length());
 
         JwtAuthentication authentication = new JwtAuthentication(token);
 
@@ -41,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(claims.get("email", String.class));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(claims.get(EMAIL_KEY, String.class));
 
         authentication.setUserDetails(userDetails);
 

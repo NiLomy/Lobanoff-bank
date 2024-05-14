@@ -1,0 +1,7 @@
+### GET request to get requisites by id
+GET {{host}}}/{{requisites-url}}/{{requisitesId}}
+Authorization: {{authorization}}
+
+### GET request to get requisites by account id
+GET {{host}}}/{{requisites-url}}/account/{{accountId}}
+Authorization: {{authorization}}

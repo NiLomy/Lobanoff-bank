@@ -3,10 +3,22 @@ spring:
     name: chat-service
   data:
     mongodb:
-      database: your db
-      port: 27017
-      uri: your uri
+      database: {database}
+      port: {port}
+      uri: mongodb://{host}/{database}
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 server:
   port: 8082
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+eureka:
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://{host}:8090/eureka

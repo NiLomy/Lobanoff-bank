@@ -1,0 +1,12 @@
+### GET request to get card by id
+GET {{host}}}/{{card-url}}/{{cardId}}
+Authorization: {{authorization}}
+
+### PUT request to create a card
+PUT {{host}}}/{{card-url}}/create
+Authorization: {{authorization}}
+Content-Type: application/json
+
+{
+  "accountId": "1"
+}

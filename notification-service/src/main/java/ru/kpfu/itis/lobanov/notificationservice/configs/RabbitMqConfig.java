@@ -17,17 +17,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMqConfig {
     @Value("${spring.rabbitmq.host}")
-    String host;
+    private String host;
     @Value("${spring.rabbitmq.username}")
-    String username;
+    private String username;
     @Value("${spring.rabbitmq.password}")
-    String password;
+    private String password;
     @Value("${spring.rabbitmq.exchange}")
-    String exchange;
+    private String exchange;
     @Value("${spring.rabbitmq.template.email.queue}")
-    String emailQueue;
+    private String emailQueue;
     @Value("${spring.rabbitmq.template.email.routing.key}")
-    String emailRoutingKey;
+    private String emailRoutingKey;
 
     @Bean
     public ConnectionFactory connectionFactory() {

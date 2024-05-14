@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: "Nikita Lobanov"
+  - include:
+      file: DML/2024-05-13--01-add-cashback-categories.sql
+      relativeToChangelogFile: true
+  - include:
+      file: DML/2024-05-13--02-add-currencies.sql
+      relativeToChangelogFile: true

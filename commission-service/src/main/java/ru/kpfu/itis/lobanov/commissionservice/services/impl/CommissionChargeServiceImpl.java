@@ -1,8 +1,5 @@
 package ru.kpfu.itis.lobanov.commissionservice.services.impl;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.lobanov.commissionservice.entities.Transaction;
@@ -14,12 +11,14 @@ import java.math.BigDecimal;
 @Service
 @RequiredArgsConstructor
 public class CommissionChargeServiceImpl implements CommissionChargeService {
+    public static final int AMOUNT_THRESHOLD = 100_000;
+    public static final double COMMISSION_MULTIPLIER = 0.05;
     private final MessagingService messagingService;
 
     @Override
-    public void chargeCommission(@NotNull @Valid Transaction transaction) {
-        if (transaction.getInitAmount().compareTo(BigDecimal.valueOf(100_000)) >= 0) {
-            transaction.setCommission(transaction.getInitAmount().multiply(BigDecimal.valueOf(0.05)));
+    public void chargeCommission(Transaction transaction) {
+        if (transaction.getInitAmount().compareTo(BigDecimal.valueOf(AMOUNT_THRESHOLD)) >= 0) {
+            transaction.setCommission(transaction.getInitAmount().multiply(BigDecimal.valueOf(COMMISSION_MULTIPLIER)));
         } else {
             transaction.setCommission(BigDecimal.ZERO);
         }

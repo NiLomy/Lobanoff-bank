@@ -13,11 +13,14 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import ru.kpfu.itis.lobanov.dtos.EmailDto;
 import ru.kpfu.itis.lobanov.notificationservice.configs.MailContentConfig;
+import ru.kpfu.itis.lobanov.notificationservice.exceptions.SendingVerificationCodeOnEmailException;
 import ru.kpfu.itis.lobanov.notificationservice.services.EmailSenderService;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static ru.kpfu.itis.lobanov.notificationservice.utils.NamingConstants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,17 +30,15 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     private final FreeMarkerConfigurer freeMarkerConfigurer;
 
     @Override
-    public void sendVerificationCode(@NonNull EmailDto emailDto) {
-        validateDataForEmail(emailDto.getEmail(), emailDto.getReceiverName(), emailDto.getUrl());
-
+    public void sendVerificationCode(EmailDto emailDto) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
 
         try {
-            Template freemarkerTemplate = freeMarkerConfigurer.getConfiguration().getTemplate("test.ftlh");
+            Template freemarkerTemplate = freeMarkerConfigurer.getConfiguration().getTemplate(EMAIL_TEMPLATE_NAME);
             Map<String, Object> templateModel = new HashMap<>();
-            templateModel.put("name", emailDto.getReceiverName());
-            templateModel.put("url", emailDto.getUrl());
+            templateModel.put(NAME_KEY, emailDto.getReceiverName());
+            templateModel.put(URL_KEY, emailDto.getUrl());
             String htmlBody = FreeMarkerTemplateUtils.processTemplateIntoString(freemarkerTemplate, templateModel);
             helper.setFrom(mailContentConfig.getFrom(), mailContentConfig.getSender());
             helper.setTo(emailDto.getEmail());
@@ -46,13 +47,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
             javaMailSender.send(mimeMessage);
         } catch (MessagingException | TemplateException | IOException e) {
-            throw new RuntimeException(e);
+            throw new SendingVerificationCodeOnEmailException(e);
         }
-    }
-
-    private void validateDataForEmail(@NonNull String mail, @NonNull String name, @NonNull String code) {
-        if (mail.isBlank()) throw new IllegalArgumentException("Email should be provided");
-        if (name.isBlank()) throw new IllegalArgumentException("Name should be provided");
-        if (code.isBlank()) throw new IllegalArgumentException("Verification code should be provided");
     }
 }

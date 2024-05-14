@@ -5,9 +5,18 @@ Content-Type: application/json
   "name": "Nikita",
   "lastname": "Lobanov",
   "patronymic": "Michailovich",
+  "series": 1234,
+  "number": 567890,
+  "birthday": "11.11.1111",
+  "gender": "M",
+  "departmentCode": "660-111",
+  "issuedBy": "AAAAA",
+  "issuedDate": "11.11.1120",
+  "address": "BBBBBB",
   "email": "lobanov.nikita2018@yandex.ru",
   "password": "qwerty123!",
-  "confirmPassword": "qwerty123!"
+  "confirmPassword": "qwerty123!",
+  "url": "http://localhost:3000?code="
 }
 
 ###

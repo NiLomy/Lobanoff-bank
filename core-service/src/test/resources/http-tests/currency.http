@@ -1,0 +1,10 @@
+### POST request to convert currencies
+POST {{host}}}/{{currency-url}}/convert
+Authorization: {{authorization}}
+Content-Type: application/json
+
+{
+  "currencyFrom": "USD",
+  "currencyTo": "RUB",
+  "amount": 1000
+}

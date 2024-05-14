@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kpfu.itis.lobanov.api.BankAccountApi;
+import ru.kpfu.itis.lobanov.api.AccountApi;
 import ru.kpfu.itis.lobanov.data.services.AccountService;
 import ru.kpfu.itis.lobanov.dtos.AccountStatementDto;
 import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
@@ -17,11 +17,10 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class BankAccountController implements BankAccountApi {
+public class AccountController implements AccountApi {
     private final AccountService accountService;
 
     @Override
-    @CrossOrigin(origins = "http://localhost:8060")
     public ResponseEntity<BankAccountDto> getAccountById(String accountId) {
         try {
             BankAccountDto bankAccount = accountService.getAccountById(Long.parseLong(accountId));

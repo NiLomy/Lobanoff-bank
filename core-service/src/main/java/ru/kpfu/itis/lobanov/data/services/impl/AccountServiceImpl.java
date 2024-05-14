@@ -97,7 +97,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void closeAccount(CloseAccountRequest request) {
-        Account account = accountRepository.findById(Long.parseLong(request.getAccountId())).orElseThrow(IllegalArgumentException::new);
+        Account account = accountRepository.findById(Long.parseLong(request.getAccountId())).orElseThrow(IllegalArgumentException::new); // TODO
         accountRepository.delete(account);
     }
 
@@ -121,16 +121,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public BankAccountDto bindCard(BindCardRequest request) {
-        User user = CurrentUserContext.getCurrentUser();
         Account account = accountRepository.findById(Long.parseLong(request.getAccountId())).orElseThrow(IllegalArgumentException::new);
 
-        if (!account.getOwner().equals(user)) {
-            return null;
-        } else {
-            Card card = cardRepository.findById(Long.parseLong(request.getCardId())).orElseThrow(IllegalArgumentException::new);
-            account.getCards().add(card);
-            return bankAccountMapper.toResponse(accountRepository.save(account));
-        }
+        Card card = cardRepository.findById(Long.parseLong(request.getCardId())).orElseThrow(IllegalArgumentException::new);
+        account.getCards().add(card);
+        return bankAccountMapper.toResponse(accountRepository.save(account));
     }
 
     @Override

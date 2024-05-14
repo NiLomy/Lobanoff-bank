@@ -1,0 +1,7 @@
+### GET request to get all card infos
+GET {{host}}}/{{card-info-url}}/all
+Authorization: {{authorization}}
+
+### GET request to upload card infos
+GET {{host}}}/{{card-info-url}}/upload
+Authorization: {{authorization}}

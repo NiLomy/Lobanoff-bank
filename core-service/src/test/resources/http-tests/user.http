@@ -1,0 +1,28 @@
+### GET request to get user by id
+GET {{host}}}/{{user-url}}/{{userId}}
+Authorization: {{authorization}}
+
+### GET request to get all users
+GET {{host}}}/{{user-url}}/all
+Authorization: {{authorization}}
+
+### PUT request to update user
+PUT {{host}}}/{{user-url}}/update
+Authorization: {{authorization}}
+Content-Type: application/json
+
+{
+  "id": "1",
+  "email": "testy@mail.com",
+  "phone": "88005553535",
+  "password": "qwerty123!",
+  "confirmPassword": "qwerty123!"
+}
+
+### POST request to ban user by id
+POST {{host}}}/{{user-url}}/ban/{{userId}}
+Authorization: {{authorization}}
+
+### DELETE request to delete user by id
+DELETE {{host}}}/{{user-url}}/delete/{{userId}}
+Authorization: {{authorization}}

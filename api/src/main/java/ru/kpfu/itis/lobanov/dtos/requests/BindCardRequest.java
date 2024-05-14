@@ -1,12 +1,15 @@
 package ru.kpfu.itis.lobanov.dtos.requests;
 
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-public class BindCardRequest {
+public final class BindCardRequest {
+    @NotNull
+    @NotBlank
     private String accountId;
+    @NotNull
+    @NotBlank
     private String cardId;
 }
