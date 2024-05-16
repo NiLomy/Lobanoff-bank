@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto getAdmin() {
+        return userMapper.toResponse(userRepository.findAdmin(Role.ADMIN.name()).orElse(null));
+    }
+
+    @Override
     public UserDto update(UpdateUserRequest request) {
         validateUpdateRequest(request);
 
@@ -54,7 +59,10 @@ public class UserServiceImpl implements UserService {
 
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        if (request.getPassword() != null && request.getConfirmPassword() != null) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
 
         return userMapper.toResponse(userRepository.save(user));
     }
@@ -89,13 +97,15 @@ public class UserServiceImpl implements UserService {
         String password = request.getPassword();
         String confirmPassword = request.getConfirmPassword();
 
-        if (!userRepository.existsById(Long.parseLong(id)))
+        User user = userRepository.findById(Long.parseLong(id)).orElse(null);
+
+        if (user == null)
             throw new UserNotFoundException("User cannot be found by id = " + id);
-        if (!password.equals(confirmPassword))
+        if (password != null && confirmPassword != null && !password.equals(confirmPassword))
             throw new PasswordMatchException("Passwords in form don't match");
-        if (userRepository.existsByEmail(email))
+        if (!email.equals(user.getEmail()) && userRepository.existsByEmail(email))
             throw new EmailAlreadyInUseException("This email is already occupied by another user");
-        if (userRepository.existsByPhone(phone))
+        if (!phone.equals(user.getPhone()) && userRepository.existsByPhone(phone))
             throw new PhoneAlreadyInUseException("This phone is already occupied by another user");
     }
 }

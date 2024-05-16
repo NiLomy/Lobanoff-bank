@@ -37,7 +37,7 @@ public class Requisites {
 
     @NotNull(message = BANK_IDENTIFICATION_CODE_NOT_NULL)
     @NotBlank(message = BANK_IDENTIFICATION_CODE_NOT_BLANK)
-    private String code;
+    private String bic;
 
     @NotNull(message = BANK_NAME_NOT_NULL)
     @NotBlank(message = BANK_NAME_NOT_BLANK)

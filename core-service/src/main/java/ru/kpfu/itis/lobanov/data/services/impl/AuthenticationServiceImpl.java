@@ -26,6 +26,8 @@ import ru.kpfu.itis.lobanov.utils.JwtProvider;
 
 import java.util.Optional;
 
+import static ru.kpfu.itis.lobanov.utils.NamingConstants.ADMIN_EMAIL_PREFIX;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -60,19 +62,26 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         passport = passportRepository.save(passport);
 
-        User user = User.builder()
+        User.UserBuilder userBuilder = User.builder()
                 .passport(passport)
                 .email(registrationForm.getEmail())
                 .password(passwordEncoder.encode(registrationForm.getPassword()))
-                .verificationCode(code)
-                .role(Role.USER)
-                .state(State.BANNED)
-                .deleted(false)
-                .build();
+                .deleted(false);
 
-        messagingService.sendEmail(registrationForm.getEmail(), registrationForm.getName(), registrationForm.getUrl() + code);
+        if (!registrationForm.getEmail().startsWith(ADMIN_EMAIL_PREFIX)) {
+            userBuilder
+                    .role(Role.USER)
+                    .verificationCode(code)
+                    .state(State.BANNED);
 
-        user = userRepository.save(user);
+            messagingService.sendEmail(registrationForm.getEmail(), registrationForm.getName(), registrationForm.getUrl() + code);
+        } else {
+            userBuilder
+                    .role(Role.ADMIN)
+                    .state(State.ACTIVE);
+        }
+
+        User user = userRepository.save(userBuilder.build());
         return generateToken(user);
     }
 

@@ -7,7 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kpfu.itis.lobanov.dtos.AccountStatementDto;
-import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
+import ru.kpfu.itis.lobanov.dtos.AccountTypeDto;
+import ru.kpfu.itis.lobanov.dtos.AccountDto;
 import ru.kpfu.itis.lobanov.dtos.requests.BindCardRequest;
 import ru.kpfu.itis.lobanov.dtos.requests.CloseAccountRequest;
 import ru.kpfu.itis.lobanov.dtos.requests.CreateAccountRequest;
@@ -25,7 +26,7 @@ public interface AccountApi {
             @ApiResponse(responseCode = "500", description = "The server encountered an error.")
     })
     @GetMapping("/{id}")
-    ResponseEntity<BankAccountDto> getAccountById(
+    ResponseEntity<AccountDto> getAccountById(
             @Parameter(description = "Id of the current user's account.", example = "123", required = true)
             @PathVariable("id")
             String accountId
@@ -38,7 +39,7 @@ public interface AccountApi {
             @ApiResponse(responseCode = "500", description = "The server encountered an error.")
     })
     @GetMapping("/all")
-    ResponseEntity<List<BankAccountDto>> getAllAccounts();
+    ResponseEntity<List<AccountDto>> getAllAccounts();
 
     @Operation(summary = "Get all user accounts.", description = "Returns all user's accounts by user id.", responses = {
             @ApiResponse(responseCode = "200", description = "Successful operation."),
@@ -47,7 +48,7 @@ public interface AccountApi {
             @ApiResponse(responseCode = "500", description = "The server encountered an error.")
     })
     @GetMapping("/all/user/{id}")
-    ResponseEntity<List<BankAccountDto>> getAllUserAccounts(
+    ResponseEntity<List<AccountDto>> getAllUserAccounts(
             @Parameter(description = "Id of the user.", example = "123", required = true)
             @PathVariable("id")
             String userId
@@ -60,7 +61,7 @@ public interface AccountApi {
             @ApiResponse(responseCode = "500", description = "The server encountered an error.")
     })
     @GetMapping("/all-cards/user/{id}")
-    ResponseEntity<List<BankAccountDto>> getAllUserCardAccounts(
+    ResponseEntity<List<AccountDto>> getAllUserCardAccounts(
             @Parameter(description = "Id of the user.", example = "123", required = true)
             @PathVariable("id")
             String userId
@@ -82,13 +83,21 @@ public interface AccountApi {
             String date
     );
 
+    @Operation(summary = "Get all account types.", description = "Returns all available account types.", responses = {
+            @ApiResponse(responseCode = "200", description = "Successful operation."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "500", description = "The server encountered an error.")
+    })
+    @GetMapping("/types")
+    ResponseEntity<List<AccountTypeDto>> getAllTypes();
+
     @Operation(summary = "Create new account.", description = "Returns created bank account.", responses = {
             @ApiResponse(responseCode = "201", description = "Account was created."),
             @ApiResponse(responseCode = "400", description = "Bad request."),
             @ApiResponse(responseCode = "500", description = "The server encountered an error.")
     })
     @PostMapping("/create")
-    ResponseEntity<BankAccountDto> createAccount(
+    ResponseEntity<AccountDto> createAccount(
             @Parameter(description = "Request for account creation.", required = true)
             @RequestBody
             CreateAccountRequest request
@@ -114,7 +123,7 @@ public interface AccountApi {
             @ApiResponse(responseCode = "500", description = "The server encountered an error.")
     })
     @PostMapping("/bind-card")
-    ResponseEntity<BankAccountDto> bindCardToAccount(
+    ResponseEntity<AccountDto> bindCardToAccount(
             @Parameter(description = "Request for card binding to account.", required = true)
             @RequestBody
             BindCardRequest request
@@ -127,7 +136,7 @@ public interface AccountApi {
             @ApiResponse(responseCode = "500", description = "The server encountered an error.")
     })
     @PatchMapping("/update/name/{id}")
-    ResponseEntity<BankAccountDto> updateAccountName(
+    ResponseEntity<AccountDto> updateAccountName(
             @Parameter(description = "Id of the current user's account.", example = "123", required = true)
             @PathVariable("id")
             String accountId,

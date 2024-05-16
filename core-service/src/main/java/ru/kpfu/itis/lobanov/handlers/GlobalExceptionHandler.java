@@ -25,6 +25,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             InvalidAmountOfTransactionException.class,
             InvalidBinException.class,
             UserNotFoundException.class,
+            AccountNotFoundException.class,
             PasswordMatchException.class,
             EmailAlreadyInUseException.class,
             PhoneAlreadyInUseException.class,

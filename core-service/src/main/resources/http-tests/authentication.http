@@ -13,7 +13,7 @@ Content-Type: application/json
   "issuedBy": "AAAAA",
   "issuedDate": "11.11.1120",
   "address": "BBBBBB",
-  "email": "lobanov.nikita2018@yandex.ru",
+  "email": "admin@yandex.ru",
   "password": "qwerty123!",
   "confirmPassword": "qwerty123!",
   "url": "http://localhost:3000?code="
@@ -59,17 +59,52 @@ GET http://localhost:8081/api/v1/bank-info/upload
 
 ###
 
-GET http://localhost:8081/api/v1/category/upload
+GET http://localhost:8081/api/v1/category/all
 
 ###
 
-POST http://localhost:8080/core/api/v1/transactions/transfer/between-accounts
+POST http://localhost:8081/api/v1/transactions/transfer/between-accounts
 Content-Type: application/json
 
 {
-  "from": 3,
-  "to": 2,
-  "amount": 100
+  "from": 1,
+  "to": 3,
+  "amount": 200000
 }
 
 ###
+
+POST http://localhost:8081/api/v1/cards/create
+Content-Type: application/json
+
+{
+  "accountId": "2"
+}
+
+###
+
+POST http://localhost:8081/api/v1/accounts/create
+Content-Type: application/json
+
+{
+  "name": "Third",
+  "currencyId": "2",
+  "typeId": "1",
+  "ownerId": "1"
+}
+
+###
+
+POST http://localhost:8081/api/v1/transactions/transfer/phone
+Content-Type: application/json
+
+{
+  "from": 1,
+  "phone": "89826335964",
+  "amount": 1000,
+  "message": "aaa"
+}
+
+###
+
+GET http://localhost:8081/api/v1/transactions/expenses/user/1

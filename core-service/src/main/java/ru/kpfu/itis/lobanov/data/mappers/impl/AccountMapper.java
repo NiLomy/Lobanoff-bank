@@ -6,35 +6,35 @@ import ru.kpfu.itis.lobanov.data.entities.*;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.dtos.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class AccountMapper implements Mapper<Account, BankAccountDto> {
+public class AccountMapper implements Mapper<Account, AccountDto> {
     private final Mapper<User, UserDto> userMapper;
     private final Mapper<Card, CardDto> cardMapper;
-    private final Mapper<Transaction, TransactionDto> transactionMapper;
     private final Mapper<Currency, CurrencyDto> currencyMapper;
 
     @Override
-    public BankAccountDto toResponse(Account account) {
+    public AccountDto toResponse(Account account) {
         if (account == null) return null;
 
-        return BankAccountDto.builder()
+        return AccountDto.builder()
                 .id(account.getId())
                 .name(account.getName())
-                .deposit(account.getDeposit())
+                .deposit(account.getTransactions().stream().map(Transaction::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add))
                 .currency(currencyMapper.toResponse(account.getCurrency()))
                 .type(account.getType().getName())
                 .owner(userMapper.toResponse(account.getOwner()))
                 .cards(cardMapper.toListResponse(account.getCards()))
-                .operations(transactionMapper.toListResponse(account.getTransactions()))
+                .main(account.getMain())
                 .build();
     }
 
     @Override
-    public List<BankAccountDto> toListResponse(List<Account> set) {
+    public List<AccountDto> toListResponse(List<Account> set) {
         if (set == null) return null;
 
         return set.stream().map(this::toResponse).collect(Collectors.toList());

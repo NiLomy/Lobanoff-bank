@@ -20,16 +20,13 @@ public class MessageDto {
     private String senderId;
     @NotNull
     @NotBlank
-    private String recipientId;
-    @NotNull
-    @NotBlank
     private String senderName;
-    @NotNull
-    @NotBlank
-    private String recipientName;
     @NotNull
     @NotBlank
     private String content;
     @NotNull
+    private Boolean isSupport;
+    @NotNull
     private Date timestamp;
+    private String status;
 }

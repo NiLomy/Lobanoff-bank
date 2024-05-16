@@ -23,7 +23,7 @@ public class RequisitesMapper implements Mapper<Requisites, RequisitesDto> {
                 .id(requisites.getId())
                 .payee(userMapper.toResponse(requisites.getPayee()))
                 .accountNumber(requisites.getPayeeAccount().getNumber())
-                .code(requisites.getCode())
+                .code(requisites.getBic())
                 .bankName(requisites.getBankName())
                 .corrAccount(requisites.getCorrAccount())
                 .build();

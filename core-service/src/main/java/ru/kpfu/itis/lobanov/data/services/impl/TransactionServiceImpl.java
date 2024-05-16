@@ -1,13 +1,13 @@
 package ru.kpfu.itis.lobanov.data.services.impl;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kpfu.itis.lobanov.data.entities.*;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.data.repositories.*;
+import ru.kpfu.itis.lobanov.data.services.CurrencyService;
 import ru.kpfu.itis.lobanov.data.services.MessagingService;
 import ru.kpfu.itis.lobanov.data.services.TransactionService;
 import ru.kpfu.itis.lobanov.dtos.TransactionDto;
@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static ru.kpfu.itis.lobanov.utils.ExceptionMessages.*;
 import static ru.kpfu.itis.lobanov.utils.NamingConstants.*;
@@ -34,7 +35,9 @@ public class TransactionServiceImpl implements TransactionService {
     private final AccountRepository accountRepository;
     private final TransactionTypeRepository transactionTypeRepository;
     private final TransactionMethodRepository transactionMethodRepository;
+    private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final CurrencyService currencyService;
     private final MessagingService messagingService;
     private final Mapper<Transaction, TransactionDto> transactionMapper;
 
@@ -45,12 +48,22 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionDto> getAllOperationsFromUser(UserDto userDto) {
-        return transactionMapper.toListResponse(transactionRepository.findAllByUser(userDto.getId()));
+        return transactionMapper.toListResponse(transactionRepository.findAllByUserExpenses(userDto.getId()));
     }
 
     @Override
     public List<TransactionDto> getAllRecentTransactions(Long accountId) {
         return transactionMapper.toListResponse(transactionRepository.findAllByUserLimitRecent(accountId));
+    }
+
+    @Override
+    public List<TransactionDto> getAllTransactionsFromUserExpenses(Long userId) {
+        return transactionMapper.toListResponse(transactionRepository.findAllByUserExpenses(userId));
+    }
+
+    @Override
+    public List<TransactionDto> getAllTransactionsFromUserReceipts(Long userId) {
+        return transactionMapper.toListResponse(transactionRepository.findAllByUserReceipts(userId));
     }
 
     @Override
@@ -61,8 +74,10 @@ public class TransactionServiceImpl implements TransactionService {
             throw new NotEnoughMoneyException(NOT_ENOUGH_MONEY_FOR_OPERATION);
         }
 
-        User anotherUser = userRepository.findByPhone(phoneTransferForm.getPhone())
-                .orElse(userRepository.findByEmail(ADMIN_EMAIL).orElseThrow(IllegalArgumentException::new));
+        User anotherUser = userRepository.findByPhone(phoneTransferForm.getPhone()).orElse(null);
+        if (anotherUser == null) {
+            anotherUser = userRepository.findByEmail(ADMIN_EMAIL).orElseThrow(IllegalArgumentException::new);
+        }
         Account anotherAccount = accountRepository.findAllByOwnerId(anotherUser.getId()).get(0);
         TransactionMethod method = transactionMethodRepository.findByName(TRANSACTION_METHOD_TRANSFER)
                 .orElseThrow(() -> new TransactionMethodNotFoundException(NO_SUCH_TRANSACTION_METHOD));
@@ -113,11 +128,16 @@ public class TransactionServiceImpl implements TransactionService {
         if (currentAccount.getDeposit().compareTo(cardTransferForm.getAmount()) <= 0) {
             throw new NotEnoughMoneyException(NOT_ENOUGH_MONEY_FOR_OPERATION);
         }
-
-        Account anotherAccount = accountRepository.findByCardNumber(cardTransferForm.getCard())
-                .orElse(accountRepository.findAllByOwnerId(
-                        userRepository.findByEmail(ADMIN_EMAIL).orElseThrow(IllegalArgumentException::new).getId()
-                ).get(0));
+        Account anotherAccount = accountRepository.findByCardNumber(cardTransferForm.getCard()).orElse(null);
+        if (anotherAccount == null) {
+            anotherAccount = accountRepository.findAllByOwnerId(
+                    userRepository.findByEmail(ADMIN_EMAIL).orElseThrow(IllegalArgumentException::new).getId()
+            ).get(0);
+        }
+//        Account anotherAccount = accountRepository.findByCardNumber(cardTransferForm.getCard())
+//                .orElse(accountRepository.findAllByOwnerId(
+//                        userRepository.findByEmail(ADMIN_EMAIL).orElseThrow(IllegalArgumentException::new).getId()
+//                ).get(0));
         TransactionMethod method = transactionMethodRepository.findByName(TRANSACTION_METHOD_TRANSFER)
                 .orElseThrow(() -> new TransactionMethodNotFoundException(NO_SUCH_TRANSACTION_METHOD));
 
@@ -130,7 +150,7 @@ public class TransactionServiceImpl implements TransactionService {
                 BANK_NAME,
                 null,
                 BANK_NAME,
-                null);
+                cardTransferForm.getMessage());
         return transactionMapper.toResponse(transaction);
     }
 
@@ -141,7 +161,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (currentAccount.getDeposit().compareTo(accountDetailsTransferForm.getAmount()) <= 0) {
             throw new NotEnoughMoneyException(NOT_ENOUGH_MONEY_FOR_OPERATION);
         }
-        // TODO implement contracts
+
         Account anotherAccount = accountRepository.findByContractNumber(accountDetailsTransferForm.getContractNumber())
                 .orElse(accountRepository.findAllByOwnerId(
                         userRepository.findByEmail(ADMIN_EMAIL).orElseThrow(IllegalArgumentException::new).getId()
@@ -258,13 +278,21 @@ public class TransactionServiceImpl implements TransactionService {
         final LocalDateTime now = LocalDateTime.now();
         final Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
 
+        Random random = new Random(System.currentTimeMillis());
+        Category category = categoryRepository.findById((long) random.nextInt(1, 34)).orElseThrow(IllegalArgumentException::new);
+
         Optional<TransactionType> optionalType = transactionTypeRepository.findByName(TRANSACTION_TYPE_PENDING);
         if (optionalType.isEmpty()) throw new TransactionTypeNotFoundException(NO_SUCH_TRANSACTION_TYPE);
+
+        Currency currencyFrom = currentAccount.getCurrency();
+        Currency currencyTo = anotherAccount.getCurrency();
+
+        BigDecimal convertedAmount = currencyService.convert(currencyFrom.getIsoCode3(), currencyTo.getIsoCode3(), amount);
 
         Transaction transaction = Transaction.builder()
                 .date(Timestamp.from(instant))
                 .initAmount(amount)
-                .currency(anotherAccount.getCurrency())
+                .currency(currentAccount.getCurrency())
                 .type(optionalType.get())
                 .method(method)
                 .from(currentAccount.getId())
@@ -273,15 +301,15 @@ public class TransactionServiceImpl implements TransactionService {
                 .bankNameTo(bankNameTo)
                 .terminalIp(terminalIp)
                 .serviceCompany(serviceCompany)
+                .category(category)
                 .message(message)
                 .build();
 
         transaction = transactionRepository.save(transaction);
         messagingService.sendTransactionToChargeCommission(transaction);
 
-        // TODO make this logic in final stage of transaction processing
         currentAccount.setDeposit(currentAccount.getDeposit().subtract(amount));
-        anotherAccount.setDeposit(anotherAccount.getDeposit().add(amount));
+        anotherAccount.setDeposit(anotherAccount.getDeposit().add(convertedAmount));
         currentAccount.getTransactions().add(transaction);
         anotherAccount.getTransactions().add(transaction);
         accountRepository.save(currentAccount);

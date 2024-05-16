@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import ru.kpfu.itis.lobanov.data.entities.User;
+import ru.kpfu.itis.lobanov.dtos.Role;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +28,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByVerificationCode(String verificationCode);
 
-    @Query("select u from User u left join fetch Card c on u = c.owner where c.number = :card")
-    User findByCard(String card);
+    @Query("select u from User u where u.role = :role")
+    Optional<User> findAdmin(String role);
 
     @Modifying
     @Query("update User set state = :state where id = :id")

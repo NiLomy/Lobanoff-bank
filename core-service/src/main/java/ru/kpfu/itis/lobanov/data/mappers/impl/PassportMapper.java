@@ -16,6 +16,9 @@ public class PassportMapper implements Mapper<Passport, PassportDto> {
 
         return PassportDto.builder()
                 .id(String.valueOf(entity.getId()))
+                .name(entity.getName())
+                .lastname(entity.getLastname())
+                .patronymic(entity.getPatronymic())
                 .series(entity.getSeries())
                 .number(entity.getNumber())
                 .birthday(entity.getBirthday())

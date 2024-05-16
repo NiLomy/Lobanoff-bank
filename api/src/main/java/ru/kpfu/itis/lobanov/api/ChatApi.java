@@ -37,14 +37,11 @@ public interface ChatApi {
             @ApiResponse(responseCode = "404", description = "Messages not found."),
             @ApiResponse(responseCode = "500", description = "The server encountered an error.")
     })
-    @GetMapping("/messages/{senderId}/{recipientId}/count")
+    @GetMapping("/messages/{senderId}/count")
     ResponseEntity<Long> countNewMessages(
             @Parameter(description = "Id of the sender.", example = "123", required = true)
             @PathVariable
-            String senderId,
-            @Parameter(description = "Id of the recipient.", example = "123", required = true)
-            @PathVariable
-            String recipientId
+            String senderId
     );
 
     @Operation(summary = "Get all messages in chat.", description = "Returns all messages in a chat.", responses = {
@@ -53,14 +50,11 @@ public interface ChatApi {
             @ApiResponse(responseCode = "404", description = "Messages not found."),
             @ApiResponse(responseCode = "500", description = "The server encountered an error.")
     })
-    @GetMapping("/messages/{senderId}/{recipientId}")
+    @GetMapping("/messages/sender/{senderId}")
     ResponseEntity<List<MessageDto>> findChatMessages(
             @Parameter(description = "Id of the sender.", example = "123", required = true)
             @PathVariable
-            String senderId,
-            @Parameter(description = "Id of the recipient.", example = "123", required = true)
-            @PathVariable
-            String recipientId
+            String senderId
     );
 
     @Operation(summary = "Get message by id.", description = "Returns message by provided id.", responses = {

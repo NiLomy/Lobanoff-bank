@@ -40,7 +40,7 @@ public class AccountNumberGenerator {
     public String generateCorrespondentAccountNumber() {
         return FIRST_RUSSIAN_CORRESPONDENT_NUMBERS + SECOND_RUSSIAN_CORRESPONDENT_NUMBERS +
                 CURRENCY_CODE_OF_THE_RUSSIAN_RUBLE +
-                (CORRESPONDENT_ACCOUNT_NUMBER_LOWER_BOUND + random.nextLong(CORRESPONDENT_ACCOUNT_NUMBER_UPPER_BOUND)) +
+                (CORRESPONDENT_ACCOUNT_NUMBER_LOWER_BOUND + random.nextInt(CORRESPONDENT_ACCOUNT_NUMBER_UPPER_BOUND)) +
                 BANK_IDENTIFICATION_CODE.substring(BANK_IDENTIFICATION_CODE.length() - NUM_OF_CHARS_TO_USE);
     }
 }

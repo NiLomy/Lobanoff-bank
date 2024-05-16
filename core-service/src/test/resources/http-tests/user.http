@@ -13,12 +13,22 @@ Content-Type: application/json
 
 {
   "id": "1",
-  "email": "testy@mail.com",
+  "email": "lobanov.nikita2018@yandex.ru",
   "phone": "88005553535",
-  "password": "qwerty123!",
-  "confirmPassword": "qwerty123!"
+  "password": null,
+  "confirmPassword": null
 }
+###
+PUT http://localhost:8081/api/v1/users/update
+Content-Type: application/json
 
+{
+  "id": "1",
+  "email": "lobanov.nikita2018@yandex.ru",
+  "phone": "88005553535",
+  "password": null,
+  "confirmPassword": null
+}
 ### POST request to ban user by id
 POST {{host}}}/{{user-url}}/ban/{{userId}}
 Authorization: {{authorization}}

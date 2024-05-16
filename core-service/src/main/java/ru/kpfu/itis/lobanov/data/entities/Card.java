@@ -29,10 +29,6 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = NAME_NOT_NULL)
-    @NotBlank(message = NAME_NOT_BLANK)
-    private String name;
-
     @CreditCardNumber(message = CARD_NUMBER)
     @JsonSerialize(using = CardNumberMaskingSerializer.class)
     @NotNull(message = CARD_NUMBER_NOT_NULL)
@@ -49,9 +45,6 @@ public class Card {
     @NotBlank(message = CVV_NOT_EMPTY)
     @Digits(integer = CVV_LENGTH, fraction = 0, message = CVV_SIZE)
     private String cvv;
-
-    @ManyToOne
-    private User owner;
 
     @ManyToOne
     private Account account;

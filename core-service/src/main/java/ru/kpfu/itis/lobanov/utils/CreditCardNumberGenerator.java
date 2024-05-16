@@ -12,9 +12,10 @@ import static ru.kpfu.itis.lobanov.utils.NamingConstants.RANDOM_INSTANCE_WITH_BI
 @Validated
 @Component
 public class CreditCardNumberGenerator {
-    @Autowired
-    @Qualifier(RANDOM_INSTANCE_WITH_BINDING)
-    private Random random;
+//    @Autowired
+//    @Qualifier(RANDOM_INSTANCE_WITH_BINDING)
+//    private Random random;
+    private Random random = new Random(System.currentTimeMillis());
     public static final int DIGITS_COUNT = 10;
 
     public String generate(String bin, int length) {

@@ -3,12 +3,12 @@ package ru.kpfu.itis.lobanov.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kpfu.itis.lobanov.api.AccountApi;
 import ru.kpfu.itis.lobanov.data.services.AccountService;
 import ru.kpfu.itis.lobanov.dtos.AccountStatementDto;
-import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
+import ru.kpfu.itis.lobanov.dtos.AccountTypeDto;
+import ru.kpfu.itis.lobanov.dtos.AccountDto;
 import ru.kpfu.itis.lobanov.dtos.requests.BindCardRequest;
 import ru.kpfu.itis.lobanov.dtos.requests.CloseAccountRequest;
 import ru.kpfu.itis.lobanov.dtos.requests.CreateAccountRequest;
@@ -21,9 +21,9 @@ public class AccountController implements AccountApi {
     private final AccountService accountService;
 
     @Override
-    public ResponseEntity<BankAccountDto> getAccountById(String accountId) {
+    public ResponseEntity<AccountDto> getAccountById(String accountId) {
         try {
-            BankAccountDto bankAccount = accountService.getAccountById(Long.parseLong(accountId));
+            AccountDto bankAccount = accountService.getAccountById(Long.parseLong(accountId));
 
             if (bankAccount == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -34,8 +34,8 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<List<BankAccountDto>> getAllAccounts() {
-        List<BankAccountDto> accounts = accountService.getAllAccounts();
+    public ResponseEntity<List<AccountDto>> getAllAccounts() {
+        List<AccountDto> accounts = accountService.getAllAccounts();
 
         if (accounts == null || accounts.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -43,11 +43,11 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<List<BankAccountDto>> getAllUserAccounts(String userId) {
+    public ResponseEntity<List<AccountDto>> getAllUserAccounts(String userId) {
         try {
-            List<BankAccountDto> accounts = accountService.getAllUserAccounts(Long.parseLong(userId));
+            List<AccountDto> accounts = accountService.getAllUserAccounts(Long.parseLong(userId));
 
-            if (accounts == null || accounts.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (accounts == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
             return new ResponseEntity<>(accounts, HttpStatus.OK);
         } catch (NumberFormatException e) {
@@ -56,9 +56,9 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<List<BankAccountDto>> getAllUserCardAccounts(String userId) {
+    public ResponseEntity<List<AccountDto>> getAllUserCardAccounts(String userId) {
         try {
-            List<BankAccountDto> accounts = accountService.getAllUserCardAccounts(Long.parseLong(userId));
+            List<AccountDto> accounts = accountService.getAllUserCardAccounts(Long.parseLong(userId));
 
             if (accounts == null || accounts.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -82,9 +82,14 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<BankAccountDto> createAccount(CreateAccountRequest request) {
+    public ResponseEntity<List<AccountTypeDto>> getAllTypes() {
+        return new ResponseEntity<>(accountService.getAllTypes(), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<AccountDto> createAccount(CreateAccountRequest request) {
         try {
-            BankAccountDto bankAccount = accountService.createAccount(request);
+            AccountDto bankAccount = accountService.createAccount(request);
 
             return new ResponseEntity<>(bankAccount, HttpStatus.CREATED);
         } catch (NumberFormatException e) {
@@ -104,9 +109,9 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<BankAccountDto> bindCardToAccount(BindCardRequest request) {
+    public ResponseEntity<AccountDto> bindCardToAccount(BindCardRequest request) {
         try {
-            BankAccountDto bankAccount = accountService.bindCard(request);
+            AccountDto bankAccount = accountService.bindCard(request);
 
             if (bankAccount == null) return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
@@ -117,9 +122,9 @@ public class AccountController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<BankAccountDto> updateAccountName(String accountId, String name) {
+    public ResponseEntity<AccountDto> updateAccountName(String accountId, String name) {
         try {
-            BankAccountDto bankAccount = accountService.updateAccountName(Long.parseLong(accountId), name);
+            AccountDto bankAccount = accountService.updateAccountName(Long.parseLong(accountId), name);
 
             if (bankAccount == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 

@@ -27,6 +27,8 @@ public interface UserService {
             String phone
     );
 
+    UserDto getAdmin();
+
     UserDto update(
             @NotNull(message = UPDATE_USER_REQUEST_NOT_NULL)
             UpdateUserRequest request

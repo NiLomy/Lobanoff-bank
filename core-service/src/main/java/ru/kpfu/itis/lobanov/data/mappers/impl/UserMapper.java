@@ -27,6 +27,7 @@ public class UserMapper implements Mapper<User, UserDto> {
                 .lastname(passport.getLastname())
                 .patronymic(passport.getPatronymic())
                 .email(userEntity.getEmail())
+                .phone(userEntity.getPhone())
                 .role(userEntity.getRole())
                 .isDeleted(userEntity.getDeleted())
                 .build();

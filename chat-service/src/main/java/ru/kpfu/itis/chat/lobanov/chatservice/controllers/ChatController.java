@@ -12,6 +12,7 @@ import ru.kpfu.itis.chat.lobanov.chatservice.services.ChatMessageService;
 import ru.kpfu.itis.lobanov.api.ChatApi;
 import ru.kpfu.itis.lobanov.dtos.MessageDto;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +30,29 @@ public class ChatController implements ChatApi {
         return "test";
     }
 
+    @GetMapping("/a")
+    public ResponseEntity<?> pm() {
+        Optional<MessageDto> saved = chatMessageService.save(MessageDto.builder()
+                .senderId("1")
+                .isSupport(false)
+                .timestamp(new Date())
+                .senderName("AAAA")
+                .content("bbbb")
+                .build());
+        if (saved.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.PROCESSING);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     @Override
     public ResponseEntity<?> processMessage(@Payload MessageDto messageDto) {
         Optional<MessageDto> saved = chatMessageService.save(messageDto);
         if (saved.isPresent()) {
             messagingTemplate.convertAndSendToUser(
-                    messageDto.getRecipientId(), MESSAGE_DESTINATION,
+                    messageDto.getSenderId(), MESSAGE_DESTINATION,
                     saved.get()
             );
             return new ResponseEntity<>(HttpStatus.PROCESSING);
@@ -44,13 +62,13 @@ public class ChatController implements ChatApi {
     }
 
     @Override
-    public ResponseEntity<Long> countNewMessages(String senderId, String recipientId) {
-        return new ResponseEntity<>(chatMessageService.countNewMessages(senderId, recipientId), HttpStatus.OK);
+    public ResponseEntity<Long> countNewMessages(String senderId) {
+        return new ResponseEntity<>(chatMessageService.countNewMessages(senderId), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<List<MessageDto>> findChatMessages(String senderId, String recipientId) {
-        return new ResponseEntity<>(chatMessageService.getChatMessages(senderId, recipientId), HttpStatus.OK);
+    public ResponseEntity<List<MessageDto>> findChatMessages(String senderId) {
+        return new ResponseEntity<>(chatMessageService.getChatMessages(senderId), HttpStatus.OK);
     }
 
     @Override

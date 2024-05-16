@@ -26,12 +26,17 @@ public class TransactionDto {
     @NotNull
     private CurrencyDto currency;
     @NotNull
+    private AccountDto from;
+    @NotNull
+    private AccountDto to;
+    @NotNull
     @NotBlank
     private String type;
     private String message;
     @NotNull
     @PositiveOrZero
     private BigDecimal cashback;
+    private String category;
     @Schema(description = "The amount of money that needs to be transferred.", example = "10000")
     @NotNull(message = "The amount of money shouldn't be null.")
     @PositiveOrZero

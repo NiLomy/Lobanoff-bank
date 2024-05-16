@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BankAccountDto {
+public class AccountDto {
     @Schema(description = "Id of the bank account.", example = "123")
     private Long id;
     @Schema(description = "Name of the bank account.", example = "Main account")
@@ -35,8 +35,6 @@ public class BankAccountDto {
     @Schema(description = "Owner of the bank account.")
     @NotNull(message = "Owner of the bank account shouldn't be null.")
     private UserDto owner;
-    @Schema(description = "Operations of the bank account.")
-    private List<TransactionDto> operations;
     @Schema(description = "Cards of the bank account.")
     private List<CardDto> cards;
     @NotNull

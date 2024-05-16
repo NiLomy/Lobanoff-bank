@@ -39,7 +39,7 @@ public class TransactionProcessingServiceImpl implements TransactionProcessingSe
         BigDecimal commission = transaction.getCommission();
         BigDecimal cashback = transaction.getCashback();
         if (cashback == null) cashback = BigDecimal.ZERO;
-        BigDecimal total = initAmount.multiply(BigDecimal.ONE.subtract(commission)).add(cashback);
+        BigDecimal total = initAmount.subtract(commission).add(cashback);
         transaction.setTotalAmount(total);
     }
 }

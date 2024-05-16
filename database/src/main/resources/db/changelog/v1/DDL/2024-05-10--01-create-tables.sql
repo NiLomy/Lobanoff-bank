@@ -58,7 +58,6 @@ CREATE TABLE IF NOT EXISTS requisites (id BIGSERIAL PRIMARY KEY
     , row_change_time timestamptz NOT NULL DEFAULT current_timestamp);
 
 CREATE TABLE IF NOT EXISTS cards (id BIGSERIAL PRIMARY KEY
-    , name VARCHAR(100) NOT NULL
     , number VARCHAR(16) NOT NULL
     , cvv VARCHAR(3) not null
     , expiration VARCHAR(5) NOT NULL
@@ -110,9 +109,9 @@ CREATE TABLE IF NOT EXISTS transactions (id BIGSERIAL PRIMARY KEY
     , bank_name_from VARCHAR(50) NOT NULL
     , bank_name_to VARCHAR(50) NOT NULL
     , date timestamptz NOT NULL
-    , cashback NUMERIC(28, 8) NOT NULL
-    , commission NUMERIC(28, 8) NOT NULL
-    , risk_indicator INTEGER NOT NULL
+    , cashback NUMERIC(28, 8)
+    , commission NUMERIC(28, 8)
+    , risk_indicator INTEGER
     , service_company VARCHAR(50) NOT NULL
     , total_amount NUMERIC(28, 8)
     , category_id BIGINT

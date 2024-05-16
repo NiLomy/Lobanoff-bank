@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.kpfu.itis.lobanov.api.UserApi;
-import ru.kpfu.itis.lobanov.data.services.AuthenticationService;
 import ru.kpfu.itis.lobanov.data.services.UserService;
 import ru.kpfu.itis.lobanov.dtos.UserDto;
 import ru.kpfu.itis.lobanov.dtos.requests.UpdateUserRequest;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController implements UserApi {
     private final UserService userService;
-    private final AuthenticationService authenticationService;
 
     @Override
     public ResponseEntity<UserDto> getUserById(String userId) {
@@ -34,6 +32,15 @@ public class UserController implements UserApi {
         if (users == null || users.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<UserDto> getAdmin() {
+        UserDto user = userService.getAdmin();
+
+        if (user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @Override

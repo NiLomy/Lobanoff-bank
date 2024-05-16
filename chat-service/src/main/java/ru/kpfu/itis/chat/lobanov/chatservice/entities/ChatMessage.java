@@ -22,19 +22,14 @@ public class ChatMessage {
     @Id
     private String id;
     @NotNull(message = ID_NOT_NULL)
-    private String chatId;
-    @NotNull(message = ID_NOT_NULL)
     private String senderId;
-    @NotNull(message = ID_NOT_NULL)
-    private String recipientId;
     @NotNull(message = NAME_NOT_NULL)
     @NotBlank(message = NAME_NOT_BLANK)
     private String senderName;
-    @NotNull(message = NAME_NOT_NULL)
-    @NotBlank(message = NAME_NOT_BLANK)
-    private String recipientName;
     @NotNull(message = MESSAGE_CONTENT_NOT_NULL)
     private String content;
+    @NotNull
+    private Boolean isSupport;
     private Date timestamp;
     private MessageStatus status;
 }

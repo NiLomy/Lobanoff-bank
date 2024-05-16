@@ -41,6 +41,32 @@ public interface TransactionApi {
             String accountId
     );
 
+    @Operation(summary = "Get recent transactions by user id.", description = "Returns recent transactions by provided user id.", responses = {
+            @ApiResponse(responseCode = "200", description = "Successful operation."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "404", description = "Transactions not found."),
+            @ApiResponse(responseCode = "500", description = "The server encountered an error.")
+    })
+    @GetMapping("expenses/user/{id}")
+    ResponseEntity<List<TransactionDto>> getAllTransactionsFromUserExpenses(
+            @Parameter(description = "Id of the user's account.", example = "123", required = true)
+            @PathVariable("id")
+            String userId
+    );
+
+    @Operation(summary = "Get recent transactions by user id.", description = "Returns recent transactions by provided user id.", responses = {
+            @ApiResponse(responseCode = "200", description = "Successful operation."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "404", description = "Transactions not found."),
+            @ApiResponse(responseCode = "500", description = "The server encountered an error.")
+    })
+    @GetMapping("receipts/user/{id}")
+    ResponseEntity<List<TransactionDto>> getAllTransactionsFromUserReceipts(
+            @Parameter(description = "Id of the user's account.", example = "123", required = true)
+            @PathVariable("id")
+            String userId
+    );
+
     @Operation(summary = "Transfer by phone.", description = "Returns transaction which was transferred by phone.", responses = {
             @ApiResponse(responseCode = "200", description = "Successful operation."),
             @ApiResponse(responseCode = "400", description = "Bad request."),

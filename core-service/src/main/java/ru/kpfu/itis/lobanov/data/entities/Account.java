@@ -49,10 +49,20 @@ public class Account {
     private User owner;
 
     @OneToMany
+    @JoinTable(
+            name = "accounts_transactions",
+            joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "transaction_id", referencedColumnName = "id")
+    )
     @ToString.Exclude
     private List<Transaction> transactions;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "accounts_cards",
+            joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "card_id", referencedColumnName = "id")
+    )
     @ToString.Exclude
     private List<Card> cards;
 

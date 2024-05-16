@@ -22,9 +22,9 @@ public class CardMapper implements Mapper<Card, CardDto> {
 
         return CardDto.builder()
                 .id(card.getId())
-                .name(card.getName())
                 .number(card.getNumber())
-                .owner(userMapper.toResponse(card.getOwner()))
+                .expiration(card.getExpiration())
+                .cvv(card.getCvv())
                 .accountId(card.getAccount().getId())
                 .build();
     }

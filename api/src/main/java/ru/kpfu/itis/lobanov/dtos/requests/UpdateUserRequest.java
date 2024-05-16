@@ -19,10 +19,6 @@ public final class UpdateUserRequest {
     @Email
     private String email;
     private String phone;
-    @NotNull
-    @NotBlank
     private String password;
-    @NotNull
-    @NotBlank
     private String confirmPassword;
 }

@@ -10,9 +10,9 @@ import static ru.kpfu.itis.lobanov.utils.NamingConstants.RANDOM_INSTANCE_WITH_BI
 
 @Configuration
 public class RandomConfig {
-    @Bean
-    @Qualifier(RANDOM_INSTANCE_WITH_BINDING)
-    public Random random() {
-        return new Random(System.currentTimeMillis());
-    }
+//    @Bean
+//    @Qualifier(RANDOM_INSTANCE_WITH_BINDING)
+//    public Random random() {
+//        return new Random(System.currentTimeMillis());
+//    }
 }

@@ -10,8 +10,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Query("select t from Transaction t where t.from = (select b.id from Account b where b.owner.id = :userId)")
-    List<Transaction> findAllByUser(Long userId);
+    @Query("select t from Transaction t where t.from in (select a.id from Account a where a.owner.id = :userId)")
+    List<Transaction> findAllByUserExpenses(Long userId);
+
+    @Query("select t from Transaction t where t.to in (select a.id from Account a where a.owner.id = :userId)")
+    List<Transaction> findAllByUserReceipts(Long userId);
 
     @Query("select t from Transaction t where t.from = (select b.id from Account b where b.id = :bankAccountId) order by t.date desc limit 10")
     List<Transaction> findAllByUserLimitRecent(Long bankAccountId);

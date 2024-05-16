@@ -38,6 +38,15 @@ public interface UserApi {
     @GetMapping("/all")
     ResponseEntity<List<UserDto>> getAllUsers();
 
+    @Operation(summary = "Get admin.", description = "Returns admin.", responses = {
+            @ApiResponse(responseCode = "200", description = "Successful operation."),
+            @ApiResponse(responseCode = "400", description = "Bad request."),
+            @ApiResponse(responseCode = "404", description = "Admin not found."),
+            @ApiResponse(responseCode = "500", description = "The server encountered an error.")
+    })
+    @GetMapping("/admin")
+    ResponseEntity<UserDto> getAdmin();
+
     @Operation(summary = "Update user.", description = "Returns updated user.", responses = {
             @ApiResponse(responseCode = "200", description = "Successful operation."),
             @ApiResponse(responseCode = "400", description = "Bad request."),

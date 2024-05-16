@@ -22,23 +22,17 @@ public interface ChatMessageService {
 
     List<MessageDto> getChatMessages(
             @NotNull(message = ID_NOT_NULL)
-            String senderId,
-            @NotNull(message = ID_NOT_NULL)
-            String recipientId
+            String senderId
     );
 
     long countNewMessages(
             @NotNull(message = ID_NOT_NULL)
-            String senderId,
-            @NotNull(message = ID_NOT_NULL)
-            String recipientId
+            String senderId
     );
 
     void updateStatuses(
             @NotNull(message = ID_NOT_NULL)
             String senderId,
-            @NotNull(message = ID_NOT_NULL)
-            String recipientId,
             @NotNull(message = MESSAGE_STATUS_NOT_NULL)
             MessageStatus status
     );

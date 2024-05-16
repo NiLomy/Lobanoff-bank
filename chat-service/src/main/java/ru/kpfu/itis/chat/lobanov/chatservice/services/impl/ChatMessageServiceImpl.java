@@ -24,29 +24,20 @@ import static ru.kpfu.itis.chat.lobanov.chatservice.utils.ChatServiceConstants.*
 @RequiredArgsConstructor
 public class ChatMessageServiceImpl implements ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
-    private final ChatRoomService chatRoomService;
     private final MongoOperations mongoOperations;
     private final Mapper<ChatMessage, MessageDto> messageMapper;
 
     @Override
     public Optional<MessageDto> save(MessageDto messageDto) {
-        Optional<String> chatId = chatRoomService
-                .getChatId(messageDto.getSenderId(), messageDto.getRecipientId(), true);
-        if (chatId.isPresent()) {
-            ChatMessage message = ChatMessage.builder()
-                    .senderId(messageDto.getSenderId())
-                    .recipientId(messageDto.getRecipientId())
-                    .senderName(messageDto.getSenderName())
-                    .recipientName(messageDto.getRecipientName())
-                    .content(messageDto.getContent())
-                    .timestamp(messageDto.getTimestamp())
-                    .chatId(chatId.get())
-                    .status(MessageStatus.RECEIVED)
-                    .build();
-            return Optional.of(messageMapper.toResponse(chatMessageRepository.save(message)));
-        } else {
-            return Optional.empty();
-        }
+        ChatMessage message = ChatMessage.builder()
+                .senderId(messageDto.getSenderId())
+                .senderName(messageDto.getSenderName())
+                .content(messageDto.getContent())
+                .timestamp(messageDto.getTimestamp())
+                .status(MessageStatus.RECEIVED)
+                .isSupport(messageDto.getIsSupport())
+                .build();
+        return Optional.of(messageMapper.toResponse(chatMessageRepository.save(message)));
     }
 
     @Override
@@ -60,29 +51,26 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     }
 
     @Override
-    public List<MessageDto> getChatMessages(String senderId, String recipientId) {
-        Optional<String> chatId = chatRoomService.getChatId(senderId, recipientId, false);
-
-        List<ChatMessage> messages = chatId.map(chatMessageRepository::findByChatId).orElse(new ArrayList<>());
+    public List<MessageDto> getChatMessages(String senderId) {
+        List<ChatMessage> messages = chatMessageRepository.findAllBySenderId(senderId);
 
         if (!messages.isEmpty()) {
-            updateStatuses(senderId, recipientId, MessageStatus.DELIVERED);
+            updateStatuses(senderId, MessageStatus.DELIVERED);
         }
 
         return messageMapper.toListResponse(messages);
     }
 
     @Override
-    public long countNewMessages(String senderId, String recipientId) {
-        return chatMessageRepository.countBySenderIdAndRecipientIdAndStatus(senderId, recipientId, MessageStatus.RECEIVED);
+    public long countNewMessages(String senderId) {
+        return chatMessageRepository.countBySenderIdAndStatus(senderId, MessageStatus.RECEIVED);
     }
 
     @Override
-    public void updateStatuses(String senderId, String recipientId, MessageStatus status) {
+    public void updateStatuses(String senderId, MessageStatus status) {
         Query query = new Query(
                 Criteria
-                        .where(SENDER_ID_KEY).is(senderId)
-                        .and(RECIPIENT_ID_KEY).is(recipientId));
+                        .where(SENDER_ID_KEY).is(senderId));
         Update update = Update.update(STATUS_KEY, status);
         mongoOperations.updateMulti(query, update, ChatMessage.class);
     }

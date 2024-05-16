@@ -13,6 +13,13 @@ import java.util.Date;
 public class PassportDto {
     private String id;
     @NotNull
+    @NotBlank
+    private String name;
+    @NotNull
+    @NotBlank
+    private String lastname;
+    private String patronymic;
+    @NotNull
     @PositiveOrZero
     private Short series;
     @NotNull

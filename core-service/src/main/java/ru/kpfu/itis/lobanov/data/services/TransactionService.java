@@ -32,6 +32,18 @@ public interface TransactionService {
             Long accountId
     );
 
+    List<TransactionDto> getAllTransactionsFromUserExpenses(
+            @NotNull(message = ID_NOT_NULL)
+            @PositiveOrZero(message = ID_POSITIVE_OR_ZERO)
+            Long userId
+    );
+
+    List<TransactionDto> getAllTransactionsFromUserReceipts(
+            @NotNull(message = ID_NOT_NULL)
+            @PositiveOrZero(message = ID_POSITIVE_OR_ZERO)
+            Long userId
+    );
+
     TransactionDto transferByPhone(
             @NotNull(message = PHONE_TRANSFER_FORM_NOT_NULL)
             PhoneTransferForm phoneTransferForm

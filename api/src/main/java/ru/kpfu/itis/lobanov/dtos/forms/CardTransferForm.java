@@ -25,4 +25,6 @@ public final class CardTransferForm {
     @NotNull(message = "The amount of money shouldn't be null.")
     @PositiveOrZero(message = "Amount should not be negative.")
     private BigDecimal amount;
+    @Schema(description = "Message to send to the bank's client who needs to be transferred.", example = "Hello, here is your money!", nullable = true)
+    private String message;
 }

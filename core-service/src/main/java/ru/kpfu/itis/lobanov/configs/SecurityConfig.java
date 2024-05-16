@@ -35,7 +35,7 @@ import java.util.Arrays;
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-public class SecurityConfig implements WebMvcConfigurer {
+public class SecurityConfig {
     private final UserDetailsService userDetailsService;
 //    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -68,12 +68,5 @@ public class SecurityConfig implements WebMvcConfigurer {
         AuthenticationManagerBuilder managerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         managerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
         return managerBuilder.build();
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
-                .allowedMethods("*");
     }
 }

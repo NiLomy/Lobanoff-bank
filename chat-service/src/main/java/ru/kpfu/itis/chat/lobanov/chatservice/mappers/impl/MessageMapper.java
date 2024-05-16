@@ -17,11 +17,11 @@ public class MessageMapper implements Mapper<ChatMessage, MessageDto> {
         return MessageDto.builder()
                 .id(entity.getId())
                 .senderId(entity.getSenderId())
-                .recipientId(entity.getRecipientId())
                 .senderName(entity.getSenderName())
-                .recipientName(entity.getRecipientName())
                 .content(entity.getContent())
+                .isSupport(entity.getIsSupport())
                 .timestamp(entity.getTimestamp())
+                .status(entity.getStatus().name())
                 .build();
     }
 

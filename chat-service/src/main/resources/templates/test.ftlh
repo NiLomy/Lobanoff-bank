@@ -27,10 +27,9 @@
         function sendMessage() {
             const message = {
                 senderId: "${currentUser}",
-                recipientId: $("#name").val(),
                 senderName: "currentUser.name",
-                recipientName: "activeContact.name",
                 content: $("#message").val(),
+                isSupport: false,
                 timestamp: new Date(),
             };
 
@@ -55,7 +54,7 @@
 
         function connect() {
             console.log("Trying to connect");
-            let socket = new SockJS("http://localhost:8081/ws");
+            let socket = new SockJS("http://localhost:8082/ws");
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 console.log("Connected: " + frame);

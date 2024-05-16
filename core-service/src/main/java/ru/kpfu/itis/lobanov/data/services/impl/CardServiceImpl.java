@@ -1,15 +1,16 @@
 package ru.kpfu.itis.lobanov.data.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.lobanov.data.entities.Account;
 import ru.kpfu.itis.lobanov.data.entities.Card;
 import ru.kpfu.itis.lobanov.data.mappers.Mapper;
 import ru.kpfu.itis.lobanov.data.repositories.AccountRepository;
 import ru.kpfu.itis.lobanov.data.repositories.CardRepository;
+import ru.kpfu.itis.lobanov.data.services.AccountService;
 import ru.kpfu.itis.lobanov.data.services.CardService;
 import ru.kpfu.itis.lobanov.dtos.CardDto;
+import ru.kpfu.itis.lobanov.dtos.requests.BindCardRequest;
 import ru.kpfu.itis.lobanov.dtos.requests.CreateCardRequest;
 import ru.kpfu.itis.lobanov.utils.CreditCardNumberGenerator;
 
@@ -19,11 +20,11 @@ import java.util.Random;
 import static ru.kpfu.itis.lobanov.utils.BankingConstants.CREDIT_CARD_BIN;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
     private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final CreditCardNumberGenerator creditCardNumberGenerator;
     private final Mapper<Card, CardDto> cardMapper;
 
@@ -46,11 +47,11 @@ public class CardServiceImpl implements CardService {
                         .number(creditCardNumberGenerator.generate(CREDIT_CARD_BIN, 16))
                         .expiration(String.format("%02d/%02d", month, year))
                         .cvv(String.valueOf(cvv))
-                        .owner(account.getOwner())
                         .account(account)
                         .build()
         );
 
+        accountService.bindCard(new BindCardRequest(String.valueOf(account.getId()), String.valueOf(card.getId())));
         return cardMapper.toResponse(card);
     }
 }

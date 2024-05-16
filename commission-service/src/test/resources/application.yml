@@ -1,0 +1,26 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: commission-service
+  rabbitmq:
+    host: localhost
+    port: 5673
+    username: lobanoff
+    password: password
+    exchange: event-exchange
+    template:
+      transaction:
+        commission:
+          queue: transaction-commission-queue
+          routing:
+            key: transaction.commission
+        cashback:
+          queue: transaction-cashback-queue
+          routing:
+            key: transaction.cashback
+
+eureka:
+  client:
+    enabled: false

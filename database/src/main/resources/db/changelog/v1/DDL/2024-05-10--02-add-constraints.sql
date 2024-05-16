@@ -3,20 +3,24 @@ ALTER TABLE passports
         UNIQUE (series, number);
 
 ALTER TABLE passports
-    ADD CONSTRAINT ckeck_passports_birthday
+    ADD CONSTRAINT check_passports_birthday
         CHECK (birthday <= now());
 
 ALTER TABLE passports
-    ADD CONSTRAINT ckeck_passports_gender
+    ADD CONSTRAINT check_passports_gender
         CHECK (gender IN ('M', 'F'));
 
 ALTER TABLE passports
-    ADD CONSTRAINT ckeck_passports_issued_date
+    ADD CONSTRAINT check_passports_issued_date
         CHECK (issued_date <= now());
 
 ALTER TABLE users
     ADD CONSTRAINT unique_users_email
         UNIQUE (email);
+
+ALTER TABLE users
+    ADD CONSTRAINT unique_users_passport_id
+        UNIQUE (passport_id);
 
 ALTER TABLE users
     ADD CONSTRAINT check_users_role

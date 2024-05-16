@@ -8,6 +8,7 @@ public final class ValueConstants {
     public static final int VERIFICATION_CODE_LENGTH = 128;
     public static final int CORRESPONDENT_ACCOUNT_LENGTH = 20;
     public static final int CVV_LENGTH = 3;
+    public static final int ADMIN_ACCOUNT_DEPOSIT = 10_000_000;
 
     private ValueConstants() {}
 }

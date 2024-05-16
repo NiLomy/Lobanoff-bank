@@ -6,7 +6,8 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import org.springframework.validation.annotation.Validated;
 import ru.kpfu.itis.lobanov.dtos.AccountStatementDto;
-import ru.kpfu.itis.lobanov.dtos.BankAccountDto;
+import ru.kpfu.itis.lobanov.dtos.AccountTypeDto;
+import ru.kpfu.itis.lobanov.dtos.AccountDto;
 import ru.kpfu.itis.lobanov.dtos.requests.BindCardRequest;
 import ru.kpfu.itis.lobanov.dtos.requests.CloseAccountRequest;
 import ru.kpfu.itis.lobanov.dtos.requests.CreateAccountRequest;
@@ -19,21 +20,21 @@ import static ru.kpfu.itis.lobanov.utils.ValueConstants.MIN_DATE_SIZE;
 
 @Validated
 public interface AccountService {
-    List<BankAccountDto> getAllAccounts();
+    List<AccountDto> getAllAccounts();
 
-    List<BankAccountDto> getAllUserAccounts(
+    List<AccountDto> getAllUserAccounts(
             @NotNull(message = ID_NOT_NULL)
             @PositiveOrZero(message = ID_POSITIVE_OR_ZERO)
             Long userId
     );
 
-    List<BankAccountDto> getAllUserCardAccounts(
+    List<AccountDto> getAllUserCardAccounts(
             @NotNull(message = ID_NOT_NULL)
             @PositiveOrZero(message = ID_POSITIVE_OR_ZERO)
             Long userId
     );
 
-    BankAccountDto createAccount(
+    AccountDto createAccount(
             @NotNull(message = CREATE_ACCOUNT_REQUEST_NOT_NULL)
             CreateAccountRequest request
     );
@@ -43,19 +44,21 @@ public interface AccountService {
             CloseAccountRequest request
     );
 
-    BankAccountDto getAccountById(
+    AccountDto getAccountById(
             @NotNull(message = ID_NOT_NULL)
             @PositiveOrZero(message = ID_POSITIVE_OR_ZERO)
             Long id
     );
 
-    BankAccountDto getUserMainAccount(
+    AccountDto getUserMainAccount(
             @NotNull(message = ID_NOT_NULL)
             @PositiveOrZero(message = ID_POSITIVE_OR_ZERO)
             Long userId
     );
 
-    BankAccountDto updateAccountName(
+    List<AccountTypeDto> getAllTypes();
+
+    AccountDto updateAccountName(
             @NotNull(message = ID_NOT_NULL)
             @PositiveOrZero(message = ID_POSITIVE_OR_ZERO)
             Long id,
@@ -64,7 +67,7 @@ public interface AccountService {
             String name
     );
 
-    BankAccountDto bindCard(
+    AccountDto bindCard(
             @NotNull(message = BIND_CARD_REQUEST_NOT_NULL)
             BindCardRequest request
     );

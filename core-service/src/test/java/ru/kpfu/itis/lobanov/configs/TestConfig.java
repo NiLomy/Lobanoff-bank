@@ -77,7 +77,6 @@ public class TestConfig {
                 .deleted(false)
                 .build();
         Card card = Card.builder()
-                .owner(owner)
                 .cvv("302")
                 .expiration("03/28")
                 .number("1144485810352102")
