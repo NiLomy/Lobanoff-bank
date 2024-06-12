@@ -33,8 +33,8 @@ public class SecurityConfig implements WebMvcConfigurer {
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     public static final String[] AUTHENTICATED_REQUESTS = new String[] {
-            "/core/api/v1/accounts/*",
-            "/core/api/v1/cards/*",
+            "/core/api/v1/accounts/**",
+            "/core/api/v1/cards/**",
             "**/api/v1/category/all",
             "**/api/v1/chat/**",
             "**/api/v1/currencies/**",

@@ -21,6 +21,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -70,7 +71,30 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDto transferByPhone(PhoneTransferForm phoneTransferForm) {
         Account currentAccount = accountRepository.findById(phoneTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
 
-        if (currentAccount.getDeposit().compareTo(phoneTransferForm.getAmount()) < 0) {
+        List<Transaction> transactions = currentAccount.getTransactions();
+        BigDecimal deposit = BigDecimal.ZERO;
+        if (transactions != null && !transactions.isEmpty()) {
+            BigDecimal transfer = BigDecimal.ZERO;
+            BigDecimal replenishment = BigDecimal.ZERO;
+            for (Transaction transaction : transactions) {
+                if (Objects.equals(transaction.getFrom(), currentAccount.getId())) {
+                    if (transaction.getTotalAmount() == null) {
+                        transfer = transfer.add(transaction.getInitAmount());
+                    } else {
+                        transfer = transfer.add(transaction.getTotalAmount());
+                    }
+                } else if (Objects.equals(transaction.getTo(), currentAccount.getId())) {
+                    if (transaction.getTotalAmount() == null) {
+                        replenishment = replenishment.add(transaction.getInitAmount());
+                    } else {
+                        replenishment = replenishment.add(transaction.getTotalAmount());
+                    }
+                }
+            }
+            deposit = replenishment.subtract(transfer);
+        }
+
+        if (deposit.compareTo(phoneTransferForm.getAmount()) < 0) {
             throw new NotEnoughMoneyException(NOT_ENOUGH_MONEY_FOR_OPERATION);
         }
 
@@ -100,7 +124,30 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDto transferBetweenAccounts(BetweenAccountsTransferForm betweenAccountsTransferForm) {
         Account accountToTransferFrom = accountRepository.findById(betweenAccountsTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
 
-        if (accountToTransferFrom.getDeposit().compareTo(betweenAccountsTransferForm.getAmount()) <= 0) {
+        List<Transaction> transactions = accountToTransferFrom.getTransactions();
+        BigDecimal deposit = BigDecimal.ZERO;
+        if (transactions != null && !transactions.isEmpty()) {
+            BigDecimal transfer = BigDecimal.ZERO;
+            BigDecimal replenishment = BigDecimal.ZERO;
+            for (Transaction transaction : transactions) {
+                if (Objects.equals(transaction.getFrom(), accountToTransferFrom.getId())) {
+                    if (transaction.getTotalAmount() == null) {
+                        transfer = transfer.add(transaction.getInitAmount());
+                    } else {
+                        transfer = transfer.add(transaction.getTotalAmount());
+                    }
+                } else if (Objects.equals(transaction.getTo(), accountToTransferFrom.getId())) {
+                    if (transaction.getTotalAmount() == null) {
+                        replenishment = replenishment.add(transaction.getInitAmount());
+                    } else {
+                        replenishment = replenishment.add(transaction.getTotalAmount());
+                    }
+                }
+            }
+            deposit = replenishment.subtract(transfer);
+        }
+
+        if (deposit.compareTo(betweenAccountsTransferForm.getAmount()) <= 0) {
             throw new NotEnoughMoneyException(NOT_ENOUGH_MONEY_FOR_OPERATION);
         }
 
@@ -125,7 +172,30 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDto transferByCard(CardTransferForm cardTransferForm) {
         Account currentAccount = accountRepository.findById(cardTransferForm.getFrom()).orElseThrow(IllegalArgumentException::new);
 
-        if (currentAccount.getDeposit().compareTo(cardTransferForm.getAmount()) <= 0) {
+        List<Transaction> transactions = currentAccount.getTransactions();
+        BigDecimal deposit = BigDecimal.ZERO;
+        if (transactions != null && !transactions.isEmpty()) {
+            BigDecimal transfer = BigDecimal.ZERO;
+            BigDecimal replenishment = BigDecimal.ZERO;
+            for (Transaction transaction : transactions) {
+                if (Objects.equals(transaction.getFrom(), currentAccount.getId())) {
+                    if (transaction.getTotalAmount() == null) {
+                        transfer = transfer.add(transaction.getInitAmount());
+                    } else {
+                        transfer = transfer.add(transaction.getTotalAmount());
+                    }
+                } else if (Objects.equals(transaction.getTo(), currentAccount.getId())) {
+                    if (transaction.getTotalAmount() == null) {
+                        replenishment = replenishment.add(transaction.getInitAmount());
+                    } else {
+                        replenishment = replenishment.add(transaction.getTotalAmount());
+                    }
+                }
+            }
+            deposit = replenishment.subtract(transfer);
+        }
+
+        if (deposit.compareTo(cardTransferForm.getAmount()) <= 0) {
             throw new NotEnoughMoneyException(NOT_ENOUGH_MONEY_FOR_OPERATION);
         }
         Account anotherAccount = accountRepository.findByCardNumber(cardTransferForm.getCard()).orElse(null);
@@ -247,7 +317,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         transaction = transactionRepository.save(transaction);
 
-        account.setDeposit(account.getDeposit().add(amount));
+//        account.setDeposit(account.getDeposit().add(amount));  //TODO
 
         account.getTransactions().add(transaction);
         adminAccount.getTransactions().add(transaction);
@@ -279,7 +349,7 @@ public class TransactionServiceImpl implements TransactionService {
         final Instant instant = now.atZone(ZoneId.systemDefault()).toInstant();
 
         Random random = new Random(System.currentTimeMillis());
-        Category category = categoryRepository.findById((long) random.nextInt(1, 34)).orElseThrow(IllegalArgumentException::new);
+        Category category = categoryRepository.findById((long) (1 + random.nextInt(34))).orElseThrow(IllegalArgumentException::new);
 
         Optional<TransactionType> optionalType = transactionTypeRepository.findByName(TRANSACTION_TYPE_PENDING);
         if (optionalType.isEmpty()) throw new TransactionTypeNotFoundException(NO_SUCH_TRANSACTION_TYPE);
@@ -291,8 +361,8 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction transaction = Transaction.builder()
                 .date(Timestamp.from(instant))
-                .initAmount(amount)
-                .currency(currentAccount.getCurrency())
+                .initAmount(convertedAmount)
+                .currency(currencyTo)
                 .type(optionalType.get())
                 .method(method)
                 .from(currentAccount.getId())
@@ -308,8 +378,8 @@ public class TransactionServiceImpl implements TransactionService {
         transaction = transactionRepository.save(transaction);
         messagingService.sendTransactionToChargeCommission(transaction);
 
-        currentAccount.setDeposit(currentAccount.getDeposit().subtract(amount));
-        anotherAccount.setDeposit(anotherAccount.getDeposit().add(convertedAmount));
+//        currentAccount.setDeposit(currentAccount.getDeposit().subtract(amount)); // TODO
+//        anotherAccount.setDeposit(anotherAccount.getDeposit().add(convertedAmount));
         currentAccount.getTransactions().add(transaction);
         anotherAccount.getTransactions().add(transaction);
         accountRepository.save(currentAccount);
